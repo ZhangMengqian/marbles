@@ -381,7 +381,14 @@ $(document).on('ready', function() {
 		$('#panel_acTradeSetup').hide();
 		$('#panel_benchmark').fadeIn(300);
 	});
-	
+	$('#cr_viewer').click(function(){
+		$('#homePanel').hide();
+		$('#createPanel').hide();
+		$('#panel_acBenchmark').hide();
+		$('#panel_acTradeSetup').hide();
+		$('#panel_benchmark').hide();
+		$('#panel_viewer').fadeIn(300);
+	});
 	
    $('#ac_accept').click(function(){
   	$('#actrade_mak_noti').append(tmp_account);
