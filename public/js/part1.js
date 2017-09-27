@@ -242,6 +242,32 @@ $(document).on('ready', function() {
 		return false;
 	});
 	
+	$('#submit5').click(function(){
+		var obj = 	{
+						type: 'data_view',
+						data_type: $('select[name="data type"]').val()
+					};
+			console.log(obj.data_type);		
+				
+		if(obj.data_type){
+			console.log('data view request, sending', obj);
+			ws.send(JSON.stringify(obj));
+			
+			//$('#user1wrap').append("<p>benchmarks:"+obj.benchmark_id+" [name]:"+obj.name+"</p>");		
+		
+			  //tmp_bench='<div id="benchnoti_'+obj.benchmark_id+'"><p><span style="color:#FF0;">An account trade has been created:</span><br>'+
+			//"[benchmark_id]:"+obj.benchmark_id+"<br>[id_source]:"+obj.id_source+
+			//"<br>[name]:"+obj.name+"<br>[currency]:"+obj.currency+
+			//"<br>[benchmark_reference_id]:"+obj.benchmark_reference_id+"<br>[benchmark_reference_id_source]:"+obj.benchmark_reference_id_source
+			//+'</p><button type="button" id="del_bench'+obj.benchmark_id+'">delete</button><hr /></div>';
+		
+		    //$('#bench_check_noti').append(tmp_bench);
+			//$('#bench_history').append(tmp_bench);
+			//$('#bench_check_button').show();
+			//$('#bench_mak_noti').empty();
+		}
+		return false;
+	});
     String.prototype.trim=function(){
 　　    return this.replace(/(^\s*)|(\s*$)/g, "");
 　　 }
