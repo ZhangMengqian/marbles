@@ -172,6 +172,21 @@ module.exports.process_msg = function(ws, data){
 			});
 			//connection.end();
 		}
+		else if (data.type == 'data_view') {
+			console.log('view data')
+			if (data.data_type == 'account'){
+
+			}
+			else if (data.data_type == 'ac_trade') {
+
+			}
+			else if (data.data_type == 'ac_benchmark') {
+
+			}
+			else if (data.data_type == 'benchmarks') {
+
+			}
+		}
 		else if(data.type == 'get'){
 			console.log('get user msg');
 			chaincode.query.read(['_allStr'], cb_got_index);
