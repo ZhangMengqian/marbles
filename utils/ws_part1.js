@@ -175,16 +175,60 @@ module.exports.process_msg = function(ws, data){
 		else if (data.type == 'data_view') {
 			console.log('view data')
 			if (data.data_type == 'account'){
-
+				var selectSQL = 'select * from `account`';
+				var arr = [];
+				connection.query(selectSQL, function(err, rows) {
+    					if (err) throw err;
+    					for (var i = 0; i < rows.length; i++) {
+        					arr[i] = rows[i];
+        					console.log(arr[i])
+    					}
+    					//app.get('/', function(req, res) {
+        					//res.send(arr);
+    					//});
+				});
 			}
 			else if (data.data_type == 'ac_trade') {
-
+				var selectSQL = 'select * from `ac_trade`';
+				var arr = [];
+				connection.query(selectSQL, function(err, rows) {
+    					if (err) throw err;
+    					for (var i = 0; i < rows.length; i++) {
+        					arr[i] = rows[i];
+        					console.log(arr[i])
+    					}
+    					//app.get('/', function(req, res) {
+        					//res.send(arr);
+    					//});
+    				});
 			}
 			else if (data.data_type == 'ac_benchmark') {
-
+				var selectSQL = 'select * from `ac_benchmark`';
+				var arr = [];
+				connection.query(selectSQL, function(err, rows) {
+    					if (err) throw err;
+    					for (var i = 0; i < rows.length; i++) {
+        					arr[i] = rows[i];
+        					console.log(arr[i])
+    					}
+    					//app.get('/', function(req, res) {
+        					//res.send(arr);
+    					//});
+				 });
 			}
 			else if (data.data_type == 'benchmarks') {
-
+				var selectSQL = 'select * from `benchmarks`';
+				var arr = [];
+				connection.query(selectSQL, function(err, rows) {
+    					if (err) throw err;
+    					for (var i = 0; i < rows.length; i++) {
+        					arr[i] = rows[i];
+        					console.log(arr[i])
+    					}
+    					//app.get('/', function(req, res) {
+        					//res.send(arr);
+    					//});
+				});
 			}
 		}
 		else if(data.type == 'get'){
