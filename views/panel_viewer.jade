@@ -1,0 +1,25 @@
+#panel_viewer(hidden).panel
+			h1 View Data
+			hr
+			#viewer
+			br
+			legend 
+
+				select(name="data type")
+
+					option(value="account" disabled="disabled" selected="selected") Account
+
+					option(value="ac_trade") Ac_Trade
+
+					option(value="ac_benchmark") Ac_benchmark
+
+					option(value="benchmarks") Benchmarks
+			br
+			button(type="button")#submit5
+				span.fa.fa-check &nbsp;&nbsp;
+				span view data
+			br
+			hr
+			#data_history
+			
+			
