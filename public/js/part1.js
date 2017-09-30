@@ -10,6 +10,11 @@ var tmp_actrade="";
 var tmp_acbench="";
 var tmp_bench="";
 
+var base_account="";
+var base_actrade="";
+var base_acbench="";
+var base_bench="";
+
 // =================================================================================
 // On Load
 // =================================================================================
@@ -684,6 +689,13 @@ function connect_to_server(){
 								blockstats: msgObj.blockstats
 							};
 				new_block(temp);								//send to blockchain.js
+			}
+			else if(msgObj.benchmark_id){
+				console.log("benchmarks from database")
+				base_bench='<div><hr>'+"[sha_value]"+msgObj.sha_value+"<br>[benchmark_id]:"+msgObj.benchmark_id+"<br>[id_source]:"+msgObj.id_source+
+			"<br>[name]:"+msgObj.name+"<br>[currency]:"+msgObj.currency+
+			"<br>[benchmark_reference_id]:"+msgObj.benchmark_reference_id+"<br>[benchmark_reference_id_source]:"+msgObj.benchmark_reference_id_source+'<hr /></div>';
+				$('#data_history').append(base_bench);
 			}
 			else console.log('rec', msgObj.msg, msgObj);
 		}
