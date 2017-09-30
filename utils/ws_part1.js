@@ -182,7 +182,12 @@ module.exports.process_msg = function(ws, data){
     					for (var i = 0; i < rows.length; i++) {
         					arr[i] = rows[i];
         					console.log(arr[i])
-						sendMsg(arr[i]);
+						sendMsg({msg: 'account', sha_value:arr[i].sha_value, ac_id:arr[i].ac_id, ac_short_name:arr[i].ac_short_name, status:arr[i].status, term_date:arr[i].term_date,
+	inception_date:arr[i].inception_date, ac_region: arr[i].ac_region, ac_sub_region:arr[i].ac_sub_region, cod_country_domicile:arr[i].cod_country_domicile, liq_method:arr[i].liq_method,
+	contracting_entity:arr[i].contracting_entity, mgn_entity:arr[i].mgn_entity, ac_legal_name:arr[i].ac_legal_name, manager_name:arr[i].manager_name, cod_ccy_base:arr[i].cod_ccy_base,
+	long_name:arr[i].long_name, mandate_id:arr[i].mandate_id, client_id:arr[i].client_id, custodian_name:arr[i].custodian_name, sub_mandate_id:arr[i].sub_mandate_id, 
+	transfer_agent_name:arr[i].transfer_agent_name, trust_bank:arr[i].trust_bank, re_trust_bank:arr[i].re_trust_bank, last_updated_by:arr[i].last_updated_by, 
+	last_approved_by:arr[i].last_approved_by, last_update_date:arr[i].last_update_date});
     					}
     					//app.get('/', function(req, res) {
         					//res.send(arr);
@@ -197,7 +202,8 @@ module.exports.process_msg = function(ws, data){
     					for (var i = 0; i < rows.length; i++) {
         					arr[i] = rows[i];
         					console.log(arr[i])
-						sendMsg(arr[i]);
+						sendMsg({msg: 'ac_trade', sha_value:arr[i].sha_value, ac_id:arr[i].ac_id, lvts:arr[i].lvts, calypso:arr[i].calypso,
+	aladdin:arr[i].aladdin, trade_start_date:arr[i].trade_start_date, equity:arr[i].equity, fixed_income:arr[i].fixed_income});
     					}
     					//app.get('/', function(req, res) {
         					//res.send(arr);
@@ -212,7 +218,8 @@ module.exports.process_msg = function(ws, data){
     					for (var i = 0; i < rows.length; i++) {
         					arr[i] = rows[i];
         					console.log(arr[i])
-						sendMsg(arr[i]);
+						sendMsg({msg: 'ac_benchmark', sha_value:arr[i].sha_value, ac_id:arr[i].ac_id, benchmark_id:arr[i].benchmark_id, source:arr[i].source, name:arr[i].name, currency:arr[i].currency,
+	primary_flag:arr[i].primary_flag, start_date:arr[i].start_date, end_date:arr[i].end_date, benchmark_reference_id:arr[i].benchmark_reference_id, benchmark_reference_id_source:arr[i].benchmark_reference_id_source});
     					}
     					//app.get('/', function(req, res) {
         					//res.send(arr);
@@ -227,7 +234,8 @@ module.exports.process_msg = function(ws, data){
     					for (var i = 0; i < rows.length; i++) {
         					arr[i] = rows[i];
         					console.log(arr[i])
-						sendMsg(arr[i]);
+						sendMsg({msg: 'benchmarks', sha_value:arr[i].sha_value, benchmark_id:arr[i].benchmark_id, id_source:arr[i].id_source, name:arr[i].name, currency:arr[i].currency,
+	benchmark_reference_id:arr[i].benchmark_reference_id, benchmark_reference_id_source:arr[i].benchmark_reference_id_source});
     					}
 				});
 			}
