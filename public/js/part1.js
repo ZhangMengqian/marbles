@@ -690,9 +690,51 @@ function connect_to_server(){
 							};
 				new_block(temp);								//send to blockchain.js
 			}
-			else if(msgObj.benchmark_id){
+			else if(msgObj.msg === 'account'){
+				console.log("accounts from database")
+
+				base_account='<div><hr>'+"[sha_value]:"+msgObj.sha_value+
+			"<br>[account]:"+msgObj.ac_id+"<br>[short name]:"+msgObj.ac_short_name+
+			"<br>[status]:"+msgObj.ac_status+"<br>[term date]:"+msgObj.term_date+
+			"<br>[inception date]:"+msgObj.inception_date+"<br>[region]:"+msgObj.ac_region+
+			"<br>[sub region]:"+msgObj.ac_sub_region+"<br>[country domicile]:"+msgObj.cod_country_domicile+
+			"<br>[liq method]:"+msgObj.liq_method+"<br>[contracting entity]:"+msgObj.contracting_entity+
+			"<br>[mgn entity]:"+msgObj.mgn_entity+"<br>[account legal name]:"+msgObj.ac_legal_name+
+			"<br>[manager name]:"+msgObj.manager_name+"<br>[cod_ccy_base]:"+msgObj.cod_ccy_base+
+			"<br>[long name]:"+msgObj.long_name+"<br>[mandate id]:"+msgObj.mandate_id+
+			"<br>[client id]:"+msgObj.client_id+"<br>[custodian name]:"+msgObj.custodian_name+
+			"<br>[sub_mandate_id]:"+msgObj.sub_mandate_id+"<br>[transfer_agent_name]:"+msgObj.transfer_agent_name+
+			"<br>[trust_bank]:"+msgObj.trust_bank+"<br>[re_trust_bank]:"+msgObj.re_trust_bank+
+			"<br>[last_updated_by]:"+msgObj.last_updated_by+"<br>[last_approved_by]:"+msgObj.last_approved_by+
+			"<br>[last_update_date]:"+msgObj.last_update_date+'<hr /></div>';
+				$('#data_history').append(base_account);
+			}
+			else if(msgObj.msg === 'ac_trade'){
+				console.log("actrade from database")
+				
+				base_actrade='<div><hr>'+"[sha_value]:"+msgObj.sha_value+
+			"<br>[account id]:"+msgObj.ac_id+"<br>[lvts]:"+msgObj.lvts+
+			"<br>[calypso]:"+msgObj.calypso+"<br>[aladdin]:"+msgObj.aladdin+
+			"<br>[trade start date]:"+msgObj.trade_start_date+"<br>[equity]:"+msgObj.equity+
+			'<br>[fixed_income]:'+msgObj.fixed_income+'<hr /></div>';
+				$('#data_history').append(base_actrade);
+			}
+			else if(msgObj.msg === 'ac_benchmark'){
+				console.log("ac_benchmarks from database")
+
+				base_acbench='<div><hr>'+"[sha_value]:"+msgObj.sha_value+
+			"<br>[account id]:"+msgObj.ac_id+"<br>[benchmark_id]:"+msgObj.benchmark_id+
+			"<br>[source]:"+msgObj.source+"<br>[name]:"+msgObj.name+
+			"<br>[currency]:"+msgObj.currency+"<br>[primary_flag]:"+msgObj.primary_flag+
+			"<br>[start_date]:"+msgObj.start_date+"<br>[end_date]:"+msgObj.end_date+
+			"<br>[benchmark_reference_id]:"+msgObj.benchmark_reference_id+"<br>[benchmark_reference_id_source]:"+msgObj.benchmark_reference_id_source
+			+'<hr /></div>';
+				$('#data_history').append(base_acbench);
+			}
+			else if(msgObj.msg === 'benchmarks'){
 				console.log("benchmarks from database")
-				base_bench='<div><hr>'+"[sha_value]"+msgObj.sha_value+"<br>[benchmark_id]:"+msgObj.benchmark_id+"<br>[id_source]:"+msgObj.id_source+
+
+				base_bench='<div><hr>'+"[sha_value]:"+msgObj.sha_value+"<br>[benchmark_id]:"+msgObj.benchmark_id+"<br>[id_source]:"+msgObj.id_source+
 			"<br>[name]:"+msgObj.name+"<br>[currency]:"+msgObj.currency+
 			"<br>[benchmark_reference_id]:"+msgObj.benchmark_reference_id+"<br>[benchmark_reference_id_source]:"+msgObj.benchmark_reference_id_source+'<hr /></div>';
 				$('#data_history').append(base_bench);
