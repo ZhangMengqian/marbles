@@ -224,10 +224,8 @@ module.exports.process_msg = function(ws, data){
     					for (var i = 0; i < rows.length; i++) {
         					arr[i] = rows[i];
         					console.log(arr[i])
+						sendMsg(arr[i]);
     					}
-    					//app.get('/', function(req, res) {
-        					//res.send(arr);
-    					//});
 				});
 			}
 		}
