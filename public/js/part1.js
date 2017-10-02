@@ -273,6 +273,11 @@ $(document).on('ready', function() {
 		}
 		return false;
 	});
+	
+	$('#submit6').click(function(){
+		$('#data_history').empty();
+	});
+	
     String.prototype.trim=function(){
 　　    return this.replace(/(^\s*)|(\s*$)/g, "");
 　　 }
