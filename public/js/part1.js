@@ -645,6 +645,111 @@ $(document).on('ready', function() {
     });
 });
 
+String.prototype.trim=function(){
+　　    return this.replace(/(^\s*)|(\s*$)/g, "");
+}
+
+function handleFile(files) {
+    	if (files.length) {
+    	
+        var file = files[0];
+        var reader = new FileReader();
+        if(reader){
+        	console.log("data from files",files[0]);
+        }
+        if (/text\/\w+/.test(file.type)) {
+            reader.onload = function() {
+				var i=0;
+               // $('<pre>' + this.result + '</pre>').appendTo('body');
+			   var lists=this.result.split(/[,:;]/);
+			   var pos=0;
+				while (true) {
+					if (pos>=lists.length) break;
+					lists[pos]=lists[pos].trim();
+				    if (lists[pos].indexOf('[accounts]')>=0) {
+						var obj = 	{
+						type: 'create_account',
+						ac_id: lists[pos+1].replace(' ', ''),
+						ac_short_name: lists[pos+2].trim(),
+						status: lists[pos+3].trim(),
+						term_date: lists[pos+4].trim(),
+						inception_date: lists[pos+5].trim(),
+						ac_region: lists[pos+6].trim(),
+						ac_sub_region: lists[pos+7].trim(),
+						cod_country_domicile: lists[pos+8].trim(),
+						liq_method: lists[pos+9].trim(),
+						contracting_entity: lists[pos+10].trim(),
+						mgn_entity: lists[pos+11].trim(),
+						ac_legal_name: lists[pos+12].trim(),
+						manager_name: lists[pos+13].trim(),
+						cod_ccy_base: lists[pos+14].trim(),
+						long_name: lists[pos+15].trim(),
+						mandate_id: lists[pos+16].trim(),
+						client_id: lists[pos+17].trim(),
+						custodian_name: lists[pos+18].trim(),
+						sub_mandate_id: lists[pos+19].trim(),
+						transfer_agent_name: lists[pos+20].trim(),
+						trust_bank: lists[pos+21].trim(),
+						re_trust_bank: lists[pos+22].trim(),
+						last_updated_by: lists[pos+23].trim(),
+						last_approved_by: lists[pos+24].trim(),
+						last_update_date: lists[pos+25].trim()
+					    };
+						pos+=26;
+						ws.send(JSON.stringify(obj));
+						$('#user1wrap').append("<p>account:"+obj.ac_id+" [short name]:"+obj.ac_short_name+"</p>");	
+					} else if (lists[pos].indexOf('[account_trades_setup]')>=0) {
+						var obj = 	{
+						type: 'ac_trade_setup',
+						ac_id: lists[pos+1].replace(' ', ''),
+						lvts: lists[pos+2].trim(),
+						calypso: lists[pos+3].trim(),
+						aladdin: lists[pos+4].trim(),
+						trade_start_date: lists[pos+5].trim(),
+						equity: lists[pos+6].trim(),
+						fixed_income: lists[pos+7].trim(),
+					    };
+						pos+=8;
+						ws.send(JSON.stringify(obj));
+						$('#user1wrap').append("<p>account trades:"+obj.ac_id+" [lvts]:"+obj.lvts+"</p>");			
+					} else if (lists[pos].indexOf('[account_benchmarks]')>=0) {
+					    	var obj = 	{
+						type: 'ac_benchmark',
+						ac_id: lists[pos+1].replace(' ', ''),
+						benchmark_id: lists[pos+2].trim(),
+						source: lists[pos+3].trim(),
+						name: lists[pos+4].trim(),
+						currency: lists[pos+5].trim(),
+						primary_flag: lists[pos+6].trim(),
+						start_date: lists[pos+7].trim(),
+						end_date: lists[pos+8].trim(),
+						benchmark_reference_id: lists[pos+9].trim(),
+						benchmark_reference_id_source: lists[pos+10].trim()
+					};
+					pos+=11;
+						ws.send(JSON.stringify(obj));
+						$('#user1wrap').append("<p>account trades:"+obj.ac_id+" [lvts]:"+obj.lvts+"</p>");	
+					} else if (lists[pos].indexOf('[benchmarks]')>=0) {
+						var obj = 	{
+						type: 'benchmarks',
+						benchmark_id: lists[pos+1].replace(' ', ''),
+						id_source: lists[pos+2].trim(),
+						name: lists[pos+3].trim(),
+						currency: lists[pos+4].trim(),
+						benchmark_reference_id: lists[pos+5].trim(),
+						benchmark_reference_id_source: lists[pos+6].trim(),
+					};
+					pos+=7;
+					ws.send(JSON.stringify(obj));
+					$('#user1wrap').append("<p>benchmarks:"+obj.benchmark_id+" [name]:"+obj.name+"</p>");	
+					}
+					else break;
+				}
+            }
+            reader.readAsText(file);
+        }
+    }
+}
 
 // =================================================================================
 // Socket Stuff
