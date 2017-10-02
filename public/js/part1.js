@@ -393,7 +393,7 @@ $(document).on('ready', function() {
 		$('#panel_acBenchmark').hide();
 		$('#panel_acTradeSetup').hide();
 		$('#panel_benchmark').hide();
-	
+		$('#panel_viewer').hide();
 	});
 
 	$('#cr_acTradeSetup').click(function(){
@@ -402,6 +402,7 @@ $(document).on('ready', function() {
 		$('#panel_acBenchmark').hide();
 		$('#panel_acTradeSetup').fadeIn(300);
 		$('#panel_benchmark').hide();
+		$('#panel_viewer').hide();
 	});
 	$('#cr_acBenchmark').click(function(){
 		$('#homePanel').hide();
@@ -409,6 +410,7 @@ $(document).on('ready', function() {
 		$('#panel_acBenchmark').fadeIn(300);
 		$('#panel_acTradeSetup').hide();
 		$('#panel_benchmark').hide();
+		$('#panel_viewer').hide();
 	});
 	$('#cr_benchmark').click(function(){
 		$('#homePanel').hide();
@@ -416,6 +418,7 @@ $(document).on('ready', function() {
 		$('#panel_acBenchmark').hide();
 		$('#panel_acTradeSetup').hide();
 		$('#panel_benchmark').fadeIn(300);
+		$('#panel_viewer').hide();
 	});
 	$('#cr_viewer').click(function(){
 		$('#homePanel').hide();
@@ -569,7 +572,7 @@ $(document).on('ready', function() {
 		$('#panel_acBenchmark').hide();
 		$('#panel_acTradeSetup').hide();
 		$('#panel_benchmark').hide();
-		
+		$('#panel_viewer').hide();
 		var part = window.location.pathname.substring(0,3);
 		window.history.pushState({},'', part + '/home');						//put it in url so we can f5
 		
