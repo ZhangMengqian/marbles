@@ -257,19 +257,6 @@ $(document).on('ready', function() {
 		if(obj.data_type){
 			console.log('data view request, sending', obj);
 			ws.send(JSON.stringify(obj));
-			
-			//$('#user1wrap').append("<p>benchmarks:"+obj.benchmark_id+" [name]:"+obj.name+"</p>");		
-		
-			  //tmp_bench='<div id="benchnoti_'+obj.benchmark_id+'"><p><span style="color:#FF0;">An account trade has been created:</span><br>'+
-			//"[benchmark_id]:"+obj.benchmark_id+"<br>[id_source]:"+obj.id_source+
-			//"<br>[name]:"+obj.name+"<br>[currency]:"+obj.currency+
-			//"<br>[benchmark_reference_id]:"+obj.benchmark_reference_id+"<br>[benchmark_reference_id_source]:"+obj.benchmark_reference_id_source
-			//+'</p><button type="button" id="del_bench'+obj.benchmark_id+'">delete</button><hr /></div>';
-		
-		    //$('#bench_check_noti').append(tmp_bench);
-			//$('#bench_history').append(tmp_bench);
-			//$('#bench_check_button').show();
-			//$('#bench_mak_noti').empty();
 		}
 		return false;
 	});
@@ -278,110 +265,10 @@ $(document).on('ready', function() {
 		$('#data_history').empty();
 	});
 	
-    String.prototype.trim=function(){
-　　    return this.replace(/(^\s*)|(\s*$)/g, "");
-　　 }
-	
-	function handleFile(files) {
-    if (files.length) {
-        var file = files[0];
-        var reader = new FileReader();
-        if (/text\/\w+/.test(file.type)) {
-            reader.onload = function() {
-				var i=0;
-               // $('<pre>' + this.result + '</pre>').appendTo('body');
-			   var lists=this.result.split(/[,:;]/);
-			   var pos=0;
-				while (true) {
-					if (pos>=lists.length) break;
-					lists[pos]=lists[pos].trim();
-				    if (lists[pos].indexOf('[accounts]')>=0) {
-						var obj = 	{
-						type: 'create_account',
-						ac_id: lists[pos+1].replace(' ', ''),
-						ac_short_name: lists[pos+2].trim(),
-						status: lists[pos+3].trim(),
-						term_date: lists[pos+4].trim(),
-						inception_date: lists[pos+5].trim(),
-						ac_region: lists[pos+6].trim(),
-						ac_sub_region: lists[pos+7].trim(),
-						cod_country_domicile: lists[pos+8].trim(),
-						liq_method: lists[pos+9].trim(),
-						contracting_entity: lists[pos+10].trim(),
-						mgn_entity: lists[pos+11].trim(),
-						ac_legal_name: lists[pos+12].trim(),
-						manager_name: lists[pos+13].trim(),
-						cod_ccy_base: lists[pos+14].trim(),
-						long_name: lists[pos+15].trim(),
-						mandate_id: lists[pos+16].trim(),
-						client_id: lists[pos+17].trim(),
-						custodian_name: lists[pos+18].trim(),
-						sub_mandate_id: lists[pos+19].trim(),
-						transfer_agent_name: lists[pos+20].trim(),
-						trust_bank: lists[pos+21].trim(),
-						re_trust_bank: lists[pos+22].trim(),
-						last_updated_by: lists[pos+23].trim(),
-						last_approved_by: lists[pos+24].trim(),
-						last_update_date: lists[pos+25].trim()
-					    };
-						pos+=26;
-						ws.send(JSON.stringify(obj));
-						$('#user1wrap').append("<p>account:"+obj.ac_id+" [short name]:"+obj.ac_short_name+"</p>");	
-					} else if (lists[pos].indexOf('[account_trades_setup]')>=0) {
-						var obj = 	{
-						type: 'ac_trade_setup',
-						ac_id: lists[pos+1].replace(' ', ''),
-						lvts: lists[pos+2].trim(),
-						calypso: lists[pos+3].trim(),
-						aladdin: lists[pos+4].trim(),
-						trade_start_date: lists[pos+5].trim(),
-						equity: lists[pos+6].trim(),
-						fixed_income: lists[pos+7].trim(),
-					    };
-						pos+=8;
-						ws.send(JSON.stringify(obj));
-						$('#user1wrap').append("<p>account trades:"+obj.ac_id+" [lvts]:"+obj.lvts+"</p>");			
-					} else if (lists[pos].indexOf('[account_benchmarks]')>=0) {
-					    	var obj = 	{
-						type: 'ac_benchmark',
-						ac_id: lists[pos+1].replace(' ', ''),
-						benchmark_id: lists[pos+2].trim(),
-						source: lists[pos+3].trim(),
-						name: lists[pos+4].trim(),
-						currency: lists[pos+5].trim(),
-						primary_flag: lists[pos+6].trim(),
-						start_date: lists[pos+7].trim(),
-						end_date: lists[pos+8].trim(),
-						benchmark_reference_id: lists[pos+9].trim(),
-						benchmark_reference_id_source: lists[pos+10].trim()
-					};
-					pos+=11;
-						ws.send(JSON.stringify(obj));
-						$('#user1wrap').append("<p>account trades:"+obj.ac_id+" [lvts]:"+obj.lvts+"</p>");	
-					} else if (lists[pos].indexOf('[benchmarks]')>=0) {
-						var obj = 	{
-						type: 'benchmarks',
-						benchmark_id: lists[pos+1].replace(' ', ''),
-						id_source: lists[pos+2].trim(),
-						name: lists[pos+3].trim(),
-						currency: lists[pos+4].trim(),
-						benchmark_reference_id: lists[pos+5].trim(),
-						benchmark_reference_id_source: lists[pos+6].trim(),
-					};
-					pos+=7;
-					ws.send(JSON.stringify(obj));
-					$('#user1wrap').append("<p>benchmarks:"+obj.benchmark_id+" [name]:"+obj.name+"</p>");	
-					}
-					else break;
-				}
-            }
-            reader.readAsText(file);
-        }
-    }
-	showHomePanel();
-}
-	
-	
+	String.prototype.trim=function(){
+　　    		return this.replace(/(^\s*)|(\s*$)/g, "");
+　　    }
+								
 	$('#homeLink').click(function(){
 		showHomePanel();
 	});
@@ -699,6 +586,25 @@ function handleFile(files) {
 					    	pos+=26;
 						ws.send(JSON.stringify(obj));
 						$('#user1wrap').append("<p>account:"+obj.ac_id+" [short name]:"+obj.ac_short_name+"</p>");	
+					    	
+					    	tmp_account='<div id="acnoti_'+obj.ac_id+'"><p><span style="color:#FF0;">A new account has been created:</span><br>'+
+						"[account]:"+obj.ac_id+"<br>[short name]:"+obj.ac_short_name+
+						"<br>[status]:"+obj.ac_status+"<br>[term date]:"+obj.term_date+
+						"<br>[inception date]:"+obj.inception_date+"<br>[region]:"+obj.ac_region+
+						"<br>[sub region]:"+obj.ac_sub_region+"<br>[country domicile]:"+obj.cod_country_domicile+
+						"<br>[liq method]:"+obj.liq_method+"<br>[contracting entity]:"+obj.contracting_entity+
+						"<br>[mgn entity]:"+obj.mgn_entity+"<br>[account legal name]:"+obj.ac_legal_name+
+						"<br>[manager name]:"+obj.manager_name+"<br>[cod_ccy_base]:"+obj.cod_ccy_base+
+						"<br>[long name]:"+obj.long_name+"<br>[mandate id]:"+obj.mandate_id+
+						"<br>[client id]:"+obj.client_id+"<br>[custodian name]:"+obj.custodian_name+
+						"<br>[sub_mandate_id]:"+obj.sub_mandate_id+"<br>[transfer_agent_name]:"+obj.transfer_agent_name+
+						"<br>[trust_bank]:"+obj.trust_bank+"<br>[re_trust_bank]:"+obj.re_trust_bank+
+						"<br>[last_updated_by]:"+obj.last_updated_by+"<br>[last_approved_by]:"+obj.last_approved_by+
+						"<br>[last_update_date]:"+obj.last_update_date+'</p><button type="button" id="del_ac'+obj.ac_id+'">delete</button><hr /></div>';
+			
+						$('#ac_check_notice').append(tmp_account);
+						$('#ac_history').append(tmp_account);
+						$('#ac_check_button').show();
 					} else if (lists[pos].indexOf('account_trades_setup')>=0) {
 						var obj = 	{
 						type: 'ac_trade_setup',
@@ -713,7 +619,19 @@ function handleFile(files) {
 						console.log("read line success");
 						pos+=8;
 						ws.send(JSON.stringify(obj));
-						$('#user1wrap').append("<p>account trades:"+obj.ac_id+" [lvts]:"+obj.lvts+"</p>");			
+						$('#user1wrap').append("<p>account trades:"+obj.ac_id+" [lvts]:"+obj.lvts+"</p>");
+						
+						$('#user1wrap').append("<p>account trades:"+obj.ac_id+" [lvts]:"+obj.lvts+"</p>");		
+						tmp_actrade='<div id="actranoti_'+obj.ac_id+'"><p><span style="color:#FF0;">An account trade has been created:</span><br>'+
+						"[account id]:"+obj.ac_id+"<br>[lvts]:"+obj.lvts+
+						"<br>[calypso]:"+obj.calypso+"<br>[aladdin]:"+obj.aladdin+
+						"<br>[trade start date]:"+obj.trade_start_date+"<br>[equity]:"+obj.equity+
+						'<br>[fixed_income]:'+obj.fixed_income+'</p><button type="button" id="del_actra'+obj.ac_id+'">delete</button><hr /></div>';
+			
+						$('#actrade_check_notice').append(tmp_actrade);
+						$('#actrade_history').append(tmp_actrade);
+						$('#actrade_check_button').show();
+						$('#actrade_mak_noti').empty();	
 					} else if (lists[pos].indexOf('account_benchmarks')>=0) {
 					    	var obj = 	{
 						type: 'ac_benchmark',
@@ -731,7 +649,20 @@ function handleFile(files) {
 						console.log("read line success");
 						pos+=11;
 						ws.send(JSON.stringify(obj));
-						$('#user1wrap').append("<p>account trades:"+obj.ac_id+" [lvts]:"+obj.lvts+"</p>");	
+						$('#user1wrap').append("<p>account trades:"+obj.ac_id+" [lvts]:"+obj.lvts+"</p>");
+						
+						tmp_acbench='<div id="acbennoti_'+obj.ac_id+'"><p><span style="color:#FF0;">An account benchmark has been created:</span><br>'+
+						"[account id]:"+obj.ac_id+"<br>[benchmark_id]:"+obj.benchmark_id+
+						"<br>[source]:"+obj.source+"<br>[name]:"+obj.name+
+						"<br>[currency]:"+obj.currency+"<br>[primary_flag]:"+obj.primary_flag+
+						"<br>[start_date]:"+obj.start_date+"<br>[end_date]:"+obj.end_date+
+						"<br>[benchmark_reference_id]:"+obj.benchmark_reference_id+"<br>[benchmark_reference_id_source]:"+obj.benchmark_reference_id_source
+						+'</p><button type="button" id="del_acben'+obj.ac_id+'">delete</button><hr /></div>';
+			
+						$('#acbench_check_noti').append(tmp_acbench);
+						$('#acbench_history').append(tmp_acbench);
+						$('#acbench_check_button').show();
+						$('#acbench_mak_noti').empty();
 					} else if (lists[pos].indexOf('benchmarks')>=0) {
 						var obj = 	{
 						type: 'benchmarks',
@@ -745,7 +676,20 @@ function handleFile(files) {
 						console.log("read line success");
 						pos+=7;
 						ws.send(JSON.stringify(obj));
-						$('#user1wrap').append("<p>benchmarks:"+obj.benchmark_id+" [name]:"+obj.name+"</p>");	
+						$('#user1wrap').append("<p>benchmarks:"+obj.benchmark_id+" [name]:"+obj.name+"</p>");
+						
+						tmp_acbench='<div id="acbennoti_'+obj.ac_id+'"><p><span style="color:#FF0;">An account benchmark has been created:</span><br>'+
+						"[account id]:"+obj.ac_id+"<br>[benchmark_id]:"+obj.benchmark_id+
+						"<br>[source]:"+obj.source+"<br>[name]:"+obj.name+
+						"<br>[currency]:"+obj.currency+"<br>[primary_flag]:"+obj.primary_flag+
+						"<br>[start_date]:"+obj.start_date+"<br>[end_date]:"+obj.end_date+
+						"<br>[benchmark_reference_id]:"+obj.benchmark_reference_id+"<br>[benchmark_reference_id_source]:"+obj.benchmark_reference_id_source
+						+'</p><button type="button" id="del_acben'+obj.ac_id+'">delete</button><hr /></div>';
+			
+						$('#acbench_check_noti').append(tmp_acbench);
+						$('#acbench_history').append(tmp_acbench);
+						$('#acbench_check_button').show();
+						$('#acbench_mak_noti').empty();
 					}
 					else break;
 				}
