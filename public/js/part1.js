@@ -666,7 +666,7 @@ function handleFile(files) {
 				while (true) {
 					if (pos>=lists.length) break;
 					lists[pos]=lists[pos].trim();
-				    if (lists[pos].indexOf('[accounts]')>=0) {
+				    if (lists[pos].indexOf('accounts')>=0) {
 						var obj = 	{
 						type: 'create_account',
 						ac_id: lists[pos+1].replace(' ', ''),
@@ -695,10 +695,11 @@ function handleFile(files) {
 						last_approved_by: lists[pos+24].trim(),
 						last_update_date: lists[pos+25].trim()
 					    };
-						pos+=26;
+						console.log("read line success");
+					    	pos+=26;
 						ws.send(JSON.stringify(obj));
 						$('#user1wrap').append("<p>account:"+obj.ac_id+" [short name]:"+obj.ac_short_name+"</p>");	
-					} else if (lists[pos].indexOf('[account_trades_setup]')>=0) {
+					} else if (lists[pos].indexOf('account_trades_setup')>=0) {
 						var obj = 	{
 						type: 'ac_trade_setup',
 						ac_id: lists[pos+1].replace(' ', ''),
@@ -709,10 +710,11 @@ function handleFile(files) {
 						equity: lists[pos+6].trim(),
 						fixed_income: lists[pos+7].trim(),
 					    };
+						console.log("read line success");
 						pos+=8;
 						ws.send(JSON.stringify(obj));
 						$('#user1wrap').append("<p>account trades:"+obj.ac_id+" [lvts]:"+obj.lvts+"</p>");			
-					} else if (lists[pos].indexOf('[account_benchmarks]')>=0) {
+					} else if (lists[pos].indexOf('account_benchmarks')>=0) {
 					    	var obj = 	{
 						type: 'ac_benchmark',
 						ac_id: lists[pos+1].replace(' ', ''),
@@ -726,10 +728,11 @@ function handleFile(files) {
 						benchmark_reference_id: lists[pos+9].trim(),
 						benchmark_reference_id_source: lists[pos+10].trim()
 					};
-					pos+=11;
+						console.log("read line success");
+						pos+=11;
 						ws.send(JSON.stringify(obj));
 						$('#user1wrap').append("<p>account trades:"+obj.ac_id+" [lvts]:"+obj.lvts+"</p>");	
-					} else if (lists[pos].indexOf('[benchmarks]')>=0) {
+					} else if (lists[pos].indexOf('benchmarks')>=0) {
 						var obj = 	{
 						type: 'benchmarks',
 						benchmark_id: lists[pos+1].replace(' ', ''),
@@ -739,9 +742,10 @@ function handleFile(files) {
 						benchmark_reference_id: lists[pos+5].trim(),
 						benchmark_reference_id_source: lists[pos+6].trim(),
 					};
-					pos+=7;
-					ws.send(JSON.stringify(obj));
-					$('#user1wrap').append("<p>benchmarks:"+obj.benchmark_id+" [name]:"+obj.name+"</p>");	
+						console.log("read line success");
+						pos+=7;
+						ws.send(JSON.stringify(obj));
+						$('#user1wrap').append("<p>benchmarks:"+obj.benchmark_id+" [name]:"+obj.name+"</p>");	
 					}
 					else break;
 				}
