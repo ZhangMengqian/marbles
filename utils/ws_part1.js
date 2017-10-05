@@ -628,11 +628,14 @@ module.exports.process_msg = function(ws, data){
 			if(stats.transactions){
 				console.log(stats);
 				console.log(stats.transactions[0]);
+				console.log(stats.height);
 				var ccid = formatCCID(stats.transactions[0].type, stats.transactions[0].uuid, atb(stats.transactions[0].chaincodeID));
 				var payload = atb(stats.transactions[0].payload);
-				var chaindata = formatPayload(payload, ccid);
-				data.push(chaindata);
-				console.log(chaindata);
+				if(ccid){
+					var chaindata = formatPayload(payload, ccid);
+					data.push(chaindata);
+					console.log(chaindata);
+				}
 			}
 			
                     }
