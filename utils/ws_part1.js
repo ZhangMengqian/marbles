@@ -586,6 +586,30 @@ module.exports.process_msg = function(ws, data){
 		}
 	}
 
+    function formatCCID(i, uuid, ccid){								//flip uuid and ccid if deploy, weird i know
+	if(i == 1) return uuid;
+	return ccid;
+    }	
+    
+    function atb(r) {
+	var e = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+    	var o = String(r).replace(/=+$/, "");
+    	if (o.length % 4 == 1)throw new t("'atob' failed: The string to be decoded is not correctly encoded.");
+    	for (var n, a, i = 0, c = 0, d = ""; a = o.charAt(c++); ~a && (n = i % 4 ? 64 * n + a : a, i++ % 4) ? d += String.fromCharCode(255 & n >> (-2 * i & 6)) : 0)a = e.indexOf(a);
+    	return String(d);
+    }
+    
+    function formatPayload(str, ccid){								//create a sllliiiggghhhtttlllllyyy better payload name from decoded payload
+	var func = ['init', 'delete', 'write', 'create_account','ac_trade_setup', 'ac_benchmark', 'benchmarks', 'check_decide'];
+	str =  str.substring(str.indexOf(ccid) + ccid.length + 4);
+	for(var i in func){
+		if(str.indexOf(func[i]) >= 0){
+			return str.substr(func[i].length);
+		}
+	}
+	return str;
+    }
+	
     function get_chainstats(e, chain_stats){
         if(chain_stats && chain_stats.height){
             chain_stats.height = chain_stats.height - 1;								//its 1 higher than actual height
@@ -593,7 +617,6 @@ module.exports.process_msg = function(ws, data){
             var data=[];
             for(var i = chain_stats.height; i >= 1; i--){								//create a list of heights we need
                 list.push(i);
-                if(list.length >= 16) break;
             }
 
             list.reverse();																//flip it so order is correct in UI
@@ -602,8 +625,16 @@ module.exports.process_msg = function(ws, data){
                     if(e == null){
                         stats.height = block_height;
                         // sendMsg({msg: 'chainstats', e: e, chainstats: chain_stats, blockstats: stats});
-						data.push(chain_stats);
-						console.log(stats.payload);
+			if(stats.transactions){
+				console.log(stats);
+				console.log(stats.transactions[0]);
+				var ccid = formatCCID(stats.transactions[0].type, stats.transactions[0].uuid, atb(stats.transactions[0].chaincodeID));
+				var payload = atb(stats.transactions[0].payload);
+				var chaindata = formatPayload(payload, ccid);
+				data.push(chaindata);
+				console.log(chaindata);
+			}
+			
                     }
                     cb(null);
                 });
