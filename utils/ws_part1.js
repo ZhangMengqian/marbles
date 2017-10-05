@@ -233,12 +233,276 @@ module.exports.process_msg = function(ws, data){
     					if (err) throw err;
     					for (var i = 0; i < rows.length; i++) {
         					arr[i] = rows[i];
-        					console.log(arr[i])
+        					console.log(arr[i]);
 						sendMsg({msg: 'benchmarks', sha_value:arr[i].sha_value, benchmark_id:arr[i].benchmark_id, id_source:arr[i].id_source, name:arr[i].name, currency:arr[i].currency,
 	benchmark_reference_id:arr[i].benchmark_reference_id, benchmark_reference_id_source:arr[i].benchmark_reference_id_source});
     					}
 				});
 			}
+		}
+		else if (data.type == 'untreated') {
+			console.log('--------------get untreated account now--------------------------');
+			if (data.table_name == 'account'){
+				var selectSQL = 'select * from `account` where flag = 0';
+				var arr = [];
+				connection.query( selectSQL, function (err, rows) {
+					if (err) throw err;
+					for (var i=0; i<rows.length; i++){
+						arr[i] = rows[i];
+						console.log(arr[i]);
+                        sendMsg({msg: 'untreated_account', sha_value:arr[i].sha_value, ac_id:arr[i].ac_id, ac_short_name:arr[i].ac_short_name, status:arr[i].status, term_date:arr[i].term_date,
+                            inception_date:arr[i].inception_date, ac_region: arr[i].ac_region, ac_sub_region:arr[i].ac_sub_region, cod_country_domicile:arr[i].cod_country_domicile, liq_method:arr[i].liq_method,
+                            contracting_entity:arr[i].contracting_entity, mgn_entity:arr[i].mgn_entity, ac_legal_name:arr[i].ac_legal_name, manager_name:arr[i].manager_name, cod_ccy_base:arr[i].cod_ccy_base,
+                            long_name:arr[i].long_name, mandate_id:arr[i].mandate_id, client_id:arr[i].client_id, custodian_name:arr[i].custodian_name, sub_mandate_id:arr[i].sub_mandate_id,
+                            transfer_agent_name:arr[i].transfer_agent_name, trust_bank:arr[i].trust_bank, re_trust_bank:arr[i].re_trust_bank, last_updated_by:arr[i].last_updated_by,
+                            last_approved_by:arr[i].last_approved_by, last_update_date:arr[i].last_update_date});
+                        }
+                });
+			}
+			else if (data.table_name == 'ac_trade') {
+				var selectSQL = 'select * from `ac_trade` where flag = 0';
+				var arr = [];
+				connection.query( selectSQL, function (err, rows) {
+					if(err) throw err;
+					for (var i =0; i<rows.length; i++){
+						arr[i] = rows[i];
+						console.log(arr[i]);
+                        sendMsg({msg: 'untreated_ac_trade', sha_value:arr[i].sha_value, ac_id:arr[i].ac_id, lvts:arr[i].lvts, calypso:arr[i].calypso,
+                            aladdin:arr[i].aladdin, trade_start_date:arr[i].trade_start_date, equity:arr[i].equity, fixed_income:arr[i].fixed_income});
+                    }
+				});
+			}
+			else if (data.table_name == 'ac_benchmark'){
+                var selectSQL = 'select * from `ac_benchmark` where flag = 0';
+                var arr = [];
+                connection.query( selectSQL, function (err, rows) {
+                    if(err) throw err;
+                    for (var i =0; i<rows.length; i++){
+                        arr[i] = rows[i];
+                        console.log(arr[i]);
+                        sendMsg({msg: 'untreated_ac_benchmark', sha_value:arr[i].sha_value, ac_id:arr[i].ac_id, benchmark_id:arr[i].benchmark_id, source:arr[i].source, name:arr[i].name, currency:arr[i].currency,
+                            primary_flag:arr[i].primary_flag, start_date:arr[i].start_date, end_date:arr[i].end_date, benchmark_reference_id:arr[i].benchmark_reference_id, benchmark_reference_id_source:arr[i].benchmark_reference_id_source});
+                    }
+                });
+			}
+			else if (data.table_name == 'benchmarks'){
+                var selectSQL = 'select * from `benchmarks` where flag = 0';
+                var arr = [];
+                connection.query( selectSQL, function (err, rows) {
+                    if(err) throw err;
+                    for (var i =0; i<rows.length; i++){
+                        arr[i] = rows[i];
+                        console.log(arr[i]);
+                        sendMsg({msg: 'untreated_benchmarks', sha_value:arr[i].sha_value, benchmark_id:arr[i].benchmark_id, id_source:arr[i].id_source, name:arr[i].name, currency:arr[i].currency,
+                            benchmark_reference_id:arr[i].benchmark_reference_id, benchmark_reference_id_source:arr[i].benchmark_reference_id_source});
+                    }
+                });
+			}
+
+		}
+		else if (data.type == 'new') {
+			console.log('-----------------get new accepted account now---------------------');
+			if(data.table_name == 'account') {
+				var selectSQL = 'select * from `account` where flag = 1';
+				var arr = [];
+                connection.query( selectSQL, function (err, rows) {
+                    if (err) throw err;
+                    for (var i=0; i<rows.length; i++){
+                        arr[i] = rows[i];
+                        console.log(arr[i]);
+                        sendMsg({msg: 'newAccepted_account', sha_value:arr[i].sha_value, ac_id:arr[i].ac_id, ac_short_name:arr[i].ac_short_name, status:arr[i].status, term_date:arr[i].term_date,
+                            inception_date:arr[i].inception_date, ac_region: arr[i].ac_region, ac_sub_region:arr[i].ac_sub_region, cod_country_domicile:arr[i].cod_country_domicile, liq_method:arr[i].liq_method,
+                            contracting_entity:arr[i].contracting_entity, mgn_entity:arr[i].mgn_entity, ac_legal_name:arr[i].ac_legal_name, manager_name:arr[i].manager_name, cod_ccy_base:arr[i].cod_ccy_base,
+                            long_name:arr[i].long_name, mandate_id:arr[i].mandate_id, client_id:arr[i].client_id, custodian_name:arr[i].custodian_name, sub_mandate_id:arr[i].sub_mandate_id,
+                            transfer_agent_name:arr[i].transfer_agent_name, trust_bank:arr[i].trust_bank, re_trust_bank:arr[i].re_trust_bank, last_updated_by:arr[i].last_updated_by,
+                            last_approved_by:arr[i].last_approved_by, last_update_date:arr[i].last_update_date});
+                    }
+                });
+			}
+			else if (data.table_name == 'ac_trade'){
+				var selectSQL = 'select * from `ac_trade` where flag = 1';
+				var arr = [];
+				connection.query( selectSQL, function (err, rows) {
+					if(err)	throw err;
+                    for (var i=0; i<rows.length; i++){
+                        arr[i] = rows[i];
+                        console.log(arr[i]);
+                        sendMsg({msg: 'newAccepted_actrade', sha_value:arr[i].sha_value, ac_id:arr[i].ac_id, lvts:arr[i].lvts, calypso:arr[i].calypso,
+                            aladdin:arr[i].aladdin, trade_start_date:arr[i].trade_start_date, equity:arr[i].equity, fixed_income:arr[i].fixed_income});
+                    }
+				} );
+			}
+			else if (data.table_name == 'ac_benchmark'){
+                var selectSQL = 'select * from `ac_benchmark` where flag = 1';
+                var arr = [];
+                connection.query( selectSQL, function (err, rows) {
+                    if(err)	throw err;
+                    for (var i=0; i<rows.length; i++){
+                        arr[i] = rows[i];
+                        console.log(arr[i]);
+                        sendMsg({msg: 'newAccepted_acben', sha_value:arr[i].sha_value, ac_id:arr[i].ac_id, benchmark_id:arr[i].benchmark_id, source:arr[i].source, name:arr[i].name, currency:arr[i].currency,
+                            primary_flag:arr[i].primary_flag, start_date:arr[i].start_date, end_date:arr[i].end_date, benchmark_reference_id:arr[i].benchmark_reference_id, benchmark_reference_id_source:arr[i].benchmark_reference_id_source});
+                    }
+                } );
+			}
+		}
+		else if (data.type == 'know_new_record') {
+			console.log('-----------------know new record----------------------');
+            console.log(data.id);
+			if (data.table_name == 'account') {
+                var updateSQL = 'update account set flag = 2 where ac_id = ' + data.id;
+                connection.query(updateSQL, function (err, res) {
+                    if (err) {
+                        console.log(err);
+                        throw err;
+                    }
+                    console.log("UPDATE Return ==> ");
+                    console.log(res);
+                });
+            }
+            else if (data.table_name == 'ac_trade'){
+                var updateSQL = 'update ac_trade set flag = 2 where ac_id = ' + data.id;
+                connection.query(updateSQL, function (err, res) {
+                    if (err) {
+                        console.log(err);
+                        throw err;
+                    }
+                    console.log("UPDATE Return ==> ");
+                    console.log(res);
+                });
+			}
+			else if (data.table_name == 'ac_benchmark'){
+                var updateSQL = 'update ac_benchmark set flag = 2 where ac_id = ' + data.id;
+                connection.query(updateSQL, function (err, res) {
+                    if (err) {
+                        console.log(err);
+                        throw err;
+                    }
+                    console.log("UPDATE Return ==> ");
+                    console.log(res);
+                });
+			}
+		}
+		else if(data.type == 'ac_accept') {
+            console.log('------------------------------accept the account now---------------------------------');
+            console.log(data.ac_id);		// success
+            var updateSQL = 'update account set flag = 1 where ac_id = ' + data.ac_id;
+            connection.query(updateSQL, function (err, res) {
+                if (err){
+                	console.log(err);
+                	throw err;
+                } else {
+                    ws.send(JSON.stringify({type:"check_decide", checktype:"Account", checkcont:"accept"}));
+				}
+                console.log("UPDATE Return ==> ");
+                console.log(res);
+            });
+
+        }
+        else if (data.type == 'actra_accept') {
+            console.log('------------------------------accept the account trade now---------------------------------');
+            console.log(data.ac_id);
+            var updateSQL = 'update ac_trade set flag = 1 where ac_id = ' + data.ac_id;
+            connection.query(updateSQL, function (err, res) {
+                if (err){
+                    console.log(err);
+                    throw err;
+                } else {
+                    ws.send(JSON.stringify({type:"check_decide", checktype:"Ac_trades_setup", checkcont:"accept"}));
+                }
+                console.log("UPDATE Return ==> ");
+                console.log(res);
+            });
+		}
+		else if(data.type == 'acben_accept') {
+            console.log('------------------------------accept the account benchmark now---------------------------------');
+            console.log(data.ac_id);
+            var updateSQL = 'update ac_benchmark set flag = 1 where ac_id = ' + data.ac_id;
+            connection.query(updateSQL, function (err, res) {
+                if (err){
+                    console.log(err);
+                    throw err;
+                } else {
+                    ws.send(JSON.stringify({type:"check_decide", checktype:"Ac_benchmark", checkcont:"accept"}));
+                }
+                console.log("UPDATE Return ==> ");
+                console.log(res);
+            });
+		}
+		else if(data.type == 'bench_accept') {
+            console.log('------------------------------accept the benchmarks now---------------------------------');
+            console.log(data.id);
+            var updateSQL = 'update benchmarks set flag = 1 where benchmark_id = ' + data.id;
+            connection.query(updateSQL, function (err, res) {
+                if (err){
+                    console.log(err);
+                    throw err;
+                } else {
+                    ws.send(JSON.stringify({type:"check_decide", checktype:"Benchmarks", checkcont:"accept"}));
+                }
+                console.log("UPDATE Return ==> ");
+                console.log(res);
+            });
+		}
+        else if(data.type == 'ac_decline') {
+			console.log('---------------------------decline the account now--------------------------------');
+			console.log(data.ac_id);
+			var updateSQL = 'update account set flag = -1 where ac_id = ' + data.ac_id;
+            connection.query(updateSQL, function (err, res) {
+                if (err){
+                    console.log(err);
+                    throw err;
+                } else {
+                    ws.send(JSON.stringify({type:"check_decide", checktype:"Account", checkcont:"decline"}));		// send to blockchain
+                }
+                console.log("UPDATE Return ==> ");
+                console.log(res);
+            });
+		}
+		else if(data.type == 'actra_decline') {
+            console.log('---------------------------decline the account trade now--------------------------------');
+            console.log(data.ac_id);
+            var updateSQL = 'update ac_trade set flag = -1 where ac_id = ' + data.ac_id;
+            connection.query(updateSQL, function (err, res) {
+                if (err) {
+                    console.log(err);
+                    throw err;
+                } else {
+                    ws.send(JSON.stringify({type: "check_decide", checktype: "Ac_trades_setup", checkcont: "decline"}));	// send to blockchain
+                }
+                console.log("UPDATE Return ==> ");
+                console.log(res);
+            });
+        }
+		else if (data.type == 'acben_decline') {
+			console.log('---------------------------decline the account benchmark now--------------------------------');
+			console.log(data.ac_id);
+			var updateSQL = 'update ac_benchmark set flag = -1 where ac_id = ' + data.ac_id;
+			connection.query(updateSQL, function (err, res) {
+                    if (err){
+                        console.log(err);
+                        throw err;
+                    } else {
+                        ws.send(JSON.stringify({type:"check_decide", checktype:"Ac_benchmark", checkcont:"decline"}));	// send to blockchain
+                    }
+                    console.log("UPDATE Return ==> ");
+                    console.log(res);
+                });
+		}
+		else if (data.type == 'bench_decline') {
+            console.log('---------------------------decline the benchmarks now--------------------------------');
+            console.log(data.id);
+            var updateSQL = 'update benchmarks set flag = -1 where benchmark_id = ' + data.id;
+            connection.query(updateSQL, function (err, res) {
+                if (err){
+                    console.log(err);
+                    throw err;
+                } else {
+                    ws.send(JSON.stringify({type:"check_decide", checktype:"Benchmarks", checkcont:"decline"}));	// send to blockchain
+                }
+                console.log("UPDATE Return ==> ");
+                console.log(res);
+            });
 		}
 		else if(data.type == 'get'){
 			console.log('get user msg');
@@ -250,9 +514,14 @@ module.exports.process_msg = function(ws, data){
 				chaincode.invoke.delete([data.name]);
 			}
 		}
+		else if(data.type == 'recheck'){
+			var chain_data = ibc.chain_stats(get_chainstats);
+			console.log("data",chain_data);
+		}
 		else if(data.type == 'chainstats'){
 			console.log('chainstats msg');
 			ibc.chain_stats(cb_chainstats);
+			console.log(ibc);
 		} else if(data.type == 'check_decide'){
 		
 			chaincode.invoke.check_decide([data.checktype, data.checkcont]);
@@ -274,6 +543,8 @@ module.exports.process_msg = function(ws, data){
 					chaincode.query.read([json[key]], function(e, marble) {
 						if(e != null) console.log('[ws error] did not get marble:', e);
 						else {
+							// console.log("------------------------------------------------------------------");
+                            // console.log(marble);
 							if(marble) sendMsg({msg: 'marbles', e: e, marble: JSON.parse(marble)});
 							cb(null);
 						}
@@ -299,7 +570,7 @@ module.exports.process_msg = function(ws, data){
 			var list = [];
 			for(var i = chain_stats.height; i >= 1; i--){								//create a list of heights we need
 				list.push(i);
-				if(list.length >= 8) break;
+				if(list.length >= 16) break;
 			}
 			list.reverse();																//flip it so order is correct in UI
 			async.eachLimit(list, 1, function(block_height, cb) {						//iter through each one, and send it
@@ -314,7 +585,34 @@ module.exports.process_msg = function(ws, data){
 			});
 		}
 	}
-	
+
+    function get_chainstats(e, chain_stats){
+        if(chain_stats && chain_stats.height){
+            chain_stats.height = chain_stats.height - 1;								//its 1 higher than actual height
+            var list = [];
+            var data=[];
+            for(var i = chain_stats.height; i >= 1; i--){								//create a list of heights we need
+                list.push(i);
+                if(list.length >= 16) break;
+            }
+
+            list.reverse();																//flip it so order is correct in UI
+            async.eachLimit(list, 1, function(block_height, cb) {						//iter through each one, and send it
+                ibc.block_stats(block_height, function(e, stats){
+                    if(e == null){
+                        stats.height = block_height;
+                        // sendMsg({msg: 'chainstats', e: e, chainstats: chain_stats, blockstats: stats});
+						data.push(chain_stats);
+						console.log(stats.payload);
+                    }
+                    cb(null);
+                });
+                return data;
+            }, function() {
+            });
+
+        }
+    }
 	//send a message, socket might be closed...
 	function sendMsg(json){
 		if(ws){

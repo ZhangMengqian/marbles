@@ -34,6 +34,7 @@ function show_details(event, id){								//build the block details html
 	html += '<p> UUID: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + formatUUID(blocks[id].blockstats.transactions[0].type, blocks[id].blockstats.transactions[0].uuid) + '</p>';
 	html += '<p> Type:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + formatType(blocks[id].blockstats.transactions[0].type) + '</p>';
 	html += '<p> CC ID:  &nbsp;&nbsp;&nbsp;&nbsp;' + ccid + '</p>';
+    //html += '<p> payload:  &nbsp;' + payload + '</p>';
 	html += '<p> Payload:  &nbsp;' + formatPayload(payload, ccid) + '</p>';
 	$('#details').html(html).css('left', left).fadeIn();
 }
@@ -66,7 +67,7 @@ function build_block(id){										//build and append the block html
 }
 
 function move_on_down(){										//move the blocks left
-	if(block > 10){
+	if(block > 20){
 		$('.block:first').animate({opacity: 0}, 800, function(){$('.block:first').remove();});
 		$('.block').animate({left: '-=36'}, 800, function(){});
 		block--;

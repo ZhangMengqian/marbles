@@ -102,15 +102,14 @@ $(document).on('ready', function() {
 			"<br>[trust_bank]:"+obj.trust_bank+"<br>[re_trust_bank]:"+obj.re_trust_bank+
 			"<br>[last_updated_by]:"+obj.last_updated_by+"<br>[last_approved_by]:"+obj.last_approved_by+
 			"<br>[last_update_date]:"+obj.last_update_date+'</p><button type="button" id="del_ac'+obj.ac_id+'">delete</button><hr /></div>';
-			
-		$('#ac_check_notice').append(tmp_account);
-		$('#ac_history').append(tmp_account);
-			$('#ac_check_button').show();
+			// $('#ac_check_notice').append(tmp_account);
+			$('#ac_history').append(tmp_account);
+			// $('#ac_check_button').show();
 		}
 		return false;
 	});
 	
-		$('#submit2').click(function(){
+	$('#submit2').click(function(){
 		var obj = 	{
 						type: 'ac_trade_setup',
 						ac_id: $('input[name="t_ac_id"]').val().replace(' ', ''),
@@ -145,10 +144,10 @@ $(document).on('ready', function() {
 			"<br>[trade start date]:"+obj.trade_start_date+"<br>[equity]:"+obj.equity+
 			'<br>[fixed_income]:'+obj.fixed_income+'</p><button type="button" id="del_actra'+obj.ac_id+'">delete</button><hr /></div>';
 			
-			$('#actrade_check_notice').append(tmp_actrade);
+			// $('#actrade_check_notice').append(tmp_actrade);
 			$('#actrade_history').append(tmp_actrade);
-			$('#actrade_check_button').show();
-			$('#actrade_mak_noti').empty();
+			// $('#actrade_check_button').show();
+			// $('#actrade_mak_noti').empty();
 			
 		}
 		return false;
@@ -197,10 +196,10 @@ $(document).on('ready', function() {
 			"<br>[benchmark_reference_id]:"+obj.benchmark_reference_id+"<br>[benchmark_reference_id_source]:"+obj.benchmark_reference_id_source
 			+'</p><button type="button" id="del_acben'+obj.ac_id+'">delete</button><hr /></div>';
 			
-			$('#acbench_check_noti').append(tmp_acbench);
+			// $('#acbench_check_noti').append(tmp_acbench);
 			$('#acbench_history').append(tmp_acbench);
-			$('#acbench_check_button').show();
-			$('#acbench_mak_noti').empty();
+			//$('#acbench_check_button').show();
+			//$('#acbench_mak_noti').empty();
 			
 		}
 		return false;
@@ -429,100 +428,208 @@ $(document).on('ready', function() {
 		$('#panel_viewer').fadeIn(300);
 	});
 	
-   $('#ac_accept').click(function(){
-  	$('#actrade_mak_noti').append(tmp_account);
-	tmp_account="";
-	console.log('accepting user, sending', account_obj);
-	ws.send(JSON.stringify(account_obj));
-	account_obj = "";
-	$('#ac_check_notice').empty();
-	$('#ac_check_button').hide();
-	$('#user1wrap').append("<p>Account Checker Accepted!</p>");	
-	ws.send(JSON.stringify({type:"check_decide", checktype:"Account", checkcont:"accept"}));
-	showHomePanel();
-});
+   // $('#ac_accept').click(function(){
+   // 		// $('#actrade_mak_noti').append(tmp_account);
+	// 	// tmp_account="";
+	// 	console.log('accepting user, sending', account_obj);
+	// 	ws.send(JSON.stringify(account_obj));
+	// 	var obj = {
+	// 		type: 'ac_accept',
+	// 		ac_id:
+	// 	};
+	// 	// $('#ac_check_notice').empty();
+	// 	// $('#ac_check_button').hide();
+	// 	$('#user1wrap').append("<p>Account Checker Accepted!</p>");
+	// 	ws.send(JSON.stringify({type:"check_decide", checktype:"Account", checkcont:"accept"}));
+	// 	showHomePanel();
+   // });
 	
-	$('#ac_decline').click(function(){
-	tmp_account="";
-	$('#ac_check_notice').empty();
-	$('#ac_check_button').hide();
-	$('#user1wrap').append("<p>Account Checker Declined!</p>");	
-	ws.send(JSON.stringify({type:"check_decide", checktype:"Account", checkcont:"decline"}));
-	showHomePanel();
-});
+// 	$('#ac_decline').click(function(){
+// 	tmp_account="";
+// 	$('#ac_check_notice').empty();
+// 	$('#ac_check_button').hide();
+// 	$('#user1wrap').append("<p>Account Checker Declined!</p>");
+// 	ws.send(JSON.stringify({type:"check_decide", checktype:"Account", checkcont:"decline"}));
+// 	showHomePanel();
+// });
 	
-	$('#actrade_accept').click(function(){
-  	$('#acbench_mak_noti').append(tmp_actrade);
-	tmp_actrade="";
-	$('#actrade_check_notice').empty();
-	$('#actrade_check_button').hide();
-	$('#user1wrap').append("<p>Account trade Checker Accepted!</p>");	
-	ws.send(JSON.stringify({type:"check_decide", checktype:"Ac_trades_setup", checkcont:"accept"}));
-	showHomePanel();
-});
+// 	$('#actrade_accept').click(function(){
+//   	$('#acbench_mak_noti').append(tmp_actrade);
+// 	tmp_actrade="";
+// 	$('#actrade_check_notice').empty();
+// 	$('#actrade_check_button').hide();
+// 	$('#user1wrap').append("<p>Account trade Checker Accepted!</p>");
+// 	ws.send(JSON.stringify({type:"check_decide", checktype:"Ac_trades_setup", checkcont:"accept"}));
+// 	showHomePanel();
+// });
 
-    $('#actrade_decline').click(function(){
-	tmp_actrade="";
-	$('#actrade_check_notice').empty();
-	$('#actrade_check_button').hide();
-	$('#user1wrap').append("<p>Account trade Checker Declined!</p>");	
-	ws.send(JSON.stringify({type:"check_decide", checktype:"Ac_trades_setup", checkcont:"decline"}));
-	showHomePanel();
-});
+//     $('#actrade_decline').click(function(){
+// 	tmp_actrade="";
+// 	$('#actrade_check_notice').empty();
+// 	$('#actrade_check_button').hide();
+// 	$('#user1wrap').append("<p>Account trade Checker Declined!</p>");
+// 	ws.send(JSON.stringify({type:"check_decide", checktype:"Ac_trades_setup", checkcont:"decline"}));
+// 	showHomePanel();
+// });
 
-     $('#acbench_accept').click(function(){
-  	$('#bench_mak_noti').append(tmp_acbench);
-	tmp_acbench="";
-	$('#acbench_check_noti').empty();
-	$('#acbench_check_button').hide();
-	$('#user1wrap').append("<p>Account Benchmark Checker Accepted!</p>");	
-	ws.send(JSON.stringify({type:"check_decide", checktype:"Ac_benchmark", checkcont:"accept"}));
-	showHomePanel();
-});
+// 	$('#acbench_accept').click(function(){
+//   	$('#bench_mak_noti').append(tmp_acbench);
+// 	tmp_acbench="";
+// 	$('#acbench_check_noti').empty();
+// 	$('#acbench_check_button').hide();
+// 	$('#user1wrap').append("<p>Account Benchmark Checker Accepted!</p>");
+// 	ws.send(JSON.stringify({type:"check_decide", checktype:"Ac_benchmark", checkcont:"accept"}));
+// 	showHomePanel();
+// });
 
-    $('#acbench_decline').click(function(){
-	tmp_acbench="";
-	$('#acbench_check_noti').empty();
-	$('#acbench_check_button').hide();
-	$('#user1wrap').append("<p>Account Benchmark Checker Declined!</p>");	
-	ws.send(JSON.stringify({type:"check_decide", checktype:"Ac_benchmark", checkcont:"decline"}));
-	showHomePanel();
-});
+//     $('#acbench_decline').click(function(){
+// 	tmp_acbench="";
+// 	$('#acbench_check_noti').empty();
+// 	$('#acbench_check_button').hide();
+// 	$('#user1wrap').append("<p>Account Benchmark Checker Declined!</p>");
+// 	ws.send(JSON.stringify({type:"check_decide", checktype:"Ac_benchmark", checkcont:"decline"}));
+// 	showHomePanel();
+// });
 
-   $('#bench_accept').click(function(){
-	tmp_bench="";
-	$('#bench_check_noti').empty();
-	$('#bench_check_button').hide();
-	$('#user1wrap').append("<p>Benchmark Checker Accepted!</p>");	
-	ws.send(JSON.stringify({type:"check_decide", checktype:"Benchmarks", checkcont:"accept"}));
-	showHomePanel();
-});
+//    $('#bench_accept').click(function(){
+// 	tmp_bench="";
+// 	$('#bench_check_noti').empty();
+// 	$('#bench_check_button').hide();
+// 	$('#user1wrap').append("<p>Benchmark Checker Accepted!</p>");
+// 	ws.send(JSON.stringify({type:"check_decide", checktype:"Benchmarks", checkcont:"accept"}));
+// 	showHomePanel();
+// });
 
-    $('#bench_decline').click(function(){
-	tmp_bench="";
-	$('#bench_check_noti').empty();
-	$('#bench_check_button').hide();
-	$('#user1wrap').append("<p>Benchmark Checker Declined!</p>");	
-	ws.send(JSON.stringify({type:"check_decide", checktype:"Benchmarks", checkcont:"decline"}));
-	showHomePanel();
-});
+//     $('#bench_decline').click(function(){
+// 	tmp_bench="";
+// 	$('#bench_check_noti').empty();
+// 	$('#bench_check_button').hide();
+// 	$('#user1wrap').append("<p>Benchmark Checker Declined!</p>");
+// 	ws.send(JSON.stringify({type:"check_decide", checktype:"Benchmarks", checkcont:"decline"}));
+// 	showHomePanel();
+// });
 
-    $(document).click(function(e){  //click the delete button
+    $(document).click(function(e){  //click the button
 		var clickid=$(e.target).attr('id');
-		if (clickid.indexOf("del_bench")>=0){
+		if (clickid.indexOf("ac_accept_")>=0) {		// accept the account
+            var obj = {
+                type: 'ac_accept',
+                ac_id: clickid.substr(10)
+            };
+            console.log('accepting user, sending', obj);
+            ws.send(JSON.stringify(obj));
+            $('#ac_check_noti_' + clickid.substr(10)).remove();
+            $('#user1wrap').append("<p>Account Checker Accepted!</p>");
+        }
+        else if (clickid.indexOf("ac_decline_")>=0) {		// decline the account
+			var obj = {
+				type: 'ac_decline',
+				ac_id:clickid.substr(11)
+			};
+			console.log('declining user, sending', obj);
+			ws.send(JSON.stringify(obj));
+            $('#ac_check_noti_' + clickid.substr(11)).remove();
+            $('#user1wrap').append("<p>Account Checker Declined!</p>");
+            // showHomePanel();
+		}
+		else if (clickid.indexOf("actra_accept_")>=0) {		// accept the account trade
+			var obj ={
+				type: 'actra_accept',
+				ac_id: clickid.substr(13)
+			};
+			console.log('accepting account trade, sending', obj);
+			ws.send(JSON.stringify(obj));
+			$('#actranoti_' + clickid.substr(13)).remove();
+            $('#user1wrap').append("<p>Account trade Checker Accepted!</p>");
+		}
+		else if (clickid.indexOf("actra_decline_")>=0) {
+            var obj = {
+                type: 'actra_decline',
+                ac_id:clickid.substr(14)
+            };
+            console.log('declining account trade, sending', obj);
+            ws.send(JSON.stringify(obj));
+            $('#actranoti_' + clickid.substr(14)).remove();
+            $('#user1wrap').append("<p>Account trade Checker Declined!</p>");
+            // ws.send(JSON.stringify({type:"check_decide", checktype:"Ac_trades_setup", checkcont:"decline"}));
+            // showHomePanel();
+		}
+		else if (clickid.indexOf("acben_accept_")>=0){
+            var obj ={
+                type: 'acben_accept',
+                ac_id: clickid.substr(13)
+            };
+            console.log('accepting account benchmark, sending', obj);
+            ws.send(JSON.stringify(obj));
+            $('#acbennoti_' + clickid.substr(13)).remove();
+            $('#user1wrap').append("<p>Account Benchmark Checker Accepted!</p>");
+		}
+		else if (clickid.indexOf("acben_decline_")>=0){
+            var obj = {
+                type: 'acben_decline',
+                ac_id:clickid.substr(14)
+            };
+            console.log('declining account benchmark, sending', obj);
+            ws.send(JSON.stringify(obj));
+            $('#acbennoti_' + clickid.substr(14)).remove();
+            $('#user1wrap').append("<p>Account Benchmark Checker Declined!</p>");
+            // showHomePanel();
+		}
+		else if (clickid.indexOf("bench_accept_")>=0) {
+            var obj ={
+                type: 'bench_accept',
+                id: clickid.substr(13)
+            };
+            console.log('accepting benchmarks, sending', obj);
+            ws.send(JSON.stringify(obj));
+            $('#benchnoti_' + clickid.substr(13)).remove();
+            $('#user1wrap').append("<p>Benchmarks Checker Accepted!</p>");
+		}
+		else if (clickid.indexOf("bench_decline_")>=0) {
+            var obj = {
+                type: 'bench_decline',
+                id:clickid.substr(14)
+            };
+            console.log('declining benchmarks, sending', obj);
+            ws.send(JSON.stringify(obj));
+            $('#benchnoti_' + clickid.substr(14)).remove();
+            $('#user1wrap').append("<p>Benchmarks Checker Declined!</p>");
+            // showHomePanel();
+		}
+		else if (clickid.indexOf("del_bench")>=0){
 			var delid=clickid.substr(9);
 			$("#benchnoti_"+delid).remove();
 			$('#user1wrap').append("<p>Benchmark "+delid+" deleted!</p>");	
-		} else if (clickid.indexOf("del_acben")>=0){
+		}
+		else if (clickid.indexOf("del_acben")>=0){
 			var delid=clickid.substr(9);
+            var obj = {
+                type: 'know_new_record',
+                table_name: 'ac_benchmark',
+                id: delid
+            };
+            ws.send(JSON.stringify(obj));
 			$("#acbennoti_"+delid).remove();
 			$('#user1wrap').append("<p>Ac_benchmark "+delid+" deleted!</p>");	
-		} else if (clickid.indexOf("del_actra")>=0){
+		}
+		else if (clickid.indexOf("del_actra")>=0){
 			var delid=clickid.substr(9);
+			var obj = {
+				type: 'know_new_record',
+				table_name: 'ac_trade',
+				id: delid
+			};
+            ws.send(JSON.stringify(obj));
 			$("#actranoti_"+delid).remove();
 			$('#user1wrap').append("<p>Ac_Trade_setup "+delid+" deleted!</p>");	
 		} else if (clickid.indexOf("del_ac")>=0){
 			var delid=clickid.substr(6);
+            var obj = {
+                type: 'know_new_record',
+                table_name: 'account',
+                id: delid
+            };
+            ws.send(JSON.stringify(obj));
 			$("#acnoti_"+delid).remove();
 			$('#user1wrap').append("<p>Account "+delid+" deleted!</p>");	
 		}
@@ -589,59 +696,123 @@ $(document).on('ready', function() {
 	
 	
 	$('#nav_ac_maker').click(function(){
-	$("#nav_ac_maker").css("color","red");
-	$("#nav_ac_checker").css("color","white");
-	$('#account_maker').show();
-	$('#account_checker').hide();
-});
+		$("#nav_ac_maker").css("color","red");
+		$("#nav_ac_checker").css("color","white");
+		$('#account_maker').show();
+		$('#account_checker').hide();
+	});
 
    $('#nav_ac_checker').click(function(){
 		$("#nav_ac_maker").css("color","white");
-	$("#nav_ac_checker").css("color","red");
-	$('#account_maker').hide();
-	$('#account_checker').show();
+		$("#nav_ac_checker").css("color","red");
+		$('#account_maker').hide();
+		$('#account_checker').show();
+        $('#ac_check_notice').empty();
+       //check the validity
+       // var obj = 	{
+       //     type: 'recheck'
+       //     //type: 'db_refresh',
+       //     //table_name: 'account'
+       // };
+       // console.log('refresh account, sending');
+       // ws.send(JSON.stringify(obj));
+
+       var obj = {
+		   type: 'untreated',
+		   table_name: 'account'
+	   };
+       console.log('get untreated account, sending');
+       ws.send(JSON.stringify(obj));
     });
 
     $('#nav_actrade_maker').click(function(){
 		$("#nav_actrade_maker").css("color","red");
-	$("#nav_actrade_checker").css("color","white");
-	$('#actrade_maker').show();
-	$('#actrade_checker').hide();
-});
+		$("#nav_actrade_checker").css("color","white");
+		$('#actrade_maker').show();
+		$('#actrade_checker').hide();
+
+        $('#actrade_mak_noti').empty();
+		var obj = {
+			type: 'new',
+			table_name: 'account'
+		};
+		console.log('get new accepted account, sending');
+		ws.send(JSON.stringify(obj));
+	});
 
    $('#nav_actrade_checker').click(function(){
 		$("#nav_actrade_maker").css("color","white");
-	$("#nav_actrade_checker").css("color","red");
-	$('#actrade_maker').hide();
-	$('#actrade_checker').show();
-    });
+		$("#nav_actrade_checker").css("color","red");
+		$('#actrade_maker').hide();
+		$('#actrade_checker').show();
+
+		$('#actrade_check_notice').empty();
+       	var obj = {
+           type: 'untreated',
+           table_name: 'ac_trade'
+       	};
+       	console.log('get untreated ac_treade, sending');
+       	ws.send(JSON.stringify(obj));
+   });
 	
 	$('#nav_acbench_maker').click(function(){
-	 $("#nav_acbench_maker").css("color","red");
-	$("#nav_acbench_checker").css("color","white");
-	$('#acbench_maker').show();
-	$('#acbench_checker').hide();
-});
+		$("#nav_acbench_maker").css("color","red");
+		$("#nav_acbench_checker").css("color","white");
+		$('#acbench_maker').show();
+		$('#acbench_checker').hide();
 
-   $('#nav_acbench_checker').click(function(){
-		 $("#nav_acbench_maker").css("color","white");
-	$("#nav_acbench_checker").css("color","red");
-	$('#acbench_maker').hide();
-	$('#acbench_checker').show();
+		$('#acbench_mak_noti').empty();
+		var obj = {
+			type: 'new',
+			table_name: 'ac_trade'
+		};
+		console.log('get new accepted account trade information, sending');
+        ws.send(JSON.stringify(obj));
+	});
+
+    $('#nav_acbench_checker').click(function(){
+    	$("#nav_acbench_maker").css("color","white");
+		$("#nav_acbench_checker").css("color","red");
+		$('#acbench_maker').hide();
+		$('#acbench_checker').show();
+
+		$('#acbench_check_noti').empty();
+		var obj = {
+			type: 'untreated',
+			table_name: 'ac_benchmark'
+		};
+        console.log('get untreated ac_benchmark, sending');
+        ws.send(JSON.stringify(obj));
     });
 
     $('#nav_bench_maker').click(function(){
-		  $("#nav_bench_maker").css("color","red");
-	$("#nav_bench_checker").css("color","white");
-	$('#benchmark_maker').show();
-	$('#benchmark_checker').hide();
-});
+		$("#nav_bench_maker").css("color","red");
+		$("#nav_bench_checker").css("color","white");
+		$('#benchmark_maker').show();
+		$('#benchmark_checker').hide();
+
+		$('#bench_mak_noti').empty();
+		var obj = {
+			type: 'new',
+			table_name: 'ac_benchmark'
+		};
+        console.log('get new accepted account trade benchmark information, sending');
+        ws.send(JSON.stringify(obj));
+	});
 
    $('#nav_bench_checker').click(function(){
-	 	  $("#nav_bench_maker").css("color","white");
-	$("#nav_bench_checker").css("color","red");
-	$('#benchmark_maker').hide();
-	$('#benchmark_checker').show();
+	   $("#nav_bench_maker").css("color","white");
+	   $("#nav_bench_checker").css("color","red");
+	   $('#benchmark_maker').hide();
+	   $('#benchmark_checker').show();
+
+	   $('#bench_check_noti').empty();
+       var obj = {
+           type: 'untreated',
+           table_name: 'benchmarks'
+       };
+       console.log('get untreated benchmarks, sending');
+       ws.send(JSON.stringify(obj));
     });
 });
 
@@ -856,8 +1027,105 @@ function connect_to_server(){
 			"<br>[benchmark_reference_id]:"+msgObj.benchmark_reference_id+"<br>[benchmark_reference_id_source]:"+msgObj.benchmark_reference_id_source+'<hr /></div>';
 				$('#data_history').append(base_bench);
 			}
+			else if(msgObj.msg === 'untreated_account'){
+				console.log("untreated account from database");  //ac_check_noti_'+msgObj.ac_id+'
+				var un_account = '<div id="ac_check_noti_'+msgObj.ac_id+'"><hr/><span style="color:#FF0;">A new account has been created:</span><br>'+"[sha_value]:"+msgObj.sha_value+
+                    "<br>[account]:"+msgObj.ac_id+"<br>[short name]:"+msgObj.ac_short_name+
+                    "<br>[status]:"+msgObj.ac_status+"<br>[term date]:"+msgObj.term_date+
+                    "<br>[inception date]:"+msgObj.inception_date+"<br>[region]:"+msgObj.ac_region+
+                    "<br>[sub region]:"+msgObj.ac_sub_reg+"<br>[contracting entity]:"+msgObj.contracting_entity+
+                    "<br>[mgn entity]:"+msgObj.mgn_entityion+"<br>[country domicile]:"+msgObj.cod_country_domicile+
+                    "<br>[liq method]:"+msgObj.liq_method+"<br>[account legal name]:"+msgObj.ac_legal_name+
+                    "<br>[manager name]:"+msgObj.manager_name+"<br>[cod_ccy_base]:"+msgObj.cod_ccy_base+
+                    "<br>[long name]:"+msgObj.long_name+"<br>[mandate id]:"+msgObj.mandate_id+
+                    "<br>[client id]:"+msgObj.client_id+"<br>[custodian name]:"+msgObj.custodian_name+
+                    "<br>[sub_mandate_id]:"+msgObj.sub_mandate_id+"<br>[transfer_agent_name]:"+msgObj.transfer_agent_name+
+                    "<br>[trust_bank]:"+msgObj.trust_bank+"<br>[re_trust_bank]:"+msgObj.re_trust_bank+
+                    "<br>[last_updated_by]:"+msgObj.last_updated_by+"<br>[last_approved_by]:"+msgObj.last_approved_by+
+                    "<br>[last_update_date]:"+msgObj.last_update_date+
+					'<br><button type="button" id="ac_accept_'+msgObj.ac_id+'">accept</button>'+
+                    '&nbsp;&nbsp;&nbsp;<button type="button" id="ac_decline_'+msgObj.ac_id+'">decline</button>'+
+					'<hr/></div>';
+				$('#ac_check_notice').append(un_account);
+			}
+			else if(msgObj.msg === 'untreated_ac_trade') {
+                console.log("untreated ac_trade from database");  //ac_check_noti_'+msgObj.ac_id+'
+				var un_ac_trade = '<div id="actranoti_'+msgObj.ac_id+'"><p><span style="color:#FF0;">An account trade has been created:</span><br>'+
+                    "[account id]:"+msgObj.ac_id+"<br>[lvts]:"+msgObj.lvts+
+                    "<br>[calypso]:"+msgObj.calypso+"<br>[aladdin]:"+msgObj.aladdin+
+                    "<br>[trade start date]:"+msgObj.trade_start_date+"<br>[equity]:"+msgObj.equity+
+                    '<br>[fixed_income]:'+msgObj.fixed_income+
+					'</p><br><button type="button" id="actra_accept_'+msgObj.ac_id+'">accept</button>'+
+                    '&nbsp;&nbsp;&nbsp;<button type="button" id="actra_decline_'+msgObj.ac_id+'">decline</button>'+
+                    '<hr/></div>';
+				$('#actrade_check_notice').append(un_ac_trade);
+            }
+            else if (msgObj.msg === 'untreated_ac_benchmark') {
+				console.log("untreated account benchmark from db");
+				var obj = '<div id="acbennoti_'+msgObj.ac_id+'"><p><span style="color:#FF0;">An account benchmark has been created:</span><br>'+
+                    "[account id]:"+msgObj.ac_id+"<br>[benchmark_id]:"+msgObj.benchmark_id+
+                    "<br>[source]:"+msgObj.source+"<br>[name]:"+msgObj.name+
+                    "<br>[currency]:"+msgObj.currency+"<br>[primary_flag]:"+msgObj.primary_flag+
+                    "<br>[start_date]:"+msgObj.start_date+"<br>[end_date]:"+msgObj.end_date+
+                    "<br>[benchmark_reference_id]:"+msgObj.benchmark_reference_id+"<br>[benchmark_reference_id_source]:"+msgObj.benchmark_reference_id_source +
+                    '</p><br><button type="button" id="acben_accept_'+msgObj.ac_id+'">accept</button>'+
+                    '&nbsp;&nbsp;&nbsp;<button type="button" id="acben_decline_'+msgObj.ac_id+'">decline</button>'+
+                    '<hr/></div>';
+				$('#acbench_check_noti').append(obj);
+			}
+			else if (msgObj.msg === 'untreated_benchmarks') {
+                console.log("untreated benchmarks from db");
+                var obj = '<div id="benchnoti_'+msgObj.benchmark_id+'"><p><span style="color:#FF0;">An account trade has been created:</span><br>'+
+                    "[benchmark_id]:"+msgObj.benchmark_id+"<br>[id_source]:"+msgObj.id_source+
+                    "<br>[name]:"+msgObj.name+"<br>[currency]:"+msgObj.currency+
+                    "<br>[benchmark_reference_id]:"+msgObj.benchmark_reference_id+"<br>[benchmark_reference_id_source]:"+msgObj.benchmark_reference_id_source +
+                    '</p><br><button type="button" id="bench_accept_'+msgObj.benchmark_id+'">accept</button>'+
+                    '&nbsp;&nbsp;&nbsp;<button type="button" id="bench_decline_'+msgObj.benchmark_id+'">decline</button>'+
+                    '<hr/></div>';
+				$('#bench_check_noti').append(obj);
+			}
+			else if(msgObj.msg === 'newAccepted_account'){
+				console.log("new accepted account from database");
+                var obj='<div id="acnoti_'+msgObj.ac_id+'"><p><span style="color:#FF0;">A new account has been created:</span><br>'+
+                    "[account]:"+msgObj.ac_id+"<br>[short name]:"+msgObj.ac_short_name+
+                    "<br>[status]:"+msgObj.ac_status+"<br>[term date]:"+msgObj.term_date+
+                    "<br>[inception date]:"+msgObj.inception_date+"<br>[region]:"+msgObj.ac_region+
+                    "<br>[sub region]:"+msgObj.ac_sub_region+"<br>[country domicile]:"+msgObj.cod_country_domicile+
+                    "<br>[liq method]:"+msgObj.liq_method+"<br>[contracting entity]:"+msgObj.contracting_entity+
+                    "<br>[mgn entity]:"+msgObj.mgn_entity+"<br>[account legal name]:"+msgObj.ac_legal_name+
+                    "<br>[manager name]:"+msgObj.manager_name+"<br>[cod_ccy_base]:"+msgObj.cod_ccy_base+
+                    "<br>[long name]:"+msgObj.long_name+"<br>[mandate id]:"+msgObj.mandate_id+
+                    "<br>[client id]:"+msgObj.client_id+"<br>[custodian name]:"+msgObj.custodian_name+
+                    "<br>[sub_mandate_id]:"+msgObj.sub_mandate_id+"<br>[transfer_agent_name]:"+msgObj.transfer_agent_name+
+                    "<br>[trust_bank]:"+msgObj.trust_bank+"<br>[re_trust_bank]:"+msgObj.re_trust_bank+
+                    "<br>[last_updated_by]:"+msgObj.last_updated_by+"<br>[last_approved_by]:"+msgObj.last_approved_by+
+                    "<br>[last_update_date]:"+msgObj.last_update_date+'</p><button type="button" id="del_ac'+msgObj.ac_id+'">OK, I know</button><hr /></div>';
+                // $('#ac_check_notice').append(tmp_account);
+				$('#actrade_mak_noti').append(obj);
+			}
+			else if(msgObj.msg === 'newAccepted_actrade'){
+                console.log("new accepted account_trade from database");
+                var obj = '<div id="actranoti_'+msgObj.ac_id+'"><p><span style="color:#FF0;">An account trade has been created:</span><br>'+
+                "[account id]:"+msgObj.ac_id+"<br>[lvts]:"+msgObj.lvts+
+                "<br>[calypso]:"+msgObj.calypso+"<br>[aladdin]:"+msgObj.aladdin+
+                "<br>[trade start date]:"+msgObj.trade_start_date+"<br>[equity]:"+msgObj.equity+
+                '<br>[fixed_income]:'+msgObj.fixed_income+'</p><button type="button" id="del_actra'+msgObj.ac_id+'">OK, I know</button><hr /></div>';
+                $('#acbench_mak_noti').append(obj);
+            }
+            else if(msgObj.msg === 'newAccepted_acben') {
+                console.log("new accepted account benchmark from database");
+                var obj = '<div id="acbennoti_'+msgObj.ac_id+'"><p><span style="color:#FF0;">An account benchmark has been created:</span><br>'+
+                    "[account id]:"+msgObj.ac_id+"<br>[benchmark_id]:"+msgObj.benchmark_id+
+                    "<br>[source]:"+msgObj.source+"<br>[name]:"+msgObj.name+
+                    "<br>[currency]:"+msgObj.currency+"<br>[primary_flag]:"+msgObj.primary_flag+
+                    "<br>[start_date]:"+msgObj.start_date+"<br>[end_date]:"+msgObj.end_date+
+                    "<br>[benchmark_reference_id]:"+msgObj.benchmark_reference_id+"<br>[benchmark_reference_id_source]:"+msgObj.benchmark_reference_id_source
+                    +'</p><button type="button" id="del_acben'+msgObj.ac_id+'">OK, I know</button><hr /></div>';
+                $('#bench_mak_noti').append(obj);
+			}
 			else console.log('rec', msgObj.msg, msgObj);
 		}
+
 		catch(e){
 			console.log('ERROR', e);
 		}

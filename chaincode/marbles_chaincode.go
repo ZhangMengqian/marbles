@@ -235,6 +235,7 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var name, jsonResp string
 	var err error
+	fmt.Println("-----------------------------starting read------------------------------")
 
 	if len(args) != 1 {
 		return nil, errors.New("Incorrect number of arguments. Expecting name of the var to query")
@@ -247,6 +248,7 @@ func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) 
 		return nil, errors.New(jsonResp)
 	}
 
+    fmt.Println("-----------------------------end read------------------------------")
 	return valAsbytes, nil													//send it onward
 }
 
@@ -314,6 +316,7 @@ func (t *SimpleChaincode) create_account(stub shim.ChaincodeStubInterface, args 
 	newaccount.Last_update_date = args[24]
 	
 	acJson, err := stub.GetState(accountStr)
+	fmt.Println(acJson)
 	if err != nil {
 		return nil, err
 	}
