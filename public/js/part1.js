@@ -263,7 +263,36 @@ $(document).on('ready', function() {
 	$('#submit6').click(function(){
 		$('#data_history').empty();
 	});
-	
+
+	$('#submit7').click(function(){
+		var data_type = $('select[name="data type"]').val()
+		console.log(data_type)
+		if(data_type == 'account'){
+			$('#accountselect').fadeIn(300);
+			$('#actradeselect').hide();
+			$('#acbenchmarkselect').hide();
+			$('#benchmarkselect').hide();
+		}
+		else if(data_type == 'ac_trade'){
+			$('#accountselect').hide();
+			$('#actradeselect').fadeIn(300);
+			$('#acbenchmarkselect').hide();
+			$('#benchmarkselect').hide();
+		}
+		else if(data_type == 'ac_benchmark'){
+			$('#accountselect').hide();
+			$('#actradeselect').hide();
+			$('#acbenchmarkselect').fadeIn(300);
+			$('#benchmarkselect').hide();
+		}
+		else if(data_type == 'benchmarks'){
+			$('#accountselect').hide();
+			$('#actradeselect').hide();
+			$('#acbenchmarkselect').hide();
+			$('#benchmarkselect').fadeIn(300);
+		}
+		
+	});
 	String.prototype.trim=function(){
 　　    		return this.replace(/(^\s*)|(\s*$)/g, "");
 　　    }
