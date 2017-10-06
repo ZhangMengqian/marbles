@@ -1,10 +1,5 @@
 var ws = {};
 
-var account_obj = "";
-var actrade_obj = "";
-var acbench_obj = "";
-var bench_obj = "";
-
 var tmp_account="";
 var tmp_actrade="";
 var tmp_acbench="";
@@ -52,36 +47,6 @@ $(document).on('ready', function() {
 						last_approved_by: $('input[name="last_approved_by"]').val(),
 						last_update_date: $('input[name="last_update_date"]').val()
 					};
-			
-		account_obj = {
-						type: 'account_accept',
-						ac_id: $('input[name="ac_id"]').val().replace(' ', ''),
-						ac_short_name: $('input[name="ac_short_name"]').val(),
-						ac_status: $('input[name="status"]').val(),
-						term_date: $('input[name="term_date"]').val(),
-						inception_date: $('input[name="inception_date"]').val(),
-						ac_region: $('input[name="ac_region"]').val(),
-						ac_sub_region: $('input[name="ac_sub_region"]').val(),
-						cod_country_domicile: $('input[name="cod_country_domicile"]').val(),
-						liq_method: $('input[name="liq_method"]').val(),
-						contracting_entity: $('input[name="contract_entity"]').val(),
-						mgn_entity: $('input[name="mgn_entity"]').val(),
-						ac_legal_name: $('input[name="ac_legal_name"]').val(),
-						manager_name: $('input[name="manager_name"]').val(),
-						cod_ccy_base: $('input[name="cod_ccy_base"]').val(),
-						long_name: $('input[name="long_name"]').val(),
-						mandate_id: $('input[name="mandate_id"]').val(),
-						client_id: $('input[name="client_id"]').val(),
-						custodian_name: $('input[name="custodian_name"]').val(),
-						sub_mandate_id: $('input[name="sub_mandate_id"]').val(),
-						transfer_agent_name: $('input[name="transfer_agent_name"]').val(),
-						trust_bank: $('input[name="trust_bank"]').val(),
-						re_trust_bank: $('input[name="re_trust_bank"]').val(),
-						last_updated_by: $('input[name="last_updated_by"]').val(),
-						last_approved_by: $('input[name="last_approved_by"]').val(),
-						last_update_date: $('input[name="last_update_date"]').val()
-					};
-		
 		if(obj.ac_id){
 			console.log('creating user, sending', obj);
 			ws.send(JSON.stringify(obj));
@@ -120,18 +85,6 @@ $(document).on('ready', function() {
 						equity: $('input[name="equity"]').val(),
 						fixed_income: $('input[name="fixed_income"]').val()
 					};
-				
-		actrade_obj = {
-						type: 'ac_trade_accept',
-						ac_id: $('input[name="t_ac_id"]').val().replace(' ', ''),
-						lvts: $('input[name="lvts"]').val(),
-						calypso: $('input[name="calypso"]').val(),
-						aladdin: $('input[name="aladdin"]').val(),
-						trade_start_date: $('input[name="t_start_date"]').val(),
-						equity: $('input[name="equity"]').val(),
-						fixed_income: $('input[name="fixed_income"]').val()
-					};
-				
 		if(obj.ac_id){
 			console.log('creating user, sending', obj);
 			ws.send(JSON.stringify(obj));
@@ -167,21 +120,6 @@ $(document).on('ready', function() {
 						benchmark_reference_id: $('input[name="aben_ref_id"]').val(),
 						benchmark_reference_id_source: $('input[name="aben_ref_id_src"]').val()
 					};
-					
-		acbench_obj = {
-						type: 'ac_benchmark_accept',
-						ac_id: $('input[name="ben_ac_id"]').val().replace(' ', ''),
-						benchmark_id: $('input[name="aben_id"]').val(),
-						source: $('input[name="aben_source"]').val(),
-						name: $('input[name="aben_name"]').val(),
-						currency: $('input[name="aben_currency"]').val(),
-						primary_flag: $('input[name="aben_pri_flag"]').val(),
-						start_date: $('input[name="aben_startdate"]').val(),
-						end_date: $('input[name="aben_enddate"]').val(),
-						benchmark_reference_id: $('input[name="aben_ref_id"]').val(),
-						benchmark_reference_id_source: $('input[name="aben_ref_id_src"]').val()
-					};
-		
 		if(obj.ac_id){
 			console.log('creating user, sending', obj);
 			ws.send(JSON.stringify(obj));
@@ -215,17 +153,6 @@ $(document).on('ready', function() {
 						benchmark_reference_id: $('input[name="ben_ref_id"]').val(),
 						benchmark_reference_id_source: $('input[name="ben_ref_id_src"]').val()
 					};
-					
-		bench_obj = {
-						type: 'benchmarks_accept',
-						benchmark_id: $('input[name="benchmark_id"]').val().replace(' ', ''),
-						id_source: $('input[name="ben_id_src"]').val(),
-						name: $('input[name="ben_name"]').val(),
-						currency: $('input[name="ben_currency"]').val(),
-						benchmark_reference_id: $('input[name="ben_ref_id"]').val(),
-						benchmark_reference_id_source: $('input[name="ben_ref_id_src"]').val()
-					};	
-				
 		if(obj.benchmark_id){
 			console.log('creating user, sending', obj);
 			ws.send(JSON.stringify(obj));
