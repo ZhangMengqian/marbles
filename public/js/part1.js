@@ -259,7 +259,14 @@ $(document).on('ready', function() {
 		}
 		return false;
 	});
-	
+
+	$('#create_by_file').click(function(){
+        console.log('---------------------CREATE BY A FILE NOW---------------------------');
+		var file = document.querySelector('input[type="file"]').files[0];
+		console.log(file);
+        handleFile(file);
+    });
+
 	$('#submit6').click(function(){
 		$('#data_history').empty();
 	});
@@ -509,7 +516,8 @@ $(document).on('ready', function() {
             ws.send(JSON.stringify(obj));
 			$("#actranoti_"+delid).remove();
 			$('#user1wrap').append("<p>Ac_Trade_setup "+delid+" deleted!</p>");	
-		} else if (clickid.indexOf("del_ac")>=0){
+		}
+		else if (clickid.indexOf("del_ac")>=0){
 			var delid=clickid.substr(6);
             var obj = {
                 type: 'know_new_record',
@@ -520,8 +528,6 @@ $(document).on('ready', function() {
 			$("#acnoti_"+delid).remove();
 			$('#user1wrap').append("<p>Account "+delid+" deleted!</p>");	
 		}
-		
-		
 
 	});
 	
@@ -594,16 +600,9 @@ $(document).on('ready', function() {
 		$("#nav_ac_checker").css("color","red");
 		$('#account_maker').hide();
 		$('#account_checker').show();
-        $('#ac_check_notice').empty();
-       //check the validity
-       // var obj = 	{
-       //     type: 'recheck'
-       //     //type: 'db_refresh',
-       //     //table_name: 'account'
-       // };
-       // console.log('refresh account, sending');
-       // ws.send(JSON.stringify(obj));
 
+		$('#ac_data_validity_notice').empty();
+        $('#ac_check_notice').empty();
        var obj = {
 		   type: 'untreated',
 		   table_name: 'account'
@@ -721,7 +720,7 @@ function handleFile(files) {
                // $('<pre>' + this.result + '</pre>').appendTo('body');
 			   var lists=this.result.split(/[,:;]/);
 			   var pos=0;
-				while (true) {
+			   while (true) {
 					if (pos>=lists.length) break;
 					lists[pos]=lists[pos].trim();
 				    if (lists[pos].indexOf('accounts')>=0) {
@@ -754,7 +753,7 @@ function handleFile(files) {
 						last_update_date: lists[pos+25].trim()
 					    };
 						console.log("read line success");
-					    	pos+=26;
+						pos+=26;
 						ws.send(JSON.stringify(obj));
 						$('#user1wrap').append("<p>account:"+obj.ac_id+" [short name]:"+obj.ac_short_name+"</p>");	
 					    	
@@ -772,11 +771,12 @@ function handleFile(files) {
 						"<br>[trust_bank]:"+obj.trust_bank+"<br>[re_trust_bank]:"+obj.re_trust_bank+
 						"<br>[last_updated_by]:"+obj.last_updated_by+"<br>[last_approved_by]:"+obj.last_approved_by+
 						"<br>[last_update_date]:"+obj.last_update_date+'</p><button type="button" id="del_ac'+obj.ac_id+'">delete</button><hr /></div>';
-			
-						$('#ac_check_notice').append(tmp_account);
+
+						// $('#ac_check_notice').append(tmp_account);
 						$('#ac_history').append(tmp_account);
-						$('#ac_check_button').show();
-					} else if (lists[pos].indexOf('account_trades_setup')>=0) {
+						// $('#ac_check_button').show();
+					}
+					else if (lists[pos].indexOf('account_trades_setup')>=0) {
 						var obj = 	{
 						type: 'ac_trade_setup',
 						ac_id: lists[pos+1].replace(' ', ''),
@@ -792,18 +792,19 @@ function handleFile(files) {
 						ws.send(JSON.stringify(obj));
 						$('#user1wrap').append("<p>account trades:"+obj.ac_id+" [lvts]:"+obj.lvts+"</p>");
 						
-						$('#user1wrap').append("<p>account trades:"+obj.ac_id+" [lvts]:"+obj.lvts+"</p>");		
+						// $('#user1wrap').append("<p>account trades:"+obj.ac_id+" [lvts]:"+obj.lvts+"</p>");
 						tmp_actrade='<div id="actranoti_'+obj.ac_id+'"><p><span style="color:#FF0;">An account trade has been created:</span><br>'+
 						"[account id]:"+obj.ac_id+"<br>[lvts]:"+obj.lvts+
 						"<br>[calypso]:"+obj.calypso+"<br>[aladdin]:"+obj.aladdin+
 						"<br>[trade start date]:"+obj.trade_start_date+"<br>[equity]:"+obj.equity+
 						'<br>[fixed_income]:'+obj.fixed_income+'</p><button type="button" id="del_actra'+obj.ac_id+'">delete</button><hr /></div>';
-			
-						$('#actrade_check_notice').append(tmp_actrade);
+
+						// $('#actrade_check_notice').append(tmp_actrade);
 						$('#actrade_history').append(tmp_actrade);
-						$('#actrade_check_button').show();
-						$('#actrade_mak_noti').empty();	
-					} else if (lists[pos].indexOf('account_benchmarks')>=0) {
+						// $('#actrade_check_button').show();
+						// $('#actrade_mak_noti').empty();
+					}
+					else if (lists[pos].indexOf('account_benchmarks')>=0) {
 					    	var obj = 	{
 						type: 'ac_benchmark',
 						ac_id: lists[pos+1].replace(' ', ''),
@@ -816,7 +817,7 @@ function handleFile(files) {
 						end_date: lists[pos+8].trim(),
 						benchmark_reference_id: lists[pos+9].trim(),
 						benchmark_reference_id_source: lists[pos+10].trim()
-					};
+						};
 						console.log("read line success");
 						pos+=11;
 						ws.send(JSON.stringify(obj));
@@ -829,12 +830,13 @@ function handleFile(files) {
 						"<br>[start_date]:"+obj.start_date+"<br>[end_date]:"+obj.end_date+
 						"<br>[benchmark_reference_id]:"+obj.benchmark_reference_id+"<br>[benchmark_reference_id_source]:"+obj.benchmark_reference_id_source
 						+'</p><button type="button" id="del_acben'+obj.ac_id+'">delete</button><hr /></div>';
-			
-						$('#acbench_check_noti').append(tmp_acbench);
+
+						// $('#acbench_check_noti').append(tmp_acbench);
 						$('#acbench_history').append(tmp_acbench);
-						$('#acbench_check_button').show();
-						$('#acbench_mak_noti').empty();
-					} else if (lists[pos].indexOf('benchmarks')>=0) {
+						// $('#acbench_check_button').show();
+						// $('#acbench_mak_noti').empty();
+					}
+					else if (lists[pos].indexOf('benchmarks')>=0) {
 						var obj = 	{
 						type: 'benchmarks',
 						benchmark_id: lists[pos+1].replace(' ', ''),
@@ -843,7 +845,7 @@ function handleFile(files) {
 						currency: lists[pos+4].trim(),
 						benchmark_reference_id: lists[pos+5].trim(),
 						benchmark_reference_id_source: lists[pos+6].trim(),
-					};
+						};
 						console.log("read line success");
 						pos+=7;
 						ws.send(JSON.stringify(obj));
@@ -856,14 +858,15 @@ function handleFile(files) {
 						"<br>[start_date]:"+obj.start_date+"<br>[end_date]:"+obj.end_date+
 						"<br>[benchmark_reference_id]:"+obj.benchmark_reference_id+"<br>[benchmark_reference_id_source]:"+obj.benchmark_reference_id_source
 						+'</p><button type="button" id="del_acben'+obj.ac_id+'">delete</button><hr /></div>';
-			
-						$('#acbench_check_noti').append(tmp_acbench);
+
+						// $('#acbench_check_noti').append(tmp_acbench);
 						$('#acbench_history').append(tmp_acbench);
-						$('#acbench_check_button').show();
-						$('#acbench_mak_noti').empty();
+						// $('#acbench_check_button').show();
+						// $('#acbench_mak_noti').empty();
 					}
 					else break;
 				}
+                showHomePanel();
             }
             reader.readAsText(file);
         }
@@ -1067,6 +1070,19 @@ function connect_to_server(){
                     +'</p><button type="button" id="del_acben'+msgObj.ac_id+'">OK, I know</button><hr /></div>';
                 $('#bench_mak_noti').append(obj);
 			}
+            else if(msgObj.msg === 'validity') {
+                console.log("account data validity");
+                if (msgObj.table_name == 'account') {
+                    var account_notice = '<div><hr/><h3>' + "[NOTICE!] Data in Table `account` changed!" + '<br/>' + "[HASH VALUE] " + msgObj.sha_value + '</h3><hr/></div>';
+                    $('#ac_data_validity_notice').append(account_notice);
+                }
+                else if(msgObj.table_name == 'unknown'){
+                    var notice = '<div><hr/><h3>' + "[NOTICE!] Data in database changed!" + '</h3><hr/></div>';
+                    if(msgObj.show_location == 'account') {
+                        $('#ac_data_validity_notice').append(notice);
+                    }
+				}
+            }
 			else console.log('rec', msgObj.msg, msgObj);
 		}
 
