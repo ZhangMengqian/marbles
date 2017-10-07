@@ -26,6 +26,7 @@ var store_bench = "_storeBenchStr"				//name for the key/value that will store a
 var allStr="_allStr"    // name for all the key/value pair to store in the blockchain, after chekcer accepted 
 
 type Account struct{
+    Hash string `json:"hash"`
 	Ac_id string `json:"ac_id"`				
 	Ac_short_name string `json:"ac_short_name"`
 	Status string `json:"status"`
@@ -208,7 +209,11 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		return t.benchmarks(stub, args)
 	} else if function == "check_decide" {									//create a new user
 		return t.check_decide(stub, args)
-	} 
+	} else if function == "readOnly" {
+	    return t.read(stub, args)
+	} else if function == "get_account" {
+	    return t.get_account(stub, args)
+	}
 	fmt.Println("invoke did not find func: " + function)					//error
 
 	return nil, errors.New("Received unknown function invocation")
@@ -314,6 +319,7 @@ func (t *SimpleChaincode) create_account(stub shim.ChaincodeStubInterface, args 
     	newaccount.Last_updated_by = args[22]
 	newaccount.Last_approved_by = args[23]
 	newaccount.Last_update_date = args[24]
+	newaccount.Hash = args[25]
 	
 	acJson, err := stub.GetState(accountStr)
 	fmt.Println(acJson)
@@ -420,6 +426,15 @@ func (t *SimpleChaincode) benchmarks(stub shim.ChaincodeStubInterface, args []st
 	return nil, nil
 }
 
+func (t *SimpleChaincode) get_account(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+    fmt.Println("- start get account from blockchain")
+    acJson, err := stub.GetState(accountStr)
+    if err != nil {
+    	return nil, err
+    }
+    fmt.Println("- end create user")
+    return acJson, nil
+}
 
 func (t *SimpleChaincode) check_decide(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	 var empty []string
