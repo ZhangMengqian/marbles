@@ -1056,7 +1056,7 @@ function connect_to_server(){
 						ac_id: $('input[name="ben_ac_id0"]').is(':checked'), 
 						benchmark_id: $('input[name="aben_id0"]').is(':checked'),
 						source: $('input[name="aben_source0"]').is(':checked'),
-						name: $('input[name="aben_name"0]').is(':checked'),
+						name: $('input[name="aben_name0"]').is(':checked'),
 						currency: $('input[name="aben_currency0"]').is(':checked'),
 						primary_flag: $('input[name="aben_pri_flag0"]').is(':checked'),
 						start_date: $('input[name="aben_startdate0"]').is(':checked'),
