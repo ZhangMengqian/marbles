@@ -14,7 +14,7 @@ var connection = mysql.createConnection({
 		database:'morgan'
 	});
 connection.connect(function(err){
-				console.log('--------------------------CONNECT INFORMATION-------------------------------------');
+			console.log('--------------------------CONNECT INFORMATION-------------------------------------');
 				if(err){
 					console.error("database connection failed:" + err.stack);
 					return;
@@ -37,7 +37,7 @@ module.exports.process_msg = function(ws, data){
 		if(data.type == 'create_account'){
 			console.log('----------------------------------Create Account!--------------------------------------');
 			
-			var value=data.ac_id+data.ac_short_name+data.status+data.term_date+data.inception_date+data.ac_region+data.ac_sub_region+data.cod_country_domicile+data.liq_method+data.contracting_entity+data.mgn_entity+data.ac_legal_name+data.manager_name+data.cod_ccy_base+data.long_name+data.mandate_id+data.client_id+data.custodian_name+data.sub_mandate_id+data.transfer_agent_name+data.trust_bank+data.re_trust_bank+data.last_updated_by+data.last_approved_by+data.last_update_date;
+			var value=data.ac_id+data.ac_short_name+data.ac_status+data.term_date+data.inception_date+data.ac_region+data.ac_sub_region+data.cod_country_domicile+data.liq_method+data.contracting_entity+data.mgn_entity+data.ac_legal_name+data.manager_name+data.cod_ccy_base+data.long_name+data.mandate_id+data.client_id+data.custodian_name+data.sub_mandate_id+data.transfer_agent_name+data.trust_bank+data.re_trust_bank+data.last_updated_by+data.last_approved_by+data.last_update_date;
 			var sha=new jsSHA("SHA-256","TEXT");
 			sha.update(value);
 			var sha_value=sha.getHash("HEX");
@@ -46,7 +46,7 @@ module.exports.process_msg = function(ws, data){
 			//connection.connect();
 			//var benchmark={benchmark_id:data.benchmark_id,id_source:data.id_source,name:data.name,currency:data.currency,benchmark_reference_id:data.benchmark_reference_id,benchmark_reference_id_source:data.benchmark_reference_id_source};
 			var  accountAddSql = 'INSERT INTO account(sha_value, ac_id,ac_short_time,status,term_date,inception_date,ac_region,ac_sub_region,cod_country_domicile,liq_method,contracting_entity,mgn_entity,ac_legal_name,manager_name,cod_ccy_base,longname,mandate_id,client_id,custodian_name,sub_mandate_id,transfer_agent_name,trust_bank,re_trust_bank,last_updated_by,last_approved_by,last_update_date) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-			var  accountAddSql_Params = [ sha_value, data.ac_id, data.ac_short_name, data.status, data.term_date,
+			var  accountAddSql_Params = [ sha_value, data.ac_id, data.ac_short_name, data.ac_status, data.term_date,
 	data.inception_date, data.ac_region, data.ac_sub_region, data.cod_country_domicile, data.liq_method,
 	data.contracting_entity, data.mgn_entity, data.ac_legal_name, data.manager_name, data.cod_ccy_base,
 	data.long_name, data.mandate_id, data.client_id, data.custodian_name, data.sub_mandate_id, 
@@ -79,7 +79,7 @@ module.exports.process_msg = function(ws, data){
 						}else{
                             console.log('[INSERT SUCCESS] \n ');
                             console.log('INSERT ID:',result);
-                            chaincode.invoke.create_account([data.ac_id, data.ac_short_name, data.status, data.term_date,
+                            chaincode.invoke.create_account([data.ac_id, data.ac_short_name, data.ac_status, data.term_date,
                                 data.inception_date, data.ac_region, data.ac_sub_region, data.cod_country_domicile, data.liq_method,
                                 data.contracting_entity, data.mgn_entity, data.ac_legal_name, data.manager_name, data.cod_ccy_base,
                                 data.long_name, data.mandate_id, data.client_id, data.custodian_name, data.sub_mandate_id,
