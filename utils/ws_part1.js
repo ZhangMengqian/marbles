@@ -15,7 +15,7 @@ var connection = mysql.createConnection({
 		database:'morgan'
 	});
 connection.connect(function(err){
-				console.log('--------------------------CONNECT INFORMATION-------------------------------------');
+			console.log('--------------------------CONNECT INFORMATION-------------------------------------');
 				if(err){
 					console.error("database connection failed:" + err.stack);
 					return;
@@ -26,8 +26,7 @@ connection.connect(function(err){
 			});
 	
 var jsSHA=require('jssha');
-module.exports.setup = function(sdk, cc){
-	ibc = sdk;
+module.exports.setup = function(sdk, cc){	ibc = sdk;
 	chaincode = cc;
 	
 	
@@ -39,7 +38,10 @@ module.exports.process_msg = function(ws, data){
 			console.log('----------------------------------Create Account!--------------------------------------');
 			
 			var value=data.ac_id+data.ac_short_name+data.ac_status+data.term_date+data.inception_date+data.ac_region+data.ac_sub_region+data.cod_country_domicile+data.liq_method+data.contracting_entity+data.mgn_entity+data.ac_legal_name+data.manager_name+data.cod_ccy_base+data.long_name+data.mandate_id+data.client_id+data.custodian_name+data.sub_mandate_id+data.transfer_agent_name+data.trust_bank+data.re_trust_bank+data.last_updated_by+data.last_approved_by+data.last_update_date;
+<<<<<<< HEAD
 			console.log("------巴拉巴拉----"+value);
+=======
+>>>>>>> 0e3228e8f5a6fd3a3be58cf841f188ed8bc63533
 			var sha=new jsSHA("SHA-256","TEXT");
 			sha.update(value);
 			var sha_value=sha.getHash("HEX");

@@ -1118,12 +1118,12 @@ function connect_to_server(){
 				var click = {
 
 						hash: $('input[name="hash4"]').is(':checked'),
-						benchmark_id: $('input[name="benchmark_id"]').is(':checked'),
-						id_source: $('input[name="ben_id_src"]').is(':checked'),
-						name: $('input[name="ben_name"]').is(':checked'),
-						currency: $('input[name="ben_currency"]').is(':checked'),
-						benchmark_reference_id: $('input[name="ben_ref_id"]').is(':checked'),
-						benchmark_reference_id_source: $('input[name="ben_ref_id_src"]').is(':checked')
+						benchmark_id: $('input[name="benchmark_id0"]').is(':checked'),
+						id_source: $('input[name="ben_id_src0"]').is(':checked'),
+						name: $('input[name="ben_name0"]').is(':checked'),
+						currency: $('input[name="ben_currency0"]').is(':checked'),
+						benchmark_reference_id: $('input[name="ben_ref_id0"]').is(':checked'),
+						benchmark_reference_id_source: $('input[name="ben_ref_id_src0"]').is(':checked')
 				};
 				var tmp_data = {
 						hash: msgObj.sha_value,
