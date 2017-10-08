@@ -887,6 +887,7 @@ function connect_to_server(){
 				if(hash){
 					console.log('hhh');
 				}
+				console.log(msgObj.ac_short_name);
 				var click = {
 						hash: $('input[name="hash1"]').is(':checked'),
 						ac_id: $('input[name="ac_id0"]').is(':checked'),
@@ -919,7 +920,7 @@ function connect_to_server(){
 						hash: msgObj.sha_value,
 						ac_id: msgObj.ac_id,
 						ac_short_name: msgObj.ac_short_name,
-						ac_status: msgObj.ac_status,
+						ac_status: msgObj.status,
 						term_date: msgObj.term_date,
 						inception_date: msgObj.inception_date,
 						ac_region: msgObj.ac_region,
@@ -1056,7 +1057,7 @@ function connect_to_server(){
 						ac_id: $('input[name="ben_ac_id0"]').is(':checked'), 
 						benchmark_id: $('input[name="aben_id0"]').is(':checked'),
 						source: $('input[name="aben_source0"]').is(':checked'),
-						name: $('input[name="aben_name"0]').is(':checked'),
+						name: $('input[name="aben_name0"]').is(':checked'),
 						currency: $('input[name="aben_currency0"]').is(':checked'),
 						primary_flag: $('input[name="aben_pri_flag0"]').is(':checked'),
 						start_date: $('input[name="aben_startdate0"]').is(':checked'),
@@ -1165,7 +1166,7 @@ function connect_to_server(){
 				console.log("untreated account from database");  //ac_check_noti_'+msgObj.ac_id+'
 				var un_account = '<div id="ac_check_noti_'+msgObj.ac_id+'"><hr/><span style="color:#FF0;">A new account has been created:</span><br>'+"[sha_value]:"+msgObj.sha_value+
                     "<br>[account]:"+msgObj.ac_id+"<br>[short name]:"+msgObj.ac_short_name+
-                    "<br>[status]:"+msgObj.ac_status+"<br>[term date]:"+msgObj.term_date+
+                    "<br>[status]:"+msgObj.status+"<br>[term date]:"+msgObj.term_date+
                     "<br>[inception date]:"+msgObj.inception_date+"<br>[region]:"+msgObj.ac_region+
                     "<br>[sub region]:"+msgObj.ac_sub_reg+"<br>[contracting entity]:"+msgObj.contracting_entity+
                     "<br>[mgn entity]:"+msgObj.mgn_entityion+"<br>[country domicile]:"+msgObj.cod_country_domicile+
@@ -1270,6 +1271,16 @@ function connect_to_server(){
                     }
 				}
             }
+            else if(msgObj.msg === 'hash'){
+				console.log("------------------------ENTER THE HASH--------------------");
+				console.log(msgObj.chain_hash);
+                var obj ={
+                    type: 'recheck',
+                    chain_hash: msgObj.chain_hash ,
+					table_name: "account"
+                };
+                ws.send(JSON.stringify(obj));
+			}
 			else console.log('rec', msgObj.msg, msgObj);
 		}
 

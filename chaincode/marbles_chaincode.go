@@ -426,6 +426,7 @@ func (t *SimpleChaincode) benchmarks(stub shim.ChaincodeStubInterface, args []st
 	return nil, nil
 }
 
+// can not use
 func (t *SimpleChaincode) get_account(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
     fmt.Println("- start get account from blockchain")
     acJson, err := stub.GetState("_acIndex")
