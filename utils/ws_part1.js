@@ -38,14 +38,18 @@ module.exports.process_msg = function(ws, data){
 			console.log('----------------------------------Create Account!--------------------------------------');
 			
 			var value=data.ac_id+data.ac_short_name+data.ac_status+data.term_date+data.inception_date+data.ac_region+data.ac_sub_region+data.cod_country_domicile+data.liq_method+data.contracting_entity+data.mgn_entity+data.ac_legal_name+data.manager_name+data.cod_ccy_base+data.long_name+data.mandate_id+data.client_id+data.custodian_name+data.sub_mandate_id+data.transfer_agent_name+data.trust_bank+data.re_trust_bank+data.last_updated_by+data.last_approved_by+data.last_update_date;
+<<<<<<< HEAD
 			console.log("------网页上填写的----"+value);
+=======
+
+			console.log("------巴拉巴拉----"+value);
+
+>>>>>>> d0bb8a9e1b7c19ac3123640e5ae42de457f62a0c
 			var sha=new jsSHA("SHA-256","TEXT");
 			sha.update(value);
 			var sha_value=sha.getHash("HEX");
 			console.log("SHA-VALUE: " + sha_value);
 
-			//connection.connect();
-			//var benchmark={benchmark_id:data.benchmark_id,id_source:data.id_source,name:data.name,currency:data.currency,benchmark_reference_id:data.benchmark_reference_id,benchmark_reference_id_source:data.benchmark_reference_id_source};
 			var  accountAddSql = 'INSERT INTO account(sha_value, ac_id,ac_short_name,status,term_date,inception_date,ac_region,ac_sub_region,cod_country_domicile,liq_method,contracting_entity,mgn_entity,ac_legal_name,manager_name,cod_ccy_base,longname,mandate_id,client_id,custodian_name,sub_mandate_id,transfer_agent_name,trust_bank,re_trust_bank,last_updated_by,last_approved_by,last_update_date) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 			var  accountAddSql_Params = [ sha_value, data.ac_id, data.ac_short_name, data.ac_status, data.term_date,
 	data.inception_date, data.ac_region, data.ac_sub_region, data.cod_country_domicile, data.liq_method,
@@ -91,7 +95,6 @@ module.exports.process_msg = function(ws, data){
                     console.log('--------------------------------------------------------------------\n\n');
 				}
 			});
-			//connection.end();
 		}
 		else if(data.type == 'ac_trade_setup'){
 			console.log('----------------------------------Create ac_trade!--------------------------------------');
@@ -103,9 +106,6 @@ module.exports.process_msg = function(ws, data){
 			var sha_value=sha.getHash("HEX");
 			console.log("SHA-VALUE: " + sha_value);
 
-			//connection.connect();
-
-			//var benchmark={benchmark_id:data.benchmark_id,id_source:data.id_source,name:data.name,currency:data.currency,benchmark_reference_id:data.benchmark_reference_id,benchmark_reference_id_source:data.benchmark_reference_id_source};
 			var  ac_tradeAddSql = 'INSERT INTO ac_trade(sha_value,ac_id,lvts,calypso,aladdin,trade_start_date,equity,fixed_income) VALUES(?,?,?,?,?,?,?,?)';
 			var  ac_tradeAddSql_Params = [ sha_value, data.ac_id, data.lvts, data.calypso,
 	data.aladdin, data.trade_start_date, data.equity, data.fixed_income];
@@ -143,7 +143,6 @@ module.exports.process_msg = function(ws, data){
 					console.log('-----------------------------------------------------------------\n\n');  
 				}
 			});
-			//connection.end();
 		}
 		else if(data.type == 'ac_benchmark'){
 			console.log('----------------------------------Create ac_benchmark!--------------------------------------');
@@ -157,9 +156,6 @@ module.exports.process_msg = function(ws, data){
 			var sha_value=sha.getHash("HEX");	
 			console.log("SHA-VALUE: " + sha_value);
 
-			//connection.connect();
-			
-			//var benchmark={benchmark_id:data.benchmark_id,id_source:data.id_source,name:data.name,currency:data.currency,benchmark_reference_id:data.benchmark_reference_id,benchmark_reference_id_source:data.benchmark_reference_id_source};
 			var  ac_benchmarkAddSql = 'INSERT INTO ac_benchmark( sha_value,ac_id,benchmark_id,source,name,currency,primary_flag,start_date,end_date,benchmark_reference_id,benchmark_reference_id_source) VALUES(?,?,?,?,?,?,?,?,?,?,?)';
 			var  ac_benchmarkAddSql_Params = [sha_value, data.ac_id, data.benchmark_id, data.source, data.name,
 	data.currency, data.primary_flag, data.start_date, data.end_date, data.benchmark_reference_id,
@@ -177,7 +173,6 @@ module.exports.process_msg = function(ws, data){
 					console.log('-------------------------------------------------------------------------\n\n');  
 				}
 			});
-			//connection.end();
 		}
 		else if(data.type == 'benchmarks'){
 			console.log('----------------------------------Create benchmarks!--------------------------------------');
@@ -190,9 +185,6 @@ module.exports.process_msg = function(ws, data){
 			var sha_value=sha.getHash("HEX");
 			console.log("SHA-VALUE: " + sha_value);
 
-			//connection.connect();
-			
-			//var benchmark={benchmark_id:data.benchmark_id,id_source:data.id_source,name:data.name,currency:data.currency,benchmark_reference_id:data.benchmark_reference_id,benchmark_reference_id_source:data.benchmark_reference_id_source};
 			var  benchmarkAddSql = 'INSERT INTO benchmarks(sha_value,benchmark_id,id_source,name,currency,benchmark_reference_id,benchmark_reference_id_source) VALUES(?,?,?,?,?,?,?)';
 			var  benchmarkAddSql_Params = [ sha_value, data.benchmark_id, data.id_source, data.name, data.currency, data.benchmark_reference_id, data.benchmark_reference_id_source];
 
@@ -208,7 +200,6 @@ module.exports.process_msg = function(ws, data){
 					console.log('----------------------------------------------------------------------\n\n');  
 				}
 			});
-			//connection.end();
 		}
 		else if (data.type == 'data_view') {
 			console.log('view data')
@@ -220,16 +211,13 @@ module.exports.process_msg = function(ws, data){
     					for (var i = 0; i < rows.length; i++) {
         					arr[i] = rows[i];
         					console.log(arr[i])
-						sendMsg({msg: 'account', sha_value:arr[i].sha_value, ac_id:arr[i].ac_id, ac_short_name:arr[i].ac_short_name, status:arr[i].status, term_date:arr[i].term_date,
+							sendMsg({msg: 'account', sha_value:arr[i].sha_value, ac_id:arr[i].ac_id, ac_short_name:arr[i].ac_short_name, status:arr[i].status, term_date:arr[i].term_date,
 	inception_date:arr[i].inception_date, ac_region: arr[i].ac_region, ac_sub_region:arr[i].ac_sub_region, cod_country_domicile:arr[i].cod_country_domicile, liq_method:arr[i].liq_method,
 	contracting_entity:arr[i].contracting_entity, mgn_entity:arr[i].mgn_entity, ac_legal_name:arr[i].ac_legal_name, manager_name:arr[i].manager_name, cod_ccy_base:arr[i].cod_ccy_base,
 	long_name:arr[i].long_name, mandate_id:arr[i].mandate_id, client_id:arr[i].client_id, custodian_name:arr[i].custodian_name, sub_mandate_id:arr[i].sub_mandate_id, 
 	transfer_agent_name:arr[i].transfer_agent_name, trust_bank:arr[i].trust_bank, re_trust_bank:arr[i].re_trust_bank, last_updated_by:arr[i].last_updated_by, 
 	last_approved_by:arr[i].last_approved_by, last_update_date:arr[i].last_update_date});
     					}
-    					//app.get('/', function(req, res) {
-        					//res.send(arr);
-    					//});
 				});
 			}
 			else if (data.data_type == 'ac_trade') {
@@ -240,12 +228,9 @@ module.exports.process_msg = function(ws, data){
     					for (var i = 0; i < rows.length; i++) {
         					arr[i] = rows[i];
         					console.log(arr[i])
-						sendMsg({msg: 'ac_trade', sha_value:arr[i].sha_value, ac_id:arr[i].ac_id, lvts:arr[i].lvts, calypso:arr[i].calypso,
+							sendMsg({msg: 'ac_trade', sha_value:arr[i].sha_value, ac_id:arr[i].ac_id, lvts:arr[i].lvts, calypso:arr[i].calypso,
 	aladdin:arr[i].aladdin, trade_start_date:arr[i].trade_start_date, equity:arr[i].equity, fixed_income:arr[i].fixed_income});
     					}
-    					//app.get('/', function(req, res) {
-        					//res.send(arr);
-    					//});
     				});
 			}
 			else if (data.data_type == 'ac_benchmark') {
@@ -256,12 +241,9 @@ module.exports.process_msg = function(ws, data){
     					for (var i = 0; i < rows.length; i++) {
         					arr[i] = rows[i];
         					console.log(arr[i])
-						sendMsg({msg: 'ac_benchmark', sha_value:arr[i].sha_value, ac_id:arr[i].ac_id, benchmark_id:arr[i].benchmark_id, source:arr[i].source, name:arr[i].name, currency:arr[i].currency,
+							sendMsg({msg: 'ac_benchmark', sha_value:arr[i].sha_value, ac_id:arr[i].ac_id, benchmark_id:arr[i].benchmark_id, source:arr[i].source, name:arr[i].name, currency:arr[i].currency,
 	primary_flag:arr[i].primary_flag, start_date:arr[i].start_date, end_date:arr[i].end_date, benchmark_reference_id:arr[i].benchmark_reference_id, benchmark_reference_id_source:arr[i].benchmark_reference_id_source});
     					}
-    					//app.get('/', function(req, res) {
-        					//res.send(arr);
-    					//});
 				 });
 			}
 			else if (data.data_type == 'benchmarks') {
@@ -272,7 +254,7 @@ module.exports.process_msg = function(ws, data){
     					for (var i = 0; i < rows.length; i++) {
         					arr[i] = rows[i];
         					console.log(arr[i]);
-						sendMsg({msg: 'benchmarks', sha_value:arr[i].sha_value, benchmark_id:arr[i].benchmark_id, id_source:arr[i].id_source, name:arr[i].name, currency:arr[i].currency,
+							sendMsg({msg: 'benchmarks', sha_value:arr[i].sha_value, benchmark_id:arr[i].benchmark_id, id_source:arr[i].id_source, name:arr[i].name, currency:arr[i].currency,
 	benchmark_reference_id:arr[i].benchmark_reference_id, benchmark_reference_id_source:arr[i].benchmark_reference_id_source});
     					}
 				});
@@ -751,8 +733,8 @@ module.exports.process_msg = function(ws, data){
 	}
 
     function formatCCID(i, uuid, ccid){								//flip uuid and ccid if deploy, weird i know
-	if(i == 1) return uuid;
-	return ccid;
+		if(i == 1) return uuid;
+			return ccid;
     }	
     
     function atb(r) {
