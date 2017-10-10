@@ -38,13 +38,9 @@ module.exports.process_msg = function(ws, data){
 			console.log('----------------------------------Create Account!--------------------------------------');
 			
 			var value=data.ac_id+data.ac_short_name+data.ac_status+data.term_date+data.inception_date+data.ac_region+data.ac_sub_region+data.cod_country_domicile+data.liq_method+data.contracting_entity+data.mgn_entity+data.ac_legal_name+data.manager_name+data.cod_ccy_base+data.long_name+data.mandate_id+data.client_id+data.custodian_name+data.sub_mandate_id+data.transfer_agent_name+data.trust_bank+data.re_trust_bank+data.last_updated_by+data.last_approved_by+data.last_update_date;
-<<<<<<< HEAD
 			console.log("------网页上填写的----"+value);
-=======
 
 			console.log("------巴拉巴拉----"+value);
-
->>>>>>> d0bb8a9e1b7c19ac3123640e5ae42de457f62a0c
 			var sha=new jsSHA("SHA-256","TEXT");
 			sha.update(value);
 			var sha_value=sha.getHash("HEX");
@@ -115,7 +111,8 @@ module.exports.process_msg = function(ws, data){
 					console.log('--------------------------INSERT ac_trade----------------------------');
          			console.log('[INSERT ERROR] - ',err.message);
 					console.log('-----------------------------------------------------------------\n\n');
-        		} else{       
+        		}
+        		else{
 					console.log('--------------------------INSERT ac_trade----------------------------');
 					//console.log('INSERT ID:',result.insertId);        
 					console.log('INSERT ID:',result);
@@ -146,11 +143,9 @@ module.exports.process_msg = function(ws, data){
 		}
 		else if(data.type == 'ac_benchmark'){
 			console.log('----------------------------------Create ac_benchmark!--------------------------------------');
-			chaincode.invoke.ac_benchmark([data.ac_id, data.benchmark_id, data.source, data.name,
-	data.currency, data.primary_flag, data.start_date, data.end_date, data.benchmark_reference_id,
-	data.benchmark_reference_id_source], cb_invoked);
 
 			var value=data.ac_id+data.benchmark_id+data.source+data.name+data.currency+data.primary_flag+data.start_date+data.end_date+data.benchmark_reference_id+data.benchmark_reference_id_source;
+            console.log("------网页上填写的----"+value);
 			var sha=new jsSHA("SHA-256","TEXT");
 			sha.update(value);
 			var sha_value=sha.getHash("HEX");	
@@ -158,27 +153,47 @@ module.exports.process_msg = function(ws, data){
 
 			var  ac_benchmarkAddSql = 'INSERT INTO ac_benchmark( sha_value,ac_id,benchmark_id,source,name,currency,primary_flag,start_date,end_date,benchmark_reference_id,benchmark_reference_id_source) VALUES(?,?,?,?,?,?,?,?,?,?,?)';
 			var  ac_benchmarkAddSql_Params = [sha_value, data.ac_id, data.benchmark_id, data.source, data.name,
-	data.currency, data.primary_flag, data.start_date, data.end_date, data.benchmark_reference_id,
-	data.benchmark_reference_id_source];
+	            data.currency, data.primary_flag, data.start_date, data.end_date, data.benchmark_reference_id,
+	            data.benchmark_reference_id_source];
 
 			connection.query(ac_benchmarkAddSql,ac_benchmarkAddSql_Params,function (err, result) {
         		if(err){
 					console.log('--------------------------INSERT ac_benchmark----------------------------');
          			console.log('[INSERT ERROR] - ',err.message);
 					console.log('-------------------------------------------------------------------------\n\n');
-           		} else{       
+           		}
+           		else{
 					console.log('--------------------------INSERT ac_benchmark----------------------------');
 					//console.log('INSERT ID:',result.insertId);        
-					console.log('INSERT ID:',result);        
-					console.log('-------------------------------------------------------------------------\n\n');  
+					console.log('INSERT ID:',result);
+                    var indexingAddSQL = 'INSERT INTO indexing(hash_value, type) VALUES(?,?)';
+                    var indexingAddSql_Params = [ sha_value, 'ac_benchmark'];
+                    connection.query(indexingAddSQL, indexingAddSql_Params, function(err, result) {
+                        console.log('---------INSERT INDEXING--------------');
+                        if(err){		// insert error, delete from the account
+                            console.log('[INSERT ERROR] - ',err.message);
+                            //delete
+                            var deleteSQL = 'delete from ac_benchmark where sha_value = '+sha_value;
+                            conn.query(deleteSQL, function (err0, res0) {
+                                if (err0) console.log(err0);
+                                console.log("DELETE Return ==> ");
+                                console.log(res0);
+                            });
+                        }else{
+                            console.log('[INSERT SUCCESS] \n ');
+                            console.log('INSERT ID:',result);
+                            chaincode.invoke.ac_benchmark([data.ac_id, data.benchmark_id, data.source, data.name,
+                                data.currency, data.primary_flag, data.start_date, data.end_date, data.benchmark_reference_id,
+                                data.benchmark_reference_id_source, sha_value], cb_invoked);
+                        }
+                    });
+                    console.log('-------------------------------------------------------------------------\n\n');
 				}
 			});
 		}
 		else if(data.type == 'benchmarks'){
 			console.log('----------------------------------Create benchmarks!--------------------------------------');
-			chaincode.invoke.benchmarks([data.benchmark_id, data.id_source, data.name, data.currency,
-	data.benchmark_reference_id, data.benchmark_reference_id_source], cb_invoked);	
-			
+
 			var value=data.benchmark_id+data.id_source+data.name+data.currency+data.benchmark_reference_id+data.benchmark_reference_id_source;
 			var sha=new jsSHA("SHA-256","TEXT");
 			sha.update(value);
@@ -196,7 +211,27 @@ module.exports.process_msg = function(ws, data){
         		} else{       
 					console.log('--------------------------INSERT benchmark----------------------------');
 					//console.log('INSERT ID:',result.insertId);        
-					console.log('INSERT ID:',result);        
+					console.log('INSERT ID:',result);
+                    var indexingAddSQL = 'INSERT INTO indexing(hash_value, type) VALUES(?,?)';
+                    var indexingAddSql_Params = [ sha_value, 'benchmarks'];
+                    connection.query(indexingAddSQL, indexingAddSql_Params, function(err, result) {
+                        console.log('---------INSERT INDEXING--------------');
+                        if(err){		// insert error, delete from the account
+                            console.log('[INSERT ERROR] - ',err.message);
+                            //delete
+                            var deleteSQL = 'delete from benchmarks where sha_value = '+sha_value;
+                            conn.query(deleteSQL, function (err0, res0) {
+                                if (err0) console.log(err0);
+                                console.log("DELETE Return ==> ");
+                                console.log(res0);
+                            });
+                        }else{
+                            console.log('[INSERT SUCCESS] \n ');
+                            console.log('INSERT ID:',result);
+                            chaincode.invoke.benchmarks([data.benchmark_id, data.id_source, data.name, data.currency,
+                                data.benchmark_reference_id, data.benchmark_reference_id_source, sha_value], cb_invoked);
+                        }
+                    });
 					console.log('----------------------------------------------------------------------\n\n');  
 				}
 			});
@@ -323,6 +358,9 @@ module.exports.process_msg = function(ws, data){
 				});
 			}
 			else if (data.table_name == 'ac_benchmark'){
+                console.log('----------------------------recheck account benchmark first-------------------------------');
+                ibc.chain_stats(get_acbenHash);
+
                 var selectSQL = 'select * from `ac_benchmark` where flag = 0';
                 var arr = [];
                 connection.query( selectSQL, function (err, rows) {
@@ -336,7 +374,10 @@ module.exports.process_msg = function(ws, data){
                 });
 			}
 			else if (data.table_name == 'benchmarks'){
-                var selectSQL = 'select * from `benchmarks` where flag = 0';
+                console.log('----------------------------recheck benchmarks first-------------------------------');
+                ibc.chain_stats(get_benchHash);
+
+			    var selectSQL = 'select * from `benchmarks` where flag = 0';
                 var arr = [];
                 connection.query( selectSQL, function (err, rows) {
                     if(err) throw err;
@@ -620,6 +661,16 @@ module.exports.process_msg = function(ws, data){
                                         else if (table == 'ac_trade') {
                                             value = row.ac_id + row.lvts + row.calypso + row.aladdin + row.trade_start_date + row.equity + row.fixed_income;
                                             console.log("-----[从数据库取出来的]-----"+value);
+                                        }
+                                        else if(table == 'ac_benchmark') {
+                                            value = row.ac_id + row.benchmark_id + row.source + row.name + row.currency + row.primary_flag + row.start_date
+                                                + row.end_date + row.benchmark_reference_id + row.benchmark_reference_id_source;
+                                            console.log("-----[从数据库取出来的]-----"+value);
+                                        }else if(table == 'benchmarks') {
+                                            value = row.benchmark_id + row.id_source + row.name + row.currency + row.benchmark_reference_id +
+                                                row.benchmark_reference_id_source;
+                                        } else{
+                                            console.log("----[Table `" + table + "` does not exist!]-----");
                                         }
                                         var sha = new jsSHA("SHA-256", "TEXT");
                                         sha.update(value);
@@ -907,7 +958,7 @@ module.exports.process_msg = function(ws, data){
                 if (err) {
                     console.error("error");
                 }
-                sendMsg({msg: 'hash', chain_hash: data, table_name: "account"});
+                sendMsg({msg: 'hash', chain_hash: data, table_name: "ac_benchmark"});
                 console.log('---RETURN HASH ARR---length:' + data.length);
                 console.log("[COUNT]  "+count);
                 console.log("[LIST.length]  "+list.length);
@@ -950,10 +1001,6 @@ module.exports.process_msg = function(ws, data){
 
                             }
                         }
-                        // if(count == list.length){
-                        //     sendMsg({msg: 'hash', chain_hash:data});
-                        //     console.log('---RETURN HASH ARR---length:' + data.length);
-                        // }
                     }
                     cb(null);
                 });
@@ -961,7 +1008,7 @@ module.exports.process_msg = function(ws, data){
                 if (err) {
                     console.error("error");
                 }
-                sendMsg({msg: 'hash', chain_hash: data, table_name: "account"});
+                sendMsg({msg: 'hash', chain_hash: data, table_name: "benchmarks"});
                 console.log('---RETURN HASH ARR---length:' + data.length);
                 console.log("[COUNT]  "+count);
                 console.log("[LIST.length]  "+list.length);

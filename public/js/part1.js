@@ -167,7 +167,7 @@ $(document).on('ready', function() {
 		
 		    $('#bench_check_noti').append(tmp_bench);
 			$('#bench_history').append(tmp_bench);
-			$('#bench_check_button').show();
+			// $('#bench_check_button').show();
 			$('#bench_mak_noti').empty();
 		}
 		return false;
@@ -566,7 +566,7 @@ $(document).on('ready', function() {
        	ws.send(JSON.stringify(obj));
     });
 
-    $('#nav_actrade_maker').click(function(){
+   $('#nav_actrade_maker').click(function(){
 		$("#nav_actrade_maker").css("color","red");
 		$("#nav_actrade_checker").css("color","white");
 		$('#actrade_maker').show();
@@ -618,6 +618,7 @@ $(document).on('ready', function() {
 		$('#acbench_maker').hide();
 		$('#acbench_checker').show();
 
+        $('#acben_validity_notice').empty();
 		$('#acbench_check_noti').empty();
 		var obj = {
 			type: 'untreated',
@@ -648,6 +649,7 @@ $(document).on('ready', function() {
 	   $('#benchmark_maker').hide();
 	   $('#benchmark_checker').show();
 
+       $('#bench_validity_notice').empty();
 	   $('#bench_check_noti').empty();
        var obj = {
            type: 'untreated',
@@ -1203,14 +1205,14 @@ function connect_to_server(){
                     "<br>[currency]:"+msgObj.currency+"<br>[primary_flag]:"+msgObj.primary_flag+
                     "<br>[start_date]:"+msgObj.start_date+"<br>[end_date]:"+msgObj.end_date+
                     "<br>[benchmark_reference_id]:"+msgObj.benchmark_reference_id+"<br>[benchmark_reference_id_source]:"+msgObj.benchmark_reference_id_source +
-                    '</p><br><br><button type="button" id="acben_accept_'+msgObj.ac_id+'">accept</button>'+
-                    '&nbsp;&nbsp;&nbsp;<button type="button" id="acben_decline_'+msgObj.ac_id+'">decline</button><br/><br/><br/><br/><br/>'+
+                    '</p><br><button type="button" id="acben_accept_'+msgObj.ac_id+'">accept</button>'+
+                    '&nbsp;&nbsp;&nbsp;<button type="button" id="acben_decline_'+msgObj.ac_id+'">decline</button><br/>'+
                     '<hr/></div>';
 				$('#acbench_check_noti').append(obj);
 			}
 			else if (msgObj.msg === 'untreated_benchmarks') {
                 console.log("untreated benchmarks from db");
-                var obj = '<div id="benchnoti_'+msgObj.benchmark_id+'"><p><span style="color:#FF0;">An account trade has been created:</span><br>'+
+                var obj = '<div id="benchnoti_'+msgObj.benchmark_id+'"><p><span style="color:#FF0;">A benchmarks has been created:</span><br>'+
                     "[benchmark_id]:"+msgObj.benchmark_id+"<br>[id_source]:"+msgObj.id_source+
                     "<br>[name]:"+msgObj.name+"<br>[currency]:"+msgObj.currency+
                     "<br>[benchmark_reference_id]:"+msgObj.benchmark_reference_id+"<br>[benchmark_reference_id_source]:"+msgObj.benchmark_reference_id_source +
@@ -1261,22 +1263,35 @@ function connect_to_server(){
             else if(msgObj.msg === 'validity') {
                 console.log("account data validity");
                 if (msgObj.table_name == 'account') {
-                    var account_notice = '<div><hr/><h5>' + "[NOTICE!] Data in Table `account` changed!" + '<br/>' + "[HASH VALUE] " + msgObj.sha_value + '</h5><hr/></div>';
+                    var account_notice = '<div><hr/><h4>' + "[NOTICE!] Data in Table `account` changed!" + '<br/>' + "[HASH VALUE] " + msgObj.sha_value + '</h4><hr/></div>';
                     $('#ac_data_validity_notice').append(account_notice);
                 }
                 else if (msgObj.table_name == 'ac_trade'){
-                    var account_notice = '<div><hr/><h5>' + "[NOTICE!] Data in Table `ac_trade` changed!" + '<br/>' + "[HASH VALUE] " + msgObj.sha_value + '</h5><hr/></div>';
+                    var account_notice = '<div><hr/><h4>' + "[NOTICE!] Data in Table `ac_trade` changed!" + '<br/>' + "[HASH VALUE] " + msgObj.sha_value + '</h4><hr/></div>';
                     $('#actra_validity_notice').append(account_notice);
 				}
+				else if (msgObj.table_name == 'ac_benchmark') {
+                    var account_notice = '<div><hr/><h4>' + "[NOTICE!] Data in Table `ac_benchmark` changed!" + '<br/>' + "[HASH VALUE] " + msgObj.sha_value + '</h4><hr/></div>';
+                    $('#acben_validity_notice').append(account_notice);
+				}
+				else if (msgObj.table_name == 'benchmarks'){
+                    var account_notice = '<div><hr/><h4>' + "[NOTICE!] Data in Table `benchmarks` changed!" + '<br/>' + "[HASH VALUE] " + msgObj.sha_value + '</h4><hr/></div>';
+                    $('#bench_validity_notice').append(account_notice);
+				}
                 else if(msgObj.table_name == 'unknown'){
-                    var notice = '<div><hr/><h5>' + "[NOTICE!] Data in database changed!" + '</h5><hr/></div>';
+                    var notice = '<div><hr/><h4>' + "[NOTICE!] Data in database changed!" + '</h4><hr/></div>';
                     if(msgObj.show_location == 'account') {
                         $('#ac_data_validity_notice').append(notice);
                     }
                     else if(msgObj.show_location == 'ac_trade'){
                     	$('#actra_validity_notice').append(notice);
 					}
-
+					else if(msgObj.show_location == 'ac_benchmark') {
+                        $('#acben_validity_notice').append(notice);
+					}
+                    else if(msgObj.show_location == 'benchmarks') {
+                        $('#bench_validity_notice').append(notice);
+                    }
 				}
             }
             else if(msgObj.msg === 'hash'){
