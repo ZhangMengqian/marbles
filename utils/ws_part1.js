@@ -38,10 +38,7 @@ module.exports.process_msg = function(ws, data){
 			console.log('----------------------------------Create Account!--------------------------------------');
 			
 			var value=data.ac_id+data.ac_short_name+data.ac_status+data.term_date+data.inception_date+data.ac_region+data.ac_sub_region+data.cod_country_domicile+data.liq_method+data.contracting_entity+data.mgn_entity+data.ac_legal_name+data.manager_name+data.cod_ccy_base+data.long_name+data.mandate_id+data.client_id+data.custodian_name+data.sub_mandate_id+data.transfer_agent_name+data.trust_bank+data.re_trust_bank+data.last_updated_by+data.last_approved_by+data.last_update_date;
-<<<<<<< HEAD
-			console.log("------巴拉巴拉----"+value);
-=======
->>>>>>> 0e3228e8f5a6fd3a3be58cf841f188ed8bc63533
+			console.log("------网页上填写的----"+value);
 			var sha=new jsSHA("SHA-256","TEXT");
 			sha.update(value);
 			var sha_value=sha.getHash("HEX");
@@ -98,10 +95,9 @@ module.exports.process_msg = function(ws, data){
 		}
 		else if(data.type == 'ac_trade_setup'){
 			console.log('----------------------------------Create ac_trade!--------------------------------------');
-			chaincode.invoke.ac_trade_setup([ data.ac_id, data.lvts, data.calypso,
-	data.aladdin, data.trade_start_date, data.equity, data.fixed_income], cb_invoked);
 			
 			var value=data.ac_id+data.lvts+data.calypso+data.aladdin+data.trade_start_date+data.equity+data.fixed_income;
+            console.log("------网页上填写的----"+value);
 			var sha=new jsSHA("SHA-256","TEXT");
 			sha.update(value);
 			var sha_value=sha.getHash("HEX");
@@ -122,7 +118,28 @@ module.exports.process_msg = function(ws, data){
         		} else{       
 					console.log('--------------------------INSERT ac_trade----------------------------');
 					//console.log('INSERT ID:',result.insertId);        
-					console.log('INSERT ID:',result);        
+					console.log('INSERT ID:',result);
+
+                    var indexingAddSQL = 'INSERT INTO indexing(hash_value, type) VALUES(?,?)';
+                    var indexingAddSql_Params = [ sha_value, 'ac_trade'];
+                    connection.query(indexingAddSQL, indexingAddSql_Params, function(err, result) {
+                        console.log('---------INSERT INDEXING--------------');
+                        if(err){		// insert error, delete from the account
+                            console.log('[INSERT ERROR] - ',err.message);
+                            //delete
+                            var deleteSQL = 'delete from ac_trade where sha_value = '+sha_value;
+                            conn.query(deleteSQL, function (err0, res0) {
+                                if (err0) console.log(err0);
+                                console.log("DELETE Return ==> ");
+                                console.log(res0);
+                            });
+                        }else{
+                            console.log('[INSERT SUCCESS] \n ');
+                            console.log('INSERT ID:',result);
+                            chaincode.invoke.ac_trade_setup([ data.ac_id, data.lvts, data.calypso,
+                                data.aladdin, data.trade_start_date, data.equity, data.fixed_income, sha_value], cb_invoked);
+                        }
+                    });
 					console.log('-----------------------------------------------------------------\n\n');  
 				}
 			});
@@ -265,15 +282,12 @@ module.exports.process_msg = function(ws, data){
 			console.log('--------------get untreated account now--------------------------');
 			if (data.table_name == 'account'){
                 console.log('----------------------------recheck account first-------------------------------');
-                // var str = chaincode.invoke.get_account(["hash"], cb_invoked);
-                // console.log(str.length);
-                // var obj = str.parseJSON();
-                // console.log(obj.hash);
                 ibc.chain_stats(get_accountHash);
                         // get untreated record
-                        var selectSQL = 'select * from `account` where flag = 0';
-                        var arr = [];
-                        connection.query(selectSQL, function (err, rows) {
+				var selectSQL = 'select * from `account` where flag = 0';
+				var arr = [];
+
+				connection.query(selectSQL, function (err, rows) {
                             if (err) throw err;
                             for (var i = 0; i < rows.length; i++) {
                                 arr[i] = rows[i];
@@ -295,7 +309,7 @@ module.exports.process_msg = function(ws, data){
                                     ac_legal_name: arr[i].ac_legal_name,
                                     manager_name: arr[i].manager_name,
                                     cod_ccy_base: arr[i].cod_ccy_base,
-                                    long_name: arr[i].long_name,
+                                    long_name: arr[i].longname,
                                     mandate_id: arr[i].mandate_id,
                                     client_id: arr[i].client_id,
                                     custodian_name: arr[i].custodian_name,
@@ -309,74 +323,12 @@ module.exports.process_msg = function(ws, data){
                                 });
                             }
                         });
-                //STEP 1
-                // chain_hash = ibc.chain_stats(get_chainstats);
-                // console.log("data "+chain_hash.length);
-
-				//STEP 2
-                // for( var i=0; i<chain_hash.length; i++){
-					// console.log('----------CHECK THE DATA  NO.'+i);
-                //     var hash = chain_hash[i];		// get hash from the blockchain
-                //     console.log(hash);
-                //     var indexingSelectSQL = 'SELECT `type` FROM `indexing` WHERE `hash_value` = ' + hash;
-                //     var res = '';
-                //     connection.query(indexingSelectSQL, function(err, rows){
-                //         console.log('---------------------------SEARCH HASH VALUE IN DB---------------------------');
-                //         if (err) throw err;
-                //         if ( rows.length > 0 ) {		// FOUND in table 'indexing'
-                //             res = rows[0];
-                //             console.log("success\n");
-                //             console.log(res);
-                //             if( res.type == 'account' ){
-                //                 var accountSelectSQL = 'SELECT * FROM `account` WHERE `hash_value` = ' + hash;
-                //                 var row = '';
-                //                 connection.query( accountSelectSQL, function (err, rows) {
-                //                     if (err) throw err;
-                //                     if ( rows.length > 0 ) {		// FOUND in table 'account'
-                //                         row = rows[0];
-                //                         console.log(row);
-                //                         var value = row.ac_id + row.ac_short_name + row.status + row.term_date + row.inception_date + row.ac_region + row.ac_sub_region + row.cod_country_domicile + row.liq_method + row.contracting_entity + row.mgn_entity + row.ac_legal_name + row.manager_name + row.cod_ccy_base + row.long_name + row.mandate_id + row.client_id + row.custodian_name + row.sub_mandate_id + row.transfer_agent_name + row.trust_bank + row.re_trust_bank + row.last_updated_by + row.last_approved_by + row.last_update_date;
-                //                         var sha = new jsSHA("SHA-256","TEXT");
-                //                         sha.update(value);
-                //                         var sha_value=sha.getHash("HEX");		// new hash
-                //                         if ( sha_value != hash ) {			// data change
-                //                             sendMsg({msg: 'validity', table_name:'account', sha_value:hash});
-                //                             console.log("SHA-VALUE: " + sha_value);
-                //                         }
-                //                     } else {		// data change
-                //                         console.log('---fail---CAN NOT FOUND HASH in table \'account\'');
-					// 					sendMsg({msg: 'validity', table_name: 'unknown', show_location: 'account'});
-                //                     }
-                //                 })
-                //             }
-                //         }else{			// data change
-                //             console.log('---fail---CAN NOT FOUND HASH in table \'indexing\'');
-                //             sendMsg({msg: 'validity', table_name: 'unknown', show_location: 'account'});
-                //         }
-                //     });
-                // }
-
-				// STEP 3
-
-                // // get untreated record
-                // var selectSQL = 'select * from `account` where flag = 0';
-                // var arr = [];
-                // connection.query( selectSQL, function (err, rows) {
-					// if (err) throw err;
-					// for (var i=0; i<rows.length; i++){
-					// 	arr[i] = rows[i];
-					// 	console.log(arr[i]);
-                //         sendMsg({msg: 'untreated_account', sha_value:arr[i].sha_value, ac_id:arr[i].ac_id, ac_short_name:arr[i].ac_short_name, status:arr[i].status, term_date:arr[i].term_date,
-                //             inception_date:arr[i].inception_date, ac_region: arr[i].ac_region, ac_sub_region:arr[i].ac_sub_region, cod_country_domicile:arr[i].cod_country_domicile, liq_method:arr[i].liq_method,
-                //             contracting_entity:arr[i].contracting_entity, mgn_entity:arr[i].mgn_entity, ac_legal_name:arr[i].ac_legal_name, manager_name:arr[i].manager_name, cod_ccy_base:arr[i].cod_ccy_base,
-                //             long_name:arr[i].long_name, mandate_id:arr[i].mandate_id, client_id:arr[i].client_id, custodian_name:arr[i].custodian_name, sub_mandate_id:arr[i].sub_mandate_id,
-                //             transfer_agent_name:arr[i].transfer_agent_name, trust_bank:arr[i].trust_bank, re_trust_bank:arr[i].re_trust_bank, last_updated_by:arr[i].last_updated_by,
-                //             last_approved_by:arr[i].last_approved_by, last_update_date:arr[i].last_update_date});
-                //         }
-                // });
 			}
 			else if (data.table_name == 'ac_trade') {
-				var selectSQL = 'select * from `ac_trade` where flag = 0';
+                console.log('----------------------------recheck account trade first-------------------------------');
+                ibc.chain_stats(get_actraHash);
+
+                var selectSQL = 'select * from `ac_trade` where flag = 0';
 				var arr = [];
 				connection.query( selectSQL, function (err, rows) {
 					if(err) throw err;
@@ -429,7 +381,7 @@ module.exports.process_msg = function(ws, data){
                         sendMsg({msg: 'newAccepted_account', sha_value:arr[i].sha_value, ac_id:arr[i].ac_id, ac_short_name:arr[i].ac_short_name, status:arr[i].status, term_date:arr[i].term_date,
                             inception_date:arr[i].inception_date, ac_region: arr[i].ac_region, ac_sub_region:arr[i].ac_sub_region, cod_country_domicile:arr[i].cod_country_domicile, liq_method:arr[i].liq_method,
                             contracting_entity:arr[i].contracting_entity, mgn_entity:arr[i].mgn_entity, ac_legal_name:arr[i].ac_legal_name, manager_name:arr[i].manager_name, cod_ccy_base:arr[i].cod_ccy_base,
-                            long_name:arr[i].long_name, mandate_id:arr[i].mandate_id, client_id:arr[i].client_id, custodian_name:arr[i].custodian_name, sub_mandate_id:arr[i].sub_mandate_id,
+                            long_name:arr[i].longname, mandate_id:arr[i].mandate_id, client_id:arr[i].client_id, custodian_name:arr[i].custodian_name, sub_mandate_id:arr[i].sub_mandate_id,
                             transfer_agent_name:arr[i].transfer_agent_name, trust_bank:arr[i].trust_bank, re_trust_bank:arr[i].re_trust_bank, last_updated_by:arr[i].last_updated_by,
                             last_approved_by:arr[i].last_approved_by, last_update_date:arr[i].last_update_date});
                     }
@@ -508,7 +460,8 @@ module.exports.process_msg = function(ws, data){
                 	console.log(err);
                 	throw err;
                 } else {
-                    ws.send(JSON.stringify({type:"check_decide", checktype:"Account", checkcont:"accept"}));
+                    // ws.send(JSON.stringify({type:"check_decide", checktype:"Account", checkcont:"accept"}));
+                    chaincode.invoke.check_decide(["Account", "accept"]);
 				}
                 console.log("UPDATE Return ==> ");
                 console.log(res);
@@ -524,7 +477,8 @@ module.exports.process_msg = function(ws, data){
                     console.log(err);
                     throw err;
                 } else {
-                    ws.send(JSON.stringify({type:"check_decide", checktype:"Ac_trades_setup", checkcont:"accept"}));
+                    // ws.send(JSON.stringify({type:"check_decide", checktype:"Ac_trades_setup", checkcont:"accept"}));
+                    chaincode.invoke.check_decide(["Ac_trades_setup", "accept"]);
                 }
                 console.log("UPDATE Return ==> ");
                 console.log(res);
@@ -539,7 +493,8 @@ module.exports.process_msg = function(ws, data){
                     console.log(err);
                     throw err;
                 } else {
-                    ws.send(JSON.stringify({type:"check_decide", checktype:"Ac_benchmark", checkcont:"accept"}));
+                    // ws.send(JSON.stringify({type:"check_decide", checktype:"Ac_benchmark", checkcont:"accept"}));
+                    chaincode.invoke.check_decide(["Ac_benchmark", "accept"]);
                 }
                 console.log("UPDATE Return ==> ");
                 console.log(res);
@@ -554,7 +509,8 @@ module.exports.process_msg = function(ws, data){
                     console.log(err);
                     throw err;
                 } else {
-                    ws.send(JSON.stringify({type:"check_decide", checktype:"Benchmarks", checkcont:"accept"}));
+                    // ws.send(JSON.stringify({type:"check_decide", checktype:"Benchmarks", checkcont:"accept"}));
+                    chaincode.invoke.check_decide(["Benchmarks", "accept"]);
                 }
                 console.log("UPDATE Return ==> ");
                 console.log(res);
@@ -569,7 +525,8 @@ module.exports.process_msg = function(ws, data){
                     console.log(err);
                     throw err;
                 } else {
-                    ws.send(JSON.stringify({type:"check_decide", checktype:"Account", checkcont:"decline"}));		// send to blockchain
+                    // ws.send(JSON.stringify({type:"check_decide", checktype:"Account", checkcont:"decline"}));		// send to blockchain
+                    chaincode.invoke.check_decide(["Account", "decline"]);
                 }
                 console.log("UPDATE Return ==> ");
                 console.log(res);
@@ -584,7 +541,8 @@ module.exports.process_msg = function(ws, data){
                     console.log(err);
                     throw err;
                 } else {
-                    ws.send(JSON.stringify({type: "check_decide", checktype: "Ac_trades_setup", checkcont: "decline"}));	// send to blockchain
+                    // ws.send(JSON.stringify({type: "check_decide", checktype: "Ac_trades_setup", checkcont: "decline"}));	// send to blockchain
+                    chaincode.invoke.check_decide(["Ac_trades_setup", "decline"]);
                 }
                 console.log("UPDATE Return ==> ");
                 console.log(res);
@@ -599,7 +557,8 @@ module.exports.process_msg = function(ws, data){
                         console.log(err);
                         throw err;
                     } else {
-                        ws.send(JSON.stringify({type:"check_decide", checktype:"Ac_benchmark", checkcont:"decline"}));	// send to blockchain
+                        // ws.send(JSON.stringify({type:"check_decide", checktype:"Ac_benchmark", checkcont:"decline"}));	// send to blockchain
+                        chaincode.invoke.check_decide(["Ac_benchmark", "decline"]);
                     }
                     console.log("UPDATE Return ==> ");
                     console.log(res);
@@ -614,7 +573,8 @@ module.exports.process_msg = function(ws, data){
                     console.log(err);
                     throw err;
                 } else {
-                    ws.send(JSON.stringify({type:"check_decide", checktype:"Benchmarks", checkcont:"decline"}));	// send to blockchain
+                    // ws.send(JSON.stringify({type:"check_decide", checktype:"Benchmarks", checkcont:"decline"}));	// send to blockchain
+                    chaincode.invoke.check_decide(["Benchmarks", "decline"]);
                 }
                 console.log("UPDATE Return ==> ");
                 console.log(res);
@@ -670,27 +630,19 @@ module.exports.process_msg = function(ws, data){
                                         if( table == 'account' ) {
                                             value = row.ac_id + row.ac_short_name + row.status + row.term_date + row.inception_date + row.ac_region
 													+ row.ac_sub_region + row.cod_country_domicile + row.liq_method + row.contracting_entity + row.mgn_entity
-													+ row.ac_legal_name + row.manager_name + row.cod_ccy_base + row.long_name + row.mandate_id + row.client_id
+													+ row.ac_legal_name + row.manager_name + row.cod_ccy_base + row.longname + row.mandate_id + row.client_id
 													+ row.custodian_name + row.sub_mandate_id + row.transfer_agent_name + row.trust_bank + row.re_trust_bank
 													+ row.last_updated_by + row.last_approved_by + row.last_update_date;
-                                            // value= 	data.ac_id + data.ac_short_name + data.status + data.term_date + data.inception_date + data.ac_region
-												//    	+ data.ac_sub_region+data.cod_country_domicile+data.liq_method+data.contracting_entity+data.mgn_entity
-												// 	+data.ac_legal_name+data.manager_name+data.cod_ccy_base+data.long_name+data.mandate_id+data.client_id
-												// 	+data.custodian_name+data.sub_mandate_id+data.transfer_agent_name+data.trust_bank+data.re_trust_bank
-												// 	+data.last_updated_by+data.last_approved_by+data.last_update_date;
-											console.log("-----[取出来的]-----"+value);
+											console.log("-----[从数据库取出来的]-----"+value);
+                                        }
+                                        else if (table == 'ac_trade') {
+                                            value = row.ac_id + row.lvts + row.calypso + row.aladdin + row.trade_start_date + row.equity + row.fixed_income;
+                                            console.log("-----[从数据库取出来的]-----"+value);
                                         }
                                         var sha = new jsSHA("SHA-256", "TEXT");
                                         sha.update(value);
                                         var sha_value = sha.getHash("HEX");		// new hash
 										console.log("SHA-VALUE: "+sha_value);
-
-										// console.log("-----------------哈哈哈---------------");
-										// var mysha =  new jsSHA("SHA-256", "TEXT");
-										// mysha.update("00baozi00");
-										// var mysha_value = mysha.getHash("HEX");
-										// console.log("----自己算的--"+mysha_value);
-
 
                                         if (sha_value !== hash) {			// data change
                                             console.log("[HASH IN INDEXING] "+hash);
@@ -698,6 +650,9 @@ module.exports.process_msg = function(ws, data){
                                             sendMsg({msg: 'validity', table_name: table, sha_value: hash});
                                             console.log("SHA-VALUE: " + sha_value);
                                         }
+                                        else {
+                                             console.log("MATCH! NO PROBLEM!");
+                                         }
                                     } else {		// data change
                                         console.log('---fail---CAN NOT FOUND HASH in table '+table);
                                         sendMsg({
@@ -720,53 +675,6 @@ module.exports.process_msg = function(ws, data){
 					console.log("---[ERROR]---"+err);
                     console.log("---[RESULT]---"+result);
                 });
-                    // console.log(hash);
-                    // var indexingSelectSQL = 'SELECT `type` FROM `indexing` WHERE `hash_value` = \'' + hash+'\'';
-                    // var res = '';
-                    // connection.query(indexingSelectSQL, function (err, rows) {
-                    //     console.log('---------------------------SEARCH HASH VALUE IN DB---------------------------');
-                    //     if (err) throw err;
-                    //     if (rows.length > 0) {		// FOUND in table 'indexing'
-                    //         res = rows[0];
-                    //         console.log("success\n");
-                    //         console.log(res);
-                    //         if (res.type === table) {
-                    //             var SelectSQL = 'SELECT * FROM '+ table +' WHERE `sha_value` = \'' + hash+'\'';
-                    //             console.log(SelectSQL);
-                    //             var row = '';
-                    //             connection.query(SelectSQL, function (err, rows2) {
-                    //                 if (err) throw err;
-                    //                 if (rows2.length > 0) {		// FOUND in table 'account'
-                    //                     row = rows2[0];
-                    //                     console.log(row);
-                    //                     var value = "";
-                    //                     if( table == 'account' ) {
-                    //                         value = row.ac_id + row.ac_short_name + row.status + row.term_date + row.inception_date + row.ac_region + row.ac_sub_region + row.cod_country_domicile + row.liq_method + row.contracting_entity + row.mgn_entity + row.ac_legal_name + row.manager_name + row.cod_ccy_base + row.long_name + row.mandate_id + row.client_id + row.custodian_name + row.sub_mandate_id + row.transfer_agent_name + row.trust_bank + row.re_trust_bank + row.last_updated_by + row.last_approved_by + row.last_update_date;
-                    //                     }
-                    //                     var sha = new jsSHA("SHA-256", "TEXT");
-                    //                     sha.update(value);
-                    //                     var sha_value = sha.getHash("HEX");		// new hash
-                    //                     if (sha_value !== hash) {			// data change
-						// 					console.log("[HASH IN INDEXING] "+hash);
-						// 					console.log("[HASH IN ACCOUNT] "+ sha_value);
-                    //                         sendMsg({msg: 'validity', table_name: table, sha_value: hash});
-                    //                         console.log("SHA-VALUE: " + sha_value);
-                    //                     }
-                    //                 } else {		// data change
-                    //                     console.log('---fail---CAN NOT FOUND HASH in table '+table);
-                    //                     sendMsg({
-                    //                         msg: 'validity',
-                    //                         table_name: 'unknown',
-                    //                         show_location: table
-                    //                     });
-                    //                 }
-                    //             })
-                    //         }
-                    //     } else {			// data change
-                    //         console.log('---fail---CAN NOT FOUND HASH in table \'indexing\'');
-                    //         sendMsg({msg: 'validity', table_name: 'unknown', show_location: table});
-                    //     }
-                    // });
                     cb(null);
                 }, function (err) {
                 if (err) {
@@ -882,10 +790,6 @@ module.exports.process_msg = function(ws, data){
                 if (list.length >= 40) break;
             }
             list.reverse();//flip it so order is correct in UI
-            // var flag = 0;
-            // for (var i = 0; i < list.length; i++) {
-                // chaincode.invoke.readOnly(['hash'], cb_invoked);
-                // execute(function (block_height) {						//iter through each one, and send it
 			var count = 0;
             async.eachLimit(list, 1, function (block_height, cb) {						//iter through each one, and send it
                 count++;
@@ -893,12 +797,12 @@ module.exports.process_msg = function(ws, data){
                         if (e == null) {
                             stats.height = block_height;
                             if (stats.transactions) {
-                            	var flag=3;
+                            	var flag=3;             // only get create_account block from chain
                                 console.log(stats.height);
                                 var ccid = formatCCID(stats.transactions[0].type, stats.transactions[0].uuid, atb(stats.transactions[0].chaincodeID));
                                 var payload = atb(stats.transactions[0].payload);
                                 if (ccid) {
-                                    var chaindata = formatPayload(payload, ccid,flag);
+                                    var chaindata = formatPayload(payload, ccid, flag);
                                     if (chaindata!='0'){
                                         var mydata = chaindata.split(" ");
                                         data.push(chaindata.slice(-64));
@@ -924,39 +828,166 @@ module.exports.process_msg = function(ws, data){
 					console.log("[LIST.length]  "+list.length);
 					// return data;
 			});
-                // list.forEach(function(block_height, cb) {						//iter through each one, and send it
-                //     ibc.block_stats(block_height, function(e, stats){
-                //         if (e == null) {
-                //             stats.height = block_height;
-                //             // sendMsg({msg: 'chainstats', e: e, chainstats: chain_stats, blockstats: stats});
-                //             if (stats.transactions) {
-                //                 // console.log(stats);
-                //                 // console.log(stats.transactions[0]);
-                //                 console.log(stats.height);
-                //                 var ccid = formatCCID(stats.transactions[0].type, stats.transactions[0].uuid, atb(stats.transactions[0].chaincodeID));
-                //                 var payload = atb(stats.transactions[0].payload);
-                //                 if (ccid) {
-                //                     var chaindata = formatPayload(payload, ccid);
-                //                     var mydata = chaindata.split(" ");
-                //                     data.push(chaindata.slice(-64));
-                //                     console.log("NO." + data.length + "   " + chaindata.slice(-64));
-                //                 }
-                //             }
-                //         }
-                //         // cb(null);
-                //     });
-                // });
-            // while(1){
-            // // console.log(count+"   ");
-            // 	if( flag === 1 ) {
-            // 		break;
-            // 	}
-            // }
-            // console.log('---RETURN HASH ARR---length:'+data.length);
-            // return data;
         }
-        // return data;
     }
+    function get_actraHash (e, chain_stats) {
+        console.log('----------FUNCTION get_chainstats-------');
+        var data = [];
+        if (chain_stats && chain_stats.height) {
+            console.log("------IF NOW-----");
+            chain_stats.height = chain_stats.height - 1;								//its 1 higher than actual height
+            console.log("----CHAIN HEIGHT-----" + chain_stats.height);
+            var list = [];
+            for (var i = chain_stats.height; i >= 1; i--) {								//create a list of heights we need
+                list.push(i);
+                if (list.length >= 40) break;
+            }
+            list.reverse();//flip it so order is correct in UI
+            var count = 0;
+            async.eachLimit(list, 1, function (block_height, cb) {						//iter through each one, and send it
+                count++;
+                ibc.block_stats(block_height, function (e, stats) {
+                    if (e == null) {
+                        stats.height = block_height;
+                        if (stats.transactions) {
+                            var flag=4;
+                            console.log(stats.height);
+                            var ccid = formatCCID(stats.transactions[0].type, stats.transactions[0].uuid, atb(stats.transactions[0].chaincodeID));
+                            var payload = atb(stats.transactions[0].payload);
+                            if (ccid) {
+                                var chaindata = formatPayload(payload, ccid,flag);
+                                if (chaindata!='0'){
+                                    var mydata = chaindata.split(" ");
+                                    data.push(chaindata.slice(-64));
+                                    console.log("NO." + data.length + "   " + chaindata.slice(-64));
+                                }
+
+                            }
+                        }
+                    }
+                    cb(null);
+                });
+            }, function (err) {
+                if (err) {
+                    console.error("error");
+                }
+                sendMsg({msg: 'hash', chain_hash: data, table_name: "ac_trade"});
+                console.log('---RETURN HASH ARR---length:' + data.length);
+                console.log("[COUNT]  "+count);
+                console.log("[LIST.length]  "+list.length);
+                // return data;
+            });
+        }
+    }
+
+    function get_acbenHash (e, chain_stats) {
+        console.log('----------FUNCTION get_chainstats-------');
+        var data = [];
+        if (chain_stats && chain_stats.height) {
+            console.log("------IF NOW-----");
+            chain_stats.height = chain_stats.height - 1;								//its 1 higher than actual height
+            console.log("----CHAIN HEIGHT-----" + chain_stats.height);
+            var list = [];
+            for (var i = chain_stats.height; i >= 1; i--) {								//create a list of heights we need
+                list.push(i);
+                if (list.length >= 40) break;
+            }
+            list.reverse();//flip it so order is correct in UI
+            var count = 0;
+            async.eachLimit(list, 1, function (block_height, cb) {						//iter through each one, and send it
+                count++;
+                ibc.block_stats(block_height, function (e, stats) {
+                    if (e == null) {
+                        stats.height = block_height;
+                        if (stats.transactions) {
+                            var flag=5;
+                            console.log(stats.height);
+                            var ccid = formatCCID(stats.transactions[0].type, stats.transactions[0].uuid, atb(stats.transactions[0].chaincodeID));
+                            var payload = atb(stats.transactions[0].payload);
+                            if (ccid) {
+                                var chaindata = formatPayload(payload, ccid,flag);
+                                if (chaindata!='0'){
+                                    var mydata = chaindata.split(" ");
+                                    data.push(chaindata.slice(-64));
+                                    console.log("NO." + data.length + "   " + chaindata.slice(-64));
+                                }
+
+                            }
+                        }
+                        // if(count == list.length){
+                        //     sendMsg({msg: 'hash', chain_hash:data});
+                        //     console.log('---RETURN HASH ARR---length:' + data.length);
+                        // }
+                    }
+                    cb(null);
+                });
+            }, function (err) {
+                if (err) {
+                    console.error("error");
+                }
+                sendMsg({msg: 'hash', chain_hash: data, table_name: "account"});
+                console.log('---RETURN HASH ARR---length:' + data.length);
+                console.log("[COUNT]  "+count);
+                console.log("[LIST.length]  "+list.length);
+                // return data;
+            });
+        }
+    }
+
+    function get_benchHash (e, chain_stats) {
+        console.log('----------FUNCTION get_chainstats-------');
+        var data = [];
+        if (chain_stats && chain_stats.height) {
+            console.log("------IF NOW-----");
+            chain_stats.height = chain_stats.height - 1;								//its 1 higher than actual height
+            console.log("----CHAIN HEIGHT-----" + chain_stats.height);
+            var list = [];
+            for (var i = chain_stats.height; i >= 1; i--) {								//create a list of heights we need
+                list.push(i);
+                if (list.length >= 40) break;
+            }
+            list.reverse();//flip it so order is correct in UI
+            var count = 0;
+            async.eachLimit(list, 1, function (block_height, cb) {						//iter through each one, and send it
+                count++;
+                ibc.block_stats(block_height, function (e, stats) {
+                    if (e == null) {
+                        stats.height = block_height;
+                        if (stats.transactions) {
+                            var flag=6;
+                            console.log(stats.height);
+                            var ccid = formatCCID(stats.transactions[0].type, stats.transactions[0].uuid, atb(stats.transactions[0].chaincodeID));
+                            var payload = atb(stats.transactions[0].payload);
+                            if (ccid) {
+                                var chaindata = formatPayload(payload, ccid,flag);
+                                if (chaindata!='0'){
+                                    var mydata = chaindata.split(" ");
+                                    data.push(chaindata.slice(-64));
+                                    console.log("NO." + data.length + "   " + chaindata.slice(-64));
+                                }
+
+                            }
+                        }
+                        // if(count == list.length){
+                        //     sendMsg({msg: 'hash', chain_hash:data});
+                        //     console.log('---RETURN HASH ARR---length:' + data.length);
+                        // }
+                    }
+                    cb(null);
+                });
+            }, function (err) {
+                if (err) {
+                    console.error("error");
+                }
+                sendMsg({msg: 'hash', chain_hash: data, table_name: "account"});
+                console.log('---RETURN HASH ARR---length:' + data.length);
+                console.log("[COUNT]  "+count);
+                console.log("[LIST.length]  "+list.length);
+                // return data;
+            });
+        }
+    }
+
 	//send a message, socket might be closed...
 	function sendMsg(json){
 		if(ws){

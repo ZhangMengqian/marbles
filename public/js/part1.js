@@ -225,7 +225,6 @@ $(document).on('ready', function() {
 			$('#acbenchmarkselect').hide();
 			$('#benchmarkselect').fadeIn(300);
 		}
-		
 	});
 	String.prototype.trim=function(){
 　　    		return this.replace(/(^\s*)|(\s*$)/g, "");
@@ -559,12 +558,12 @@ $(document).on('ready', function() {
 
 		$('#ac_data_validity_notice').empty();
         $('#ac_check_notice').empty();
-       var obj = {
-		   type: 'untreated',
-		   table_name: 'account'
-	   };
-       console.log('get untreated account, sending');
-       ws.send(JSON.stringify(obj));
+       	var obj = {
+       		type: 'untreated',
+		   	table_name: 'account'
+	   	};
+       	console.log('get untreated account, sending');
+       	ws.send(JSON.stringify(obj));
     });
 
     $('#nav_actrade_maker').click(function(){
@@ -588,6 +587,7 @@ $(document).on('ready', function() {
 		$('#actrade_maker').hide();
 		$('#actrade_checker').show();
 
+		$('#actra_validity_notice').empty();
 		$('#actrade_check_notice').empty();
        	var obj = {
            type: 'untreated',
@@ -1168,9 +1168,9 @@ function connect_to_server(){
                     "<br>[account]:"+msgObj.ac_id+"<br>[short name]:"+msgObj.ac_short_name+
                     "<br>[status]:"+msgObj.status+"<br>[term date]:"+msgObj.term_date+
                     "<br>[inception date]:"+msgObj.inception_date+"<br>[region]:"+msgObj.ac_region+
-                    "<br>[sub region]:"+msgObj.ac_sub_reg+"<br>[contracting entity]:"+msgObj.contracting_entity+
-                    "<br>[mgn entity]:"+msgObj.mgn_entityion+"<br>[country domicile]:"+msgObj.cod_country_domicile+
-                    "<br>[liq method]:"+msgObj.liq_method+"<br>[account legal name]:"+msgObj.ac_legal_name+
+                    "<br>[sub region]:"+msgObj.ac_sub_region+"<br>[country domicile]:"+msgObj.cod_country_domicile+
+                    "<br>[liq method]:"+msgObj.liq_method+"<br>[contracting entity]:"+msgObj.contracting_entity+
+                    "<br>[mgn entity]:"+msgObj.mgn_entity+"<br>[account legal name]:"+msgObj.ac_legal_name+
                     "<br>[manager name]:"+msgObj.manager_name+"<br>[cod_ccy_base]:"+msgObj.cod_ccy_base+
                     "<br>[long name]:"+msgObj.long_name+"<br>[mandate id]:"+msgObj.mandate_id+
                     "<br>[client id]:"+msgObj.client_id+"<br>[custodian name]:"+msgObj.custodian_name+
@@ -1178,8 +1178,8 @@ function connect_to_server(){
                     "<br>[trust_bank]:"+msgObj.trust_bank+"<br>[re_trust_bank]:"+msgObj.re_trust_bank+
                     "<br>[last_updated_by]:"+msgObj.last_updated_by+"<br>[last_approved_by]:"+msgObj.last_approved_by+
                     "<br>[last_update_date]:"+msgObj.last_update_date+
-					'<br><button type="button" id="ac_accept_'+msgObj.ac_id+'">accept</button>'+
-                    '&nbsp;&nbsp;&nbsp;<button type="button" id="ac_decline_'+msgObj.ac_id+'">decline</button>'+
+					'<br><br><button type="button" id="ac_accept_'+msgObj.ac_id+'">accept</button>'+
+                    '&nbsp;&nbsp;&nbsp;<button type="button" id="ac_decline_'+msgObj.ac_id+'">decline</button><br><br><br><br><br>'+
 					'<hr/></div>';
 				$('#ac_check_notice').append(un_account);
 			}
@@ -1203,8 +1203,8 @@ function connect_to_server(){
                     "<br>[currency]:"+msgObj.currency+"<br>[primary_flag]:"+msgObj.primary_flag+
                     "<br>[start_date]:"+msgObj.start_date+"<br>[end_date]:"+msgObj.end_date+
                     "<br>[benchmark_reference_id]:"+msgObj.benchmark_reference_id+"<br>[benchmark_reference_id_source]:"+msgObj.benchmark_reference_id_source +
-                    '</p><br><button type="button" id="acben_accept_'+msgObj.ac_id+'">accept</button>'+
-                    '&nbsp;&nbsp;&nbsp;<button type="button" id="acben_decline_'+msgObj.ac_id+'">decline</button>'+
+                    '</p><br><br><button type="button" id="acben_accept_'+msgObj.ac_id+'">accept</button>'+
+                    '&nbsp;&nbsp;&nbsp;<button type="button" id="acben_decline_'+msgObj.ac_id+'">decline</button><br/><br/><br/><br/><br/>'+
                     '<hr/></div>';
 				$('#acbench_check_noti').append(obj);
 			}
@@ -1223,7 +1223,7 @@ function connect_to_server(){
 				console.log("new accepted account from database");
                 var obj='<div id="acnoti_'+msgObj.ac_id+'"><p><span style="color:#FF0;">A new account has been created:</span><br>'+
                     "[account]:"+msgObj.ac_id+"<br>[short name]:"+msgObj.ac_short_name+
-                    "<br>[status]:"+msgObj.ac_status+"<br>[term date]:"+msgObj.term_date+
+                    "<br>[status]:"+msgObj.status+"<br>[term date]:"+msgObj.term_date+
                     "<br>[inception date]:"+msgObj.inception_date+"<br>[region]:"+msgObj.ac_region+
                     "<br>[sub region]:"+msgObj.ac_sub_region+"<br>[country domicile]:"+msgObj.cod_country_domicile+
                     "<br>[liq method]:"+msgObj.liq_method+"<br>[contracting entity]:"+msgObj.contracting_entity+
@@ -1261,14 +1261,22 @@ function connect_to_server(){
             else if(msgObj.msg === 'validity') {
                 console.log("account data validity");
                 if (msgObj.table_name == 'account') {
-                    var account_notice = '<div><hr/><h3>' + "[NOTICE!] Data in Table `account` changed!" + '<br/>' + "[HASH VALUE] " + msgObj.sha_value + '</h3><hr/></div>';
+                    var account_notice = '<div><hr/><h5>' + "[NOTICE!] Data in Table `account` changed!" + '<br/>' + "[HASH VALUE] " + msgObj.sha_value + '</h5><hr/></div>';
                     $('#ac_data_validity_notice').append(account_notice);
                 }
+                else if (msgObj.table_name == 'ac_trade'){
+                    var account_notice = '<div><hr/><h5>' + "[NOTICE!] Data in Table `ac_trade` changed!" + '<br/>' + "[HASH VALUE] " + msgObj.sha_value + '</h5><hr/></div>';
+                    $('#actra_validity_notice').append(account_notice);
+				}
                 else if(msgObj.table_name == 'unknown'){
-                    var notice = '<div><hr/><h3>' + "[NOTICE!] Data in database changed!" + '</h3><hr/></div>';
+                    var notice = '<div><hr/><h5>' + "[NOTICE!] Data in database changed!" + '</h5><hr/></div>';
                     if(msgObj.show_location == 'account') {
                         $('#ac_data_validity_notice').append(notice);
                     }
+                    else if(msgObj.show_location == 'ac_trade'){
+                    	$('#actra_validity_notice').append(notice);
+					}
+
 				}
             }
             else if(msgObj.msg === 'hash'){
@@ -1277,7 +1285,7 @@ function connect_to_server(){
                 var obj ={
                     type: 'recheck',
                     chain_hash: msgObj.chain_hash ,
-					table_name: "account"
+					table_name: msgObj.table_name
                 };
                 ws.send(JSON.stringify(obj));
 			}

@@ -55,6 +55,7 @@ type Account struct{
 }
 
 type Ac_trades_setup struct{
+    Hash string `json:"hash"`
 	Ac_id string `json:"ac_id"`					
 	Lvts string `json:"lvts"`
 	Calypso string `json:"calypso"`
@@ -65,6 +66,7 @@ type Ac_trades_setup struct{
 }
 
 type Ac_benchmark struct{
+    Hash string `json:"hash"`
 	Ac_id string `json:"ac_id"`					
 	Benchmark_id string `json:"benchmark_id"`
 	Source string `json:"source"`
@@ -78,6 +80,7 @@ type Ac_benchmark struct{
 }
 
 type Benchmarks struct{
+    Hash string `json:"hash"`
 	Benchmark_id string `json:"benchmark_id"`					
 	Id_source string `json:"id_source"`
 	Name string `json:"name"`
@@ -349,6 +352,7 @@ func (t *SimpleChaincode) ac_trade_setup(stub shim.ChaincodeStubInterface, args 
 	newaccount.Trade_start_date = args[4]
     newaccount.Equity = args[5]
 	newaccount.Fixed_income = args[6]
+	newaccount.Hash = args[7]
 	
 	acJson, err := stub.GetState(actradeStr)
 	if err != nil {
@@ -381,6 +385,7 @@ func (t *SimpleChaincode) ac_benchmark(stub shim.ChaincodeStubInterface, args []
 	newaccount.End_date = args[7]
 	newaccount.Benchmark_reference_id  = args[8]
 	newaccount.Benchmark_reference_id_source = args[9]
+	newaccount.Hash = args[10]
 
 	
 	acJson, err := stub.GetState(acbenchStr)
@@ -410,7 +415,8 @@ func (t *SimpleChaincode) benchmarks(stub shim.ChaincodeStubInterface, args []st
 	newaccount.Currency = args[3]
 	newaccount.Benchmark_reference_id = args[4]
     newaccount.Benchmark_reference_id_source  = args[5]
-	
+	newaccount.Hash = args[6]
+
 	acJson, err := stub.GetState(benchStr)
 	if err != nil {
 		return nil, err

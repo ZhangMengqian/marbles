@@ -69,9 +69,6 @@
 			input(type="text" name="custodian_name" placeholder="Arthur Conan Doyle")
 			span.hint &nbsp;&nbsp; Input your custodian name 
 			br
-			input(type="text" name="manager_name" placeholder="Smith")
-			span.hint &nbsp;&nbsp; Input your manager name
-			br
 			input(type="text" name="sub_mandate_id" placeholder="10086")
 			span.hint &nbsp;&nbsp; Input your sub mandate id 	
 			br
@@ -108,13 +105,21 @@
 		#account_checker(hidden)
 			#ac_data_validity_notice
 			#ac_check_notice
+			#blank
+				br
+				br
+				br
+				br
 			#ac_check_button(hidden)
-				button(type="button")#ac_accept
-					span.fa.fa-check &nbsp;&nbsp;
-					span Accept
 				br
 				br
-				button(type="button")#ac_decline
-					span.fa.fa-check &nbsp;&nbsp;
-					span Decline 
+				br
+				//button(type="button")#ac_accept
+				//	span.fa.fa-check &nbsp;&nbsp;
+				//	span Accept
+				//br
+				//br
+				//button(type="button")#ac_decline
+				//	span.fa.fa-check &nbsp;&nbsp;
+				//	span Decline
 			
