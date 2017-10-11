@@ -1,78 +1,67 @@
-# Marbles Demo
+##Steps to set the environment:
+1. Install native Docker for Windows: https://docs.docker.com/docker-for-windows/install/
+Notice: The current version of Docker for Windows runs on 64bit Windows 10 Pro, Enterprise and Education (1511 November update, Build 10586 or later). Do not use Docker Toolbox because there are some problems when it runs with the blockchain.
+2. Pull the Fabric images from Docker Hub (execute these 2 commands in command window):  
+  docker pull hyperledger/fabric-peer:x86_64-1.0.1
+  docker pull hyperledger/fabric-membersrvc:latest
+Then you can use “docker images” command to check whether you can see “hyperledger/fabric-peer” and “hyperledger/fabric-membersrvc” images. If you see these two images, you can go on to the next step.
+3. Add an environment variable “CORE_VM_ENDPOINT” with the value of “unix:///var/run/docker.sock” or “127.0.0.1:2375” (both of these two values would work so you can select one) for Windows.
+ Add an environment variable “CORE_PEER_ID” with the value of “vp0”.
+4. Download Git if it is not in your computer: https://git-scm.com/downloads
+  You can use “git version” command to check whether Git is successfully installed. You may see something like “git version 2.9.0.windows.1”.
+5. Download Go if it is not in your computer: https://golang.org/dl/#go1.6.3 
+  Select “go1.6.3.windows-amd64.msi”. After you install it, create your desired workspace directory for Go and add an environment variable “GOPATH” with the value of this directory (such as “D:\gopath”).
+   You can use “go version” command to check whether Go is successfully installed.
+6. Put the hyperledger fabric into your work directory: 
+   “mkdir -p $GOPATH/src/github.com/hyperledger” (if you cannot use “mkdir -p” command in Windows, you can manually create these folders in your computer)
+   d:enter the disk where directory is first
+   cd $GOPATH/src/github.com/hyperledger
+   git clone -b v0.6 http://gerrit.hyperledger.org/r/fabric
+7.Download node.js: https://nodejs.org/en/download/
+  When node.js is installed, npm is also installed. You can use “node -v” and “npm -v” commands to check whether they are successfully installed.
+8. Download my demo project for the blockchain (which is rewritten based on IBM Blockchain demo) in your desired directory:
+   git clone https://github.com/ZhangMengqian/marbles.git
+9: Set the environment in your desired directory: 
+  git clone https://github.com/IBM-Blockchain/fabric-images.git
+  cd fabric-images/docker-compose
+  setenv.sh
+  docker-compose -f single-peer-ca.yaml up
+After these steps you can click http://localhost:7050/chain . If you see some codes in json like this then the environment is fine (the contents will not be exactly the same):
+{
+	"height": 1,
+	"currentBlockHash": "lJ5dfqGBmhpkn1yHgbpbLnK9GEzrzsAnCm0AJZCIr0GaYznWDCt7j9yC09fGUe2MNXS+HEooKBbajHb+T40kIg==",
+	"previousBlockHash": "UYTfnosVy6PqW59Gs4roQTLZ5av/t8sMrkWDKetAwFzoueZ3SkIcW6qPVLQPHuxCJO17AxLYsjzmYNN1fNtwFg=="
+} 
+When you ran “docker-compose -f single-peer-ca.yaml up” command, if you see the error message like “ARCH_TAG” is not set and “manifest for ibmblockchain/fabric-membersrvc: latest not found”, just add the environment variable “ARCH_TAG” with the value of “x86_64-0.6.1-preview” and then restart the command window.
+10. [optional]
+	Change value for docker variable to avoid running out deploy time problem.
+	In the Windows command window:
+	docker-compose -f single-peer-ca.yaml up
+	Open another Windows command window:
+	docker ps
+	docker exec -it [docker id for ibmblockchain/fabric-peer:x86_64-0.6.1-preview] bash
+	cd peer
+	vi core.yaml
+	Find 314th line change “deploytimeout: 30000” into “deploytimeout: 300000” then exit after saving file.
+	export CORE_CHAINCODE_DEPLOYTIMEOUT =300000(optional)
+	go build
+	Stop blockchain service set up by single-peer-ca.yaml and restart it.
+11.Install mysql server
+  Download MySQL if it is not in your computer.
+  https://dev.mysql.com/downloads/mysql/#downloads
+  Set your user name to "root" and password to "".
+  Open command shell for mysql server, type this:
+  create database morgan;
+  use morgan;
+  source [file directory]morgan.sql;
+12.In the Windows command line window, type this(in project directory):
+  npm install gulp -g
+  npm install mysql -g
+  npm install jssha -g
+  npm install  
+  gulp
+ Wait until you see the message like the following:
+ [ibc-js] Deploying Chaincode - Complete
+ ---------------------------------------- Websocket Up ------------------------------------------
 
-[![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/ibm-blockchain/marbles.git)
-
-***
-
-##### Versions and Supported Platforms
-On November 9th, 2016, we released the IBM Blockchain Service v1.0.0 based on HyperLedger fabric v0.6.3 
-All new networks created in Bluemix will use this version. 
-Support of the v0.4.2.x Bluemix Service (based on the v0.5.3 Hyperledger Fabric) has been deprecated. 
-It is strongly recommended that if you have an existing network based on v0.5.3, you create a new network and follow the instructions in the 2.0 branch. 
-
-- [Marbles - Branch v1.0](https://github.com/ibm-blockchain/marbles/tree/v1.0) **(Deprecated)**
-	- This is an old version that is no longer supported by the Bluemix service
-	- Works with Hyperledger fabric `v0.5-developer-preview`
-
-- [Marbles - Branch v2.0](https://github.com/ibm-blockchain/marbles/tree/v2.0)
-	- Works with Hyperledger fabric `v0.6-developer-preview`
-	- Works with IBM Blockchain Bluemix Service `v1.0.0+`
-
-
-- [Marbles - Branch v3.0](https://github.com/ibm-blockchain/marbles/tree/v3.0) **(Experimental)**
-	- Works with [Hyperledger Fabric v1.0](http://hyperledger-fabric.readthedocs.io/en/latest/gettingstarted) - hackfest images
-	- Does not work with the IBM Blockchain Bluemix Service
-
-***
-
-# Application Background
-
-Hold on to your hats everyone, this application is going to demonstrate transferring marbles between two users leveraging IBM Blockchain.
-We are going to do this in Node.js and a bit of GoLang. 
-The backend of this application will be the GoLang code running in our blockchain network. 
-The chaincode itself will create a marble by storing it to the chaincode state. 
-The chaincode itself is able to store data as a string in a key/value pair setup. 
-Thus we will stringify JSON objects to store more complex structures. 
-
-Attributes of a marble:
-
-	1. name (unique string, will be used as key)
-	1. color (string, css color names)
-	1. size (int, size in mm)
-	1. user (string)
-	
-We are going to create a Web UI that can set these values and pass them to the chaincode. 
-Interacting with the chaincode is done with a HTTP REST call to a peer on the network. 
-The ibc-js SDK will abstract the details of the REST calls away.
-This allow us to use dot notation to call our GoLang functions (such as `chaincode.init_marble(args)`). 
-
-Start the tutorials below to have your own marbles blockchain demo!
-
-## Tutorial / Documentation
-- Looking for chaincode documentation? Check out the [learn chaincode](https://github.com/IBM-Blockchain/learn-chaincode) repo - **start here!**
-- Tutorial for Marbles [Part 1](/docs/tutorial_part1.md)
-- Tutorial for Marbles [Part 2](/docs/tutorial_part2.md) 
-- Documentation for IBM Blockchain [IBC-JS SDK](https://github.com/IBM-Blockchain/ibm-blockchain-js) (our REST based SDK)
-
-***
-
-## Projects Contents
-
-If you **run marbles on local host** you will have these two urls:
-
-1. Marbles Part 1   -	[http://localhost:3000/p1](http://localhost:3000/p1)
-1. Marbles Part 2   -	[http://localhost:3000/p2](http://localhost:3000/p2)
-
-
-## Privacy Notice
-
-This web application includes code to track deployments to [IBM Bluemix](https://www.bluemix.net/) and other Cloud Foundry platforms. The following information is sent to a [Deployment Tracker](https://github.com/cloudant-labs/deployment-tracker) service on each deployment:
-
-* Application Name (`application_name`)
-* Space ID (`space_id`)
-* Application Version (`application_version`)
-* Application URIs (`application_uris`)
-
-This data is used by IBM to track metrics around deployments of sample applications to IBM Bluemix to measure the usefulness of our examples, so that we can continuously improve the content we offer to you. Only deployments of sample applications that include code to ping the Deployment Tracker service will be tracked.
-
-**Deployment tracking can be disabled by deleting the 'Deployment Tracking' section in [app.js.](app.js#L120)**
+This means everything is fine and click http://localhost:3000 to view the demo. 
