@@ -73,31 +73,31 @@
    export CORE_CHAINCODE_DEPLOYTIMEOUT =300000(optional)	
    go build
 ```
-  Stop blockchain service set up by single-peer-ca.yaml and restart it.
+   Stop blockchain service set up by single-peer-ca.yaml and restart it.
 # 11.  
-  Install mysql server
-  Download MySQL if it is not in your computer.
-  https://dev.mysql.com/downloads/mysql/#downloads
-  Set your user name to "root" and password to "".
-  Open command shell for mysql server, type this:
-  ```
-  create database morgan;
-  use morgan;
-  source [file directory]morgan.sql;
+   Install mysql server
+   Download MySQL if it is not in your computer.
+   https://dev.mysql.com/downloads/mysql/#downloads
+   Set your user name to "root" and password to "".
+   Open command shell for mysql server, type this:
+```
+   create database morgan;
+   use morgan;
+   source [file directory]morgan.sql;
 ```
 # 12. 
-  In the Windows command line window, type this(in project directory):
+   In the Windows command line window, type this(in project directory):
 ```
-  npm install gulp -g
-  npm install mysql -g
-  npm install jssha -g
-  npm install  
-  gulp
+   npm install gulp -g
+   npm install mysql -g
+   npm install jssha -g
+   npm install  
+   gulp
  ```
-  Wait until you see the message like the following:
+   Wait until you see the message like the following:
  ```
  [ibc-js] Deploying Chaincode - Complete
  ---------------------------------------- Websocket Up ------------------------------------------
  ```
 
-  This means everything is fine and click http://localhost:3000 to view the demo. 
+   This means everything is fine and click http://localhost:3000 to view the demo. 
