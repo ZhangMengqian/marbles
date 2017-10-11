@@ -1279,7 +1279,7 @@ function connect_to_server(){
                     $('#bench_validity_notice').append(account_notice);
 				}
                 else if(msgObj.table_name == 'unknown'){
-                    var notice = '<div><hr/><h4>' + "[NOTICE!] Data in database changed!" + '</h4><hr/></div>';
+                    var notice = '<div><hr/><h4>' + "[NOTICE!] Can not find the hash value in Table `" + msgObj.show_location + "`! Data changed!" + '<br/>' + "[HASH VALUE] " + msgObj.sha_value + '</h4><hr/></div>';
                     if(msgObj.show_location == 'account') {
                         $('#ac_data_validity_notice').append(notice);
                     }

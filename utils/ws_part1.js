@@ -38,9 +38,8 @@ module.exports.process_msg = function(ws, data){
 			console.log('----------------------------------Create Account!--------------------------------------');
 			
 			var value=data.ac_id+data.ac_short_name+data.ac_status+data.term_date+data.inception_date+data.ac_region+data.ac_sub_region+data.cod_country_domicile+data.liq_method+data.contracting_entity+data.mgn_entity+data.ac_legal_name+data.manager_name+data.cod_ccy_base+data.long_name+data.mandate_id+data.client_id+data.custodian_name+data.sub_mandate_id+data.transfer_agent_name+data.trust_bank+data.re_trust_bank+data.last_updated_by+data.last_approved_by+data.last_update_date;
-			console.log("------网页上填写的----"+value);
+			console.log("------FROM PAGE----"+value);
 
-			console.log("------巴拉巴拉----"+value);
 			var sha=new jsSHA("SHA-256","TEXT");
 			sha.update(value);
 			var sha_value=sha.getHash("HEX");
@@ -64,30 +63,30 @@ module.exports.process_msg = function(ws, data){
 					//console.log('INSERT ID:',result.insertId);        
 					console.log('INSERT ID:',result);
 
-					var indexingAddSQL = 'INSERT INTO indexing(hash_value, type) VALUES(?,?)';
-					var indexingAddSql_Params = [ sha_value, 'account'];
-					connection.query(indexingAddSQL, indexingAddSql_Params, function(err, result) {
-						console.log('---------INSERT INDEXING--------------');
-						if(err){		// insert error, delete from the account
-                            console.log('[INSERT ERROR] - ',err.message);
-                            //delete
-                            var deleteSQL = 'delete from account where sha_value = '+sha_value;
-                            conn.query(deleteSQL, function (err0, res0) {
-                                if (err0) console.log(err0);
-                                console.log("DELETE Return ==> ");
-                                console.log(res0);
-                            });
-						}else{
-                            console.log('[INSERT SUCCESS] \n ');
-                            console.log('INSERT ID:',result);
+					// var indexingAddSQL = 'INSERT INTO indexing(hash_value, type) VALUES(?,?)';
+					// var indexingAddSql_Params = [ sha_value, 'account'];
+					// connection.query(indexingAddSQL, indexingAddSql_Params, function(err, result) {
+					// 	console.log('---------INSERT INDEXING--------------');
+					// 	if(err){		// insert error, delete from the account
+                     //        console.log('[INSERT ERROR] - ',err.message);
+                     //        //delete
+                     //        var deleteSQL = 'delete from account where sha_value = '+sha_value;
+                     //        conn.query(deleteSQL, function (err0, res0) {
+                     //            if (err0) console.log(err0);
+                     //            console.log("DELETE Return ==> ");
+                     //            console.log(res0);
+                     //        });
+					// 	}else{
+                     //        console.log('[INSERT SUCCESS] \n ');
+                     //        console.log('INSERT ID:',result);
                             chaincode.invoke.create_account([data.ac_id, data.ac_short_name, data.ac_status, data.term_date,
                                 data.inception_date, data.ac_region, data.ac_sub_region, data.cod_country_domicile, data.liq_method,
                                 data.contracting_entity, data.mgn_entity, data.ac_legal_name, data.manager_name, data.cod_ccy_base,
                                 data.long_name, data.mandate_id, data.client_id, data.custodian_name, data.sub_mandate_id,
                                 data.transfer_agent_name, data.trust_bank, data.re_trust_bank, data.last_updated_by,
                                 data.last_approved_by, data.last_update_date, sha_value], cb_invoked);
-						}
-					});
+					// 	}
+					// });
                     console.log('--------------------------------------------------------------------\n\n');
 				}
 			});
@@ -96,7 +95,7 @@ module.exports.process_msg = function(ws, data){
 			console.log('----------------------------------Create ac_trade!--------------------------------------');
 			
 			var value=data.ac_id+data.lvts+data.calypso+data.aladdin+data.trade_start_date+data.equity+data.fixed_income;
-            console.log("------网页上填写的----"+value);
+            console.log("------FROM PAGE----"+value);
 			var sha=new jsSHA("SHA-256","TEXT");
 			sha.update(value);
 			var sha_value=sha.getHash("HEX");
@@ -117,26 +116,26 @@ module.exports.process_msg = function(ws, data){
 					//console.log('INSERT ID:',result.insertId);        
 					console.log('INSERT ID:',result);
 
-                    var indexingAddSQL = 'INSERT INTO indexing(hash_value, type) VALUES(?,?)';
-                    var indexingAddSql_Params = [ sha_value, 'ac_trade'];
-                    connection.query(indexingAddSQL, indexingAddSql_Params, function(err, result) {
-                        console.log('---------INSERT INDEXING--------------');
-                        if(err){		// insert error, delete from the account
-                            console.log('[INSERT ERROR] - ',err.message);
-                            //delete
-                            var deleteSQL = 'delete from ac_trade where sha_value = '+sha_value;
-                            conn.query(deleteSQL, function (err0, res0) {
-                                if (err0) console.log(err0);
-                                console.log("DELETE Return ==> ");
-                                console.log(res0);
-                            });
-                        }else{
-                            console.log('[INSERT SUCCESS] \n ');
-                            console.log('INSERT ID:',result);
+                    // var indexingAddSQL = 'INSERT INTO indexing(hash_value, type) VALUES(?,?)';
+                    // var indexingAddSql_Params = [ sha_value, 'ac_trade'];
+                    // connection.query(indexingAddSQL, indexingAddSql_Params, function(err, result) {
+                    //     console.log('---------INSERT INDEXING--------------');
+                    //     if(err){		// insert error, delete from the account
+                    //         console.log('[INSERT ERROR] - ',err.message);
+                    //         //delete
+                    //         var deleteSQL = 'delete from ac_trade where sha_value = '+sha_value;
+                    //         conn.query(deleteSQL, function (err0, res0) {
+                    //             if (err0) console.log(err0);
+                    //             console.log("DELETE Return ==> ");
+                    //             console.log(res0);
+                    //         });
+                    //     }else{
+                    //         console.log('[INSERT SUCCESS] \n ');
+                    //         console.log('INSERT ID:',result);
                             chaincode.invoke.ac_trade_setup([ data.ac_id, data.lvts, data.calypso,
                                 data.aladdin, data.trade_start_date, data.equity, data.fixed_income, sha_value], cb_invoked);
-                        }
-                    });
+                    //     }
+                    // });
 					console.log('-----------------------------------------------------------------\n\n');  
 				}
 			});
@@ -145,7 +144,7 @@ module.exports.process_msg = function(ws, data){
 			console.log('----------------------------------Create ac_benchmark!--------------------------------------');
 
 			var value=data.ac_id+data.benchmark_id+data.source+data.name+data.currency+data.primary_flag+data.start_date+data.end_date+data.benchmark_reference_id+data.benchmark_reference_id_source;
-            console.log("------网页上填写的----"+value);
+            console.log("------FROM PAGE----"+value);
 			var sha=new jsSHA("SHA-256","TEXT");
 			sha.update(value);
 			var sha_value=sha.getHash("HEX");	
@@ -166,27 +165,27 @@ module.exports.process_msg = function(ws, data){
 					console.log('--------------------------INSERT ac_benchmark----------------------------');
 					//console.log('INSERT ID:',result.insertId);        
 					console.log('INSERT ID:',result);
-                    var indexingAddSQL = 'INSERT INTO indexing(hash_value, type) VALUES(?,?)';
-                    var indexingAddSql_Params = [ sha_value, 'ac_benchmark'];
-                    connection.query(indexingAddSQL, indexingAddSql_Params, function(err, result) {
-                        console.log('---------INSERT INDEXING--------------');
-                        if(err){		// insert error, delete from the account
-                            console.log('[INSERT ERROR] - ',err.message);
-                            //delete
-                            var deleteSQL = 'delete from ac_benchmark where sha_value = '+sha_value;
-                            conn.query(deleteSQL, function (err0, res0) {
-                                if (err0) console.log(err0);
-                                console.log("DELETE Return ==> ");
-                                console.log(res0);
-                            });
-                        }else{
-                            console.log('[INSERT SUCCESS] \n ');
-                            console.log('INSERT ID:',result);
+                    // var indexingAddSQL = 'INSERT INTO indexing(hash_value, type) VALUES(?,?)';
+                    // var indexingAddSql_Params = [ sha_value, 'ac_benchmark'];
+                    // connection.query(indexingAddSQL, indexingAddSql_Params, function(err, result) {
+                    //     console.log('---------INSERT INDEXING--------------');
+                    //     if(err){		// insert error, delete from the account
+                    //         console.log('[INSERT ERROR] - ',err.message);
+                    //         //delete
+                    //         var deleteSQL = 'delete from ac_benchmark where sha_value = '+sha_value;
+                    //         conn.query(deleteSQL, function (err0, res0) {
+                    //             if (err0) console.log(err0);
+                    //             console.log("DELETE Return ==> ");
+                    //             console.log(res0);
+                    //         });
+                    //     }else{
+                    //         console.log('[INSERT SUCCESS] \n ');
+                    //         console.log('INSERT ID:',result);
                             chaincode.invoke.ac_benchmark([data.ac_id, data.benchmark_id, data.source, data.name,
                                 data.currency, data.primary_flag, data.start_date, data.end_date, data.benchmark_reference_id,
                                 data.benchmark_reference_id_source, sha_value], cb_invoked);
-                        }
-                    });
+                    //     }
+                    // });
                     console.log('-------------------------------------------------------------------------\n\n');
 				}
 			});
@@ -195,6 +194,8 @@ module.exports.process_msg = function(ws, data){
 			console.log('----------------------------------Create benchmarks!--------------------------------------');
 
 			var value=data.benchmark_id+data.id_source+data.name+data.currency+data.benchmark_reference_id+data.benchmark_reference_id_source;
+			console.log("------FROM PAGE-------");
+
 			var sha=new jsSHA("SHA-256","TEXT");
 			sha.update(value);
 			var sha_value=sha.getHash("HEX");
@@ -212,26 +213,26 @@ module.exports.process_msg = function(ws, data){
 					console.log('--------------------------INSERT benchmark----------------------------');
 					//console.log('INSERT ID:',result.insertId);        
 					console.log('INSERT ID:',result);
-                    var indexingAddSQL = 'INSERT INTO indexing(hash_value, type) VALUES(?,?)';
-                    var indexingAddSql_Params = [ sha_value, 'benchmarks'];
-                    connection.query(indexingAddSQL, indexingAddSql_Params, function(err, result) {
-                        console.log('---------INSERT INDEXING--------------');
-                        if(err){		// insert error, delete from the account
-                            console.log('[INSERT ERROR] - ',err.message);
-                            //delete
-                            var deleteSQL = 'delete from benchmarks where sha_value = '+sha_value;
-                            conn.query(deleteSQL, function (err0, res0) {
-                                if (err0) console.log(err0);
-                                console.log("DELETE Return ==> ");
-                                console.log(res0);
-                            });
-                        }else{
-                            console.log('[INSERT SUCCESS] \n ');
-                            console.log('INSERT ID:',result);
+                    // var indexingAddSQL = 'INSERT INTO indexing(hash_value, type) VALUES(?,?)';
+                    // var indexingAddSql_Params = [ sha_value, 'benchmarks'];
+                    // connection.query(indexingAddSQL, indexingAddSql_Params, function(err, result) {
+                    //     console.log('---------INSERT INDEXING--------------');
+                    //     if(err){		// insert error, delete from the account
+                    //         console.log('[INSERT ERROR] - ',err.message);
+                    //         //delete
+                    //         var deleteSQL = 'delete from benchmarks where sha_value = '+sha_value;
+                    //         conn.query(deleteSQL, function (err0, res0) {
+                    //             if (err0) console.log(err0);
+                    //             console.log("DELETE Return ==> ");
+                    //             console.log(res0);
+                    //         });
+                    //     }else{
+                    //         console.log('[INSERT SUCCESS] \n ');
+                    //         console.log('INSERT ID:',result);
                             chaincode.invoke.benchmarks([data.benchmark_id, data.id_source, data.name, data.currency,
                                 data.benchmark_reference_id, data.benchmark_reference_id_source, sha_value], cb_invoked);
-                        }
-                    });
+                    //     }
+                    // });
 					console.log('----------------------------------------------------------------------\n\n');  
 				}
 			});
@@ -623,24 +624,27 @@ module.exports.process_msg = function(ws, data){
             async.eachLimit(chain_hash, 1, function (hash, cb) {
                     // console.log('----------CHECK THE DATA  NO.' + i);
                     // var hash = chain_hash[i];		// get hash from the blockchain
-                async.waterfall([
-                    function(callback){
-                        console.log(hash);
-                        var indexingSelectSQL = 'SELECT `type` FROM `indexing` WHERE `hash_value` = \'' + hash+'\'';
-                        connection.query(indexingSelectSQL, function (err, rows) {
-                            console.log('---------------------------SEARCH HASH VALUE IN DB---------------------------');
-                            if (err) throw err;
-                            callback(null, rows);
-                        });
-                        // callback(null, rows);
-                    },
-                    function(rows, callback){
-                        // arg1 now equals 'one' and arg2 now equals 'two'
-                        if (rows.length > 0) {		// FOUND in table 'indexing'
-                            var res = rows[0];
-                            console.log("success\n");
-                            console.log(res);
-                            if (res.type === table) {
+                //
+
+                // origin sucess!!
+                // async.waterfall([
+                //     function(callback){
+                //         console.log(hash);
+                //         var indexingSelectSQL = 'SELECT `type` FROM `indexing` WHERE `hash_value` = \'' + hash+'\'';
+                //         connection.query(indexingSelectSQL, function (err, rows) {
+                //             console.log('---------------------------SEARCH HASH VALUE IN DB---------------------------');
+                //             if (err) throw err;
+                //             callback(null, rows);
+                //         });
+                //         // callback(null, rows);
+                //     },
+                //     function(rows, callback){
+                //         // arg1 now equals 'one' and arg2 now equals 'two'
+                //         if (rows.length > 0) {		// FOUND in table 'indexing'
+                //             var res = rows[0];
+                //             console.log("success\n");
+                //             console.log(res);
+                //             if (res.type === table) {
                                 var SelectSQL = 'SELECT * FROM '+ table +' WHERE `sha_value` = \'' + hash+'\'';
                                 console.log(SelectSQL);
                                 var row = '';
@@ -685,29 +689,31 @@ module.exports.process_msg = function(ws, data){
                                         }
                                         else {
                                              console.log("MATCH! NO PROBLEM!");
-                                         }
-                                    } else {		// data change
+                                        }
+                                    }
+                                    else {		// can not find the hash value from the table
                                         console.log('---fail---CAN NOT FOUND HASH in table '+table);
                                         sendMsg({
                                             msg: 'validity',
                                             table_name: 'unknown',
-                                            show_location: table
+                                            show_location: table,
+                                            sha_value: hash
                                         });
                                     }
                                 })
-                            }
-                        }
-                        else {			// data change
-                            console.log('---fail---CAN NOT FOUND HASH in table \'indexing\'');
-                            sendMsg({msg: 'validity', table_name: 'unknown', show_location: table});
-                        }
-                        callback(null, 'three');
-                    }
-                ], function (err, result) {
-                    // result now equals 'done'
-					console.log("---[ERROR]---"+err);
-                    console.log("---[RESULT]---"+result);
-                });
+                //             }
+                //         }
+                //         else {			// data change
+                //             console.log('---fail---CAN NOT FOUND HASH in table \'indexing\'');
+                //             sendMsg({msg: 'validity', table_name: 'unknown', show_location: table});
+                //         }
+                //         callback(null, 'three');
+                //     }
+                // ], function (err, result) {
+                //     // result now equals 'done'
+					// console.log("---[ERROR]---"+err);
+                //     console.log("---[RESULT]---"+result);
+                // });
                     cb(null);
                 }, function (err) {
                 if (err) {
