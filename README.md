@@ -18,11 +18,11 @@ Then you can use “docker images” command to check whether you can see “hyp
    d:enter the disk where directory is first
    cd $GOPATH/src/github.com/hyperledger
    git clone -b v0.6 http://gerrit.hyperledger.org/r/fabric
-7.Download node.js: https://nodejs.org/en/download/
+7. Download node.js: https://nodejs.org/en/download/
   When node.js is installed, npm is also installed. You can use “node -v” and “npm -v” commands to check whether they are successfully installed.
 8. Download my demo project for the blockchain (which is rewritten based on IBM Blockchain demo) in your desired directory:
    git clone https://github.com/ZhangMengqian/marbles.git
-9.Set the environment in your desired directory: 
+9. Set the environment in your desired directory: 
   git clone https://github.com/IBM-Blockchain/fabric-images.git
   cd fabric-images/docker-compose
   setenv.sh
@@ -47,7 +47,7 @@ When you ran “docker-compose -f single-peer-ca.yaml up” command, if you see 
 	export CORE_CHAINCODE_DEPLOYTIMEOUT =300000(optional)
 	go build
 	Stop blockchain service set up by single-peer-ca.yaml and restart it.
-11.Install mysql server
+11. Install mysql server
   Download MySQL if it is not in your computer.
   https://dev.mysql.com/downloads/mysql/#downloads
   Set your user name to "root" and password to "".
@@ -55,7 +55,7 @@ When you ran “docker-compose -f single-peer-ca.yaml up” command, if you see 
   create database morgan;
   use morgan;
   source [file directory]morgan.sql;
-12.In the Windows command line window, type this(in project directory):
+12. In the Windows command line window, type this(in project directory):
   npm install gulp -g
   npm install mysql -g
   npm install jssha -g
