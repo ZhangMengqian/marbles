@@ -22,7 +22,7 @@ Then you can use “docker images” command to check whether you can see “hyp
   When node.js is installed, npm is also installed. You can use “node -v” and “npm -v” commands to check whether they are successfully installed.
 8. Download my demo project for the blockchain (which is rewritten based on IBM Blockchain demo) in your desired directory:
    git clone https://github.com/ZhangMengqian/marbles.git
-9: Set the environment in your desired directory: 
+9.Set the environment in your desired directory: 
   git clone https://github.com/IBM-Blockchain/fabric-images.git
   cd fabric-images/docker-compose
   setenv.sh
