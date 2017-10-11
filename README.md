@@ -1,4 +1,4 @@
-##Steps to set the environment:
+#Steps to set the environment:
 1. Install native Docker for Windows: https://docs.docker.com/docker-for-windows/install/
 Notice: The current version of Docker for Windows runs on 64bit Windows 10 Pro, Enterprise and Education (1511 November update, Build 10586 or later). Do not use Docker Toolbox because there are some problems when it runs with the blockchain.
 2. Pull the Fabric images from Docker Hub (execute these 2 commands in command window):  
