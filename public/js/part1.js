@@ -179,8 +179,8 @@ $(document).on('ready', function() {
 						data_type: $('select[name="data type"]').val()
 					};
 			console.log(obj.data_type);		
-		$('#submit6').fadeIn(300);
-		$('#submit5').hide();
+		$('#viewer_button3').fadeIn(300);
+		$('#viewer_button2').hide();
 		if(obj.data_type){
 			console.log('data view request, sending', obj);
 			ws.send(JSON.stringify(obj));
@@ -197,13 +197,13 @@ $(document).on('ready', function() {
 
 	$('#submit6').click(function(){
 		$('#data_history').empty();
-		$('#submit6').hide();
+		$('#viewer_button3').hide();
 	});
 
 	$('#submit7').click(function(){
 		var data_type = $('select[name="data type"]').val()
 		console.log(data_type)
-		$('#submit5').fadeIn(300);
+		$('#viewer_button2').fadeIn(300);
 		if(data_type == 'account'){
 			$('#accountselect').fadeIn(300);
 			$('#actradeselect').hide();

@@ -38,5 +38,9 @@ router.route('/p1').get(function(req, res){
 router.route('/p1/:page?').get(function(req, res){
 	res.render('part1', {title: 'Users', bag: build_bag()});
 });
-
+router.route('/p1').post(function(req,res,next){
+	var keys = Object.keys(req.body);
+	var data = JSON.parse(keys[0]);
+	next(new Error('not implemented'));
+});
 module.exports = router;
