@@ -179,7 +179,8 @@ $(document).on('ready', function() {
 						data_type: $('select[name="data type"]').val()
 					};
 			console.log(obj.data_type);		
-				
+		$('#submit6').fadeIn(300);
+		$('#submit5').hide();
 		if(obj.data_type){
 			console.log('data view request, sending', obj);
 			ws.send(JSON.stringify(obj));
@@ -196,11 +197,13 @@ $(document).on('ready', function() {
 
 	$('#submit6').click(function(){
 		$('#data_history').empty();
+		$('#submit6').hide();
 	});
 
 	$('#submit7').click(function(){
 		var data_type = $('select[name="data type"]').val()
 		console.log(data_type)
+		$('#submit5').fadeIn(300);
 		if(data_type == 'account'){
 			$('#accountselect').fadeIn(300);
 			$('#actradeselect').hide();
@@ -226,6 +229,20 @@ $(document).on('ready', function() {
 			$('#benchmarkselect').fadeIn(300);
 		}
 	});
+
+	// $('#submit9').click(function(){
+	// 	var obj = 	{
+	// 					type: 'download_data',
+	// 					data_type: $('select[name="data type"]').val()
+	// 				};
+	// 		console.log(obj.data_type);		
+				
+	// 	if(obj.data_type){
+	// 		console.log('data download request, sending', obj);
+	// 		ws.send(JSON.stringify(obj));
+	// 	}
+	// 	return false;
+	// });
 	String.prototype.trim=function(){
 　　    		return this.replace(/(^\s*)|(\s*$)/g, "");
 　　    }
@@ -730,9 +747,7 @@ function handleFile(files) {
 						"<br>[last_updated_by]:"+obj.last_updated_by+"<br>[last_approved_by]:"+obj.last_approved_by+
 						"<br>[last_update_date]:"+obj.last_update_date+'</p><button type="button" id="del_ac'+obj.ac_id+'">delete</button><hr /></div>';
 
-						// $('#ac_check_notice').append(tmp_account);
 						$('#ac_history').append(tmp_account);
-						// $('#ac_check_button').show();
 					}
 					else if (lists[pos].indexOf('account_trades_setup')>=0) {
 						var obj = 	{
@@ -757,10 +772,7 @@ function handleFile(files) {
 						"<br>[trade start date]:"+obj.trade_start_date+"<br>[equity]:"+obj.equity+
 						'<br>[fixed_income]:'+obj.fixed_income+'</p><button type="button" id="del_actra'+obj.ac_id+'">delete</button><hr /></div>';
 
-						// $('#actrade_check_notice').append(tmp_actrade);
 						$('#actrade_history').append(tmp_actrade);
-						// $('#actrade_check_button').show();
-						// $('#actrade_mak_noti').empty();
 					}
 					else if (lists[pos].indexOf('account_benchmarks')>=0) {
 					    	var obj = 	{
@@ -789,10 +801,7 @@ function handleFile(files) {
 						"<br>[benchmark_reference_id]:"+obj.benchmark_reference_id+"<br>[benchmark_reference_id_source]:"+obj.benchmark_reference_id_source
 						+'</p><button type="button" id="del_acben'+obj.ac_id+'">delete</button><hr /></div>';
 
-						// $('#acbench_check_noti').append(tmp_acbench);
 						$('#acbench_history').append(tmp_acbench);
-						// $('#acbench_check_button').show();
-						// $('#acbench_mak_noti').empty();
 					}
 					else if (lists[pos].indexOf('benchmarks')>=0) {
 						var obj = 	{
@@ -817,10 +826,8 @@ function handleFile(files) {
 						"<br>[benchmark_reference_id]:"+obj.benchmark_reference_id+"<br>[benchmark_reference_id_source]:"+obj.benchmark_reference_id_source
 						+'</p><button type="button" id="del_acben'+obj.ac_id+'">delete</button><hr /></div>';
 
-						// $('#acbench_check_noti').append(tmp_acbench);
+					
 						$('#acbench_history').append(tmp_acbench);
-						// $('#acbench_check_button').show();
-						// $('#acbench_mak_noti').empty();
 					}
 					else break;
 				}
@@ -976,29 +983,12 @@ function connect_to_server(){
 				}
 				base = '<div><hr>';
 				for (var s in click){
-					// console.log(s);
-					// console.log(click[s]);
 					if (click[s]){
 						base = base + "<br>" + title[s] + tmp_data[s];
 					}
 				}
 				base = base + '<hr /></div>';
 				$('#data_history').append(base);
-			// 	base_account='<div><hr>'+"[sha_value]:"+msgObj.sha_value+
-			// "<br>[account]:"+msgObj.ac_id+"<br>[short name]:"+msgObj.ac_short_name+
-			// "<br>[status]:"+msgObj.ac_status+"<br>[term date]:"+msgObj.term_date+
-			// "<br>[inception date]:"+msgObj.inception_date+"<br>[region]:"+msgObj.ac_region+
-			// "<br>[sub region]:"+msgObj.ac_sub_region+"<br>[country domicile]:"+msgObj.cod_country_domicile+
-			// "<br>[liq method]:"+msgObj.liq_method+"<br>[contracting entity]:"+msgObj.contracting_entity+
-			// "<br>[mgn entity]:"+msgObj.mgn_entity+"<br>[account legal name]:"+msgObj.ac_legal_name+
-			// "<br>[manager name]:"+msgObj.manager_name+"<br>[cod_ccy_base]:"+msgObj.cod_ccy_base+
-			// "<br>[long name]:"+msgObj.long_name+"<br>[mandate id]:"+msgObj.mandate_id+
-			// "<br>[client id]:"+msgObj.client_id+"<br>[custodian name]:"+msgObj.custodian_name+
-			// "<br>[sub_mandate_id]:"+msgObj.sub_mandate_id+"<br>[transfer_agent_name]:"+msgObj.transfer_agent_name+
-			// "<br>[trust_bank]:"+msgObj.trust_bank+"<br>[re_trust_bank]:"+msgObj.re_trust_bank+
-			// "<br>[last_updated_by]:"+msgObj.last_updated_by+"<br>[last_approved_by]:"+msgObj.last_approved_by+
-			// "<br>[last_update_date]:"+msgObj.last_update_date+'<hr /></div>';
-			// 	$('#data_history').append(base_account);
 			}
 			else if(msgObj.msg === 'ac_trade'){
 				console.log("actrade from database");
@@ -1035,20 +1025,12 @@ function connect_to_server(){
 				}
 				base = '<div><hr>';
 				for (var s in click){
-					// console.log(s);
-					// console.log(click[s]);
 					if (click[s]){
 						base = base + "<br>" + title[s] + tmp_data[s];
 					}
 				}
 				base = base + '<hr /></div>';
 				$('#data_history').append(base);
-			// 	base_actrade='<div><hr>'+"[sha_value]:"+msgObj.sha_value+
-			// "<br>[account id]:"+msgObj.ac_id+"<br>[lvts]:"+msgObj.lvts+
-			// "<br>[calypso]:"+msgObj.calypso+"<br>[aladdin]:"+msgObj.aladdin+
-			// "<br>[trade start date]:"+msgObj.trade_start_date+"<br>[equity]:"+msgObj.equity+
-			// '<br>[fixed_income]:'+msgObj.fixed_income+'<hr /></div>';
-			// 	$('#data_history').append(base_actrade);
 			}
 			else if(msgObj.msg === 'ac_benchmark'){
 				console.log("ac_benchmarks from database");
@@ -1095,24 +1077,13 @@ function connect_to_server(){
 				}
 				
 				base = '<div><hr>';
-				for (var s in click){
-					// console.log(s);
-					// console.log(click[s]);
+				for (var s in click){;
 					if (click[s]){
 						base = base + "<br>" + title[s] + tmp_data[s];
 					}
 				}
 				base = base + '<hr /></div>';
 				$('#data_history').append(base);
-
-			// 	base_acbench='<div><hr>'+"[sha_value]:"+msgObj.sha_value+
-			// "<br>[account id]:"+msgObj.ac_id+"<br>[benchmark_id]:"+msgObj.benchmark_id+
-			// "<br>[source]:"+msgObj.source+"<br>[name]:"+msgObj.name+
-			// "<br>[currency]:"+msgObj.currency+"<br>[primary_flag]:"+msgObj.primary_flag+
-			// "<br>[start_date]:"+msgObj.start_date+"<br>[end_date]:"+msgObj.end_date+
-			// "<br>[benchmark_reference_id]:"+msgObj.benchmark_reference_id+"<br>[benchmark_reference_id_source]:"+msgObj.benchmark_reference_id_source
-			// +'<hr /></div>';
-			// 	$('#data_history').append(base_acbench);
 			}
 			else if(msgObj.msg === 'benchmarks'){
 				console.log("benchmarks from database");
@@ -1147,23 +1118,19 @@ function connect_to_server(){
 				}
 				base = '<div><hr>';
 				for (var s in click){
-					// console.log(s);
-					// console.log(click[s]);
 					if (click[s]){
 						base = base + "<br>" + title[s] + tmp_data[s];
 					}
 				}
 				base = base + '<hr /></div>';
 				$('#data_history').append(base);
-
-				// if(hash == 'on'){
-				// 	console.log('hhh');
-				// }
-			// 	base_bench='<div><hr>'+"[sha_value]:"+msgObj.sha_value+"<br>[benchmark_id]:"+msgObj.benchmark_id+"<br>[id_source]:"+msgObj.id_source+
-			// "<br>[name]:"+msgObj.name+"<br>[currency]:"+msgObj.currency+
-			// "<br>[benchmark_reference_id]:"+msgObj.benchmark_reference_id+"<br>[benchmark_reference_id_source]:"+msgObj.benchmark_reference_id_source+'<hr /></div>';
-			// 	$('#data_history').append(base_bench);
 			}
+			// else if(msgObj.msg === 'download_account'){
+			// 	console.log(msgObj.value);
+			// 	console.log(msgObj.value[0]);
+			// 	console.log(msgObj.value.length);
+			// 	console.log(msgObj.value[0].length);
+			// }
 			else if(msgObj.msg === 'untreated_account'){
 				console.log("untreated account from database");  //ac_check_noti_'+msgObj.ac_id+'
 				var un_account = '<div id="ac_check_noti_'+msgObj.ac_id+'"><hr/><span style="color:#FF0;">A new account has been created:</span><br>'+"[sha_value]:"+msgObj.sha_value+

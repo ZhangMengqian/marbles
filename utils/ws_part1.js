@@ -9,7 +9,7 @@ var mysql = require('mysql');
 var connection = mysql.createConnection({
 		host:'localhost',
 		user:'root',
-		password:'',
+		password:'l19951030',
 		//socketPath : 'H:/xampp/mysql/mysql.sock',
 		port:3306,
 		database:'morgan'
@@ -59,34 +59,14 @@ module.exports.process_msg = function(ws, data){
          			console.log('[INSERT ERROR] - ',err.message);
 					console.log('--------------------------------------------------------------------\n\n');
         		}else{        
-					console.log('--------------------------SUCCESS INSERT Account----------------------------');
-					//console.log('INSERT ID:',result.insertId);        
-					console.log('INSERT ID:',result);
-
-					// var indexingAddSQL = 'INSERT INTO indexing(hash_value, type) VALUES(?,?)';
-					// var indexingAddSql_Params = [ sha_value, 'account'];
-					// connection.query(indexingAddSQL, indexingAddSql_Params, function(err, result) {
-					// 	console.log('---------INSERT INDEXING--------------');
-					// 	if(err){		// insert error, delete from the account
-                     //        console.log('[INSERT ERROR] - ',err.message);
-                     //        //delete
-                     //        var deleteSQL = 'delete from account where sha_value = '+sha_value;
-                     //        conn.query(deleteSQL, function (err0, res0) {
-                     //            if (err0) console.log(err0);
-                     //            console.log("DELETE Return ==> ");
-                     //            console.log(res0);
-                     //        });
-					// 	}else{
-                     //        console.log('[INSERT SUCCESS] \n ');
-                     //        console.log('INSERT ID:',result);
-                            chaincode.invoke.create_account([data.ac_id, data.ac_short_name, data.ac_status, data.term_date,
-                                data.inception_date, data.ac_region, data.ac_sub_region, data.cod_country_domicile, data.liq_method,
-                                data.contracting_entity, data.mgn_entity, data.ac_legal_name, data.manager_name, data.cod_ccy_base,
-                                data.long_name, data.mandate_id, data.client_id, data.custodian_name, data.sub_mandate_id,
-                                data.transfer_agent_name, data.trust_bank, data.re_trust_bank, data.last_updated_by,
-                                data.last_approved_by, data.last_update_date, sha_value], cb_invoked);
-					// 	}
-					// });
+					console.log('--------------------------SUCCESS INSERT Account----------------------------');     
+					console.log('INSERT ID:',result);			
+                    chaincode.invoke.create_account([data.ac_id, data.ac_short_name, data.ac_status, data.term_date,
+                        data.inception_date, data.ac_region, data.ac_sub_region, data.cod_country_domicile, data.liq_method,
+                        data.contracting_entity, data.mgn_entity, data.ac_legal_name, data.manager_name, data.cod_ccy_base,
+                        data.long_name, data.mandate_id, data.client_id, data.custodian_name, data.sub_mandate_id,
+                        data.transfer_agent_name, data.trust_bank, data.re_trust_bank, data.last_updated_by,
+                        data.last_approved_by, data.last_update_date, sha_value], cb_invoked);
                     console.log('--------------------------------------------------------------------\n\n');
 				}
 			});
@@ -112,30 +92,10 @@ module.exports.process_msg = function(ws, data){
 					console.log('-----------------------------------------------------------------\n\n');
         		}
         		else{
-					console.log('--------------------------INSERT ac_trade----------------------------');
-					//console.log('INSERT ID:',result.insertId);        
+					console.log('--------------------------INSERT ac_trade----------------------------');   
 					console.log('INSERT ID:',result);
-
-                    // var indexingAddSQL = 'INSERT INTO indexing(hash_value, type) VALUES(?,?)';
-                    // var indexingAddSql_Params = [ sha_value, 'ac_trade'];
-                    // connection.query(indexingAddSQL, indexingAddSql_Params, function(err, result) {
-                    //     console.log('---------INSERT INDEXING--------------');
-                    //     if(err){		// insert error, delete from the account
-                    //         console.log('[INSERT ERROR] - ',err.message);
-                    //         //delete
-                    //         var deleteSQL = 'delete from ac_trade where sha_value = '+sha_value;
-                    //         conn.query(deleteSQL, function (err0, res0) {
-                    //             if (err0) console.log(err0);
-                    //             console.log("DELETE Return ==> ");
-                    //             console.log(res0);
-                    //         });
-                    //     }else{
-                    //         console.log('[INSERT SUCCESS] \n ');
-                    //         console.log('INSERT ID:',result);
-                            chaincode.invoke.ac_trade_setup([ data.ac_id, data.lvts, data.calypso,
-                                data.aladdin, data.trade_start_date, data.equity, data.fixed_income, sha_value], cb_invoked);
-                    //     }
-                    // });
+                    chaincode.invoke.ac_trade_setup([ data.ac_id, data.lvts, data.calypso,
+                        data.aladdin, data.trade_start_date, data.equity, data.fixed_income, sha_value], cb_invoked);
 					console.log('-----------------------------------------------------------------\n\n');  
 				}
 			});
@@ -162,30 +122,11 @@ module.exports.process_msg = function(ws, data){
 					console.log('-------------------------------------------------------------------------\n\n');
            		}
            		else{
-					console.log('--------------------------INSERT ac_benchmark----------------------------');
-					//console.log('INSERT ID:',result.insertId);        
+					console.log('--------------------------INSERT ac_benchmark----------------------------');      
 					console.log('INSERT ID:',result);
-                    // var indexingAddSQL = 'INSERT INTO indexing(hash_value, type) VALUES(?,?)';
-                    // var indexingAddSql_Params = [ sha_value, 'ac_benchmark'];
-                    // connection.query(indexingAddSQL, indexingAddSql_Params, function(err, result) {
-                    //     console.log('---------INSERT INDEXING--------------');
-                    //     if(err){		// insert error, delete from the account
-                    //         console.log('[INSERT ERROR] - ',err.message);
-                    //         //delete
-                    //         var deleteSQL = 'delete from ac_benchmark where sha_value = '+sha_value;
-                    //         conn.query(deleteSQL, function (err0, res0) {
-                    //             if (err0) console.log(err0);
-                    //             console.log("DELETE Return ==> ");
-                    //             console.log(res0);
-                    //         });
-                    //     }else{
-                    //         console.log('[INSERT SUCCESS] \n ');
-                    //         console.log('INSERT ID:',result);
-                            chaincode.invoke.ac_benchmark([data.ac_id, data.benchmark_id, data.source, data.name,
-                                data.currency, data.primary_flag, data.start_date, data.end_date, data.benchmark_reference_id,
-                                data.benchmark_reference_id_source, sha_value], cb_invoked);
-                    //     }
-                    // });
+                    chaincode.invoke.ac_benchmark([data.ac_id, data.benchmark_id, data.source, data.name,
+                        data.currency, data.primary_flag, data.start_date, data.end_date, data.benchmark_reference_id,
+                        data.benchmark_reference_id_source, sha_value], cb_invoked);
                     console.log('-------------------------------------------------------------------------\n\n');
 				}
 			});
@@ -210,29 +151,10 @@ module.exports.process_msg = function(ws, data){
          			console.log('[INSERT ERROR] - ',err.message);
 					console.log('-------------------------------------------------------------------------\n\n');
         		} else{       
-					console.log('--------------------------INSERT benchmark----------------------------');
-					//console.log('INSERT ID:',result.insertId);        
+					console.log('--------------------------INSERT benchmark----------------------------');    
 					console.log('INSERT ID:',result);
-                    // var indexingAddSQL = 'INSERT INTO indexing(hash_value, type) VALUES(?,?)';
-                    // var indexingAddSql_Params = [ sha_value, 'benchmarks'];
-                    // connection.query(indexingAddSQL, indexingAddSql_Params, function(err, result) {
-                    //     console.log('---------INSERT INDEXING--------------');
-                    //     if(err){		// insert error, delete from the account
-                    //         console.log('[INSERT ERROR] - ',err.message);
-                    //         //delete
-                    //         var deleteSQL = 'delete from benchmarks where sha_value = '+sha_value;
-                    //         conn.query(deleteSQL, function (err0, res0) {
-                    //             if (err0) console.log(err0);
-                    //             console.log("DELETE Return ==> ");
-                    //             console.log(res0);
-                    //         });
-                    //     }else{
-                    //         console.log('[INSERT SUCCESS] \n ');
-                    //         console.log('INSERT ID:',result);
-                            chaincode.invoke.benchmarks([data.benchmark_id, data.id_source, data.name, data.currency,
-                                data.benchmark_reference_id, data.benchmark_reference_id_source, sha_value], cb_invoked);
-                    //     }
-                    // });
+                    chaincode.invoke.benchmarks([data.benchmark_id, data.id_source, data.name, data.currency,
+                        data.benchmark_reference_id, data.benchmark_reference_id_source, sha_value], cb_invoked);
 					console.log('----------------------------------------------------------------------\n\n');  
 				}
 			});
@@ -296,6 +218,66 @@ module.exports.process_msg = function(ws, data){
 				});
 			}
 		}
+	// 	else if (data.type == 'download_data'){
+	// 		if (data.data_type == 'account'){
+	// 			var selectSQL = 'select * from `account`';
+	// 			var arr = [];
+	// 			connection.query(selectSQL, function(err, rows) {
+ //    					if (err) throw err;
+ // //    					account_value="";
+    					
+ // //     					for (var i = 0; i < rows.length; i++) {
+ // //         					account_value.append(rows[i]);
+	// // 						sendMsg({msg: 'account', sha_value:arr[i].sha_value, ac_id:arr[i].ac_id, ac_short_name:arr[i].ac_short_name, status:arr[i].status, term_date:arr[i].term_date,
+	// // inception_date:arr[i].inception_date, ac_region: arr[i].ac_region, ac_sub_region:arr[i].ac_sub_region, cod_country_domicile:arr[i].cod_country_domicile, liq_method:arr[i].liq_method,
+	// // contracting_entity:arr[i].contracting_entity, mgn_entity:arr[i].mgn_entity, ac_legal_name:arr[i].ac_legal_name, manager_name:arr[i].manager_name, cod_ccy_base:arr[i].cod_ccy_base,
+	// // long_name:arr[i].long_name, mandate_id:arr[i].mandate_id, client_id:arr[i].client_id, custodian_name:arr[i].custodian_name, sub_mandate_id:arr[i].sub_mandate_id, 
+	// // transfer_agent_name:arr[i].transfer_agent_name, trust_bank:arr[i].trust_bank, re_trust_bank:arr[i].re_trust_bank, last_updated_by:arr[i].last_updated_by, 
+	// // last_approved_by:arr[i].last_approved_by, last_update_date:arr[i].last_update_date});
+ // //     					}
+ //     					// console.log(account_value);
+ //     					sendMsg({msg:'download_account',value:rows});
+	// 			});
+	// 		}
+	// 		else if (data.data_type == 'ac_trade') {
+	// 			var selectSQL = 'select * from `ac_trade`';
+	// 			var arr = [];
+	// 			connection.query(selectSQL, function(err, rows) {
+ //    					if (err) throw err;
+ //    					for (var i = 0; i < rows.length; i++) {
+ //        					arr[i] = rows[i];
+	// 						sendMsg({msg: 'ac_trade', sha_value:arr[i].sha_value, ac_id:arr[i].ac_id, lvts:arr[i].lvts, calypso:arr[i].calypso,
+	// aladdin:arr[i].aladdin, trade_start_date:arr[i].trade_start_date, equity:arr[i].equity, fixed_income:arr[i].fixed_income});
+ //    					}
+ //    				});
+	// 		}
+	// 		else if (data.data_type == 'ac_benchmark') {
+	// 			var selectSQL = 'select * from `ac_benchmark`';
+	// 			var arr = [];
+	// 			connection.query(selectSQL, function(err, rows) {
+ //    					if (err) throw err;
+ //    					for (var i = 0; i < rows.length; i++) {
+ //        					arr[i] = rows[i];
+	// 						sendMsg({msg: 'ac_benchmark', sha_value:arr[i].sha_value, ac_id:arr[i].ac_id, benchmark_id:arr[i].benchmark_id, source:arr[i].source, name:arr[i].name, currency:arr[i].currency,
+	// primary_flag:arr[i].primary_flag, start_date:arr[i].start_date, end_date:arr[i].end_date, benchmark_reference_id:arr[i].benchmark_reference_id, benchmark_reference_id_source:arr[i].benchmark_reference_id_source});
+ //    					}
+	// 			 });
+	// 		}
+	// 		else if (data.data_type == 'benchmarks') {
+	// 			var selectSQL = 'select * from `benchmarks`';
+	// 			var arr = [];
+	// 			connection.query(selectSQL, function(err, rows) {
+ //    					if (err) throw err;
+ //    					sendMsg({msg:'download_benchmarks',value:rows});
+ // //    					for (var i = 0; i < rows.length; i++) {
+ // //        					arr[i] = rows[i];
+ // //        					console.log(arr[i]);
+	// // 						sendMsg({msg: 'benchmarks', sha_value:arr[i].sha_value, benchmark_id:arr[i].benchmark_id, id_source:arr[i].id_source, name:arr[i].name, currency:arr[i].currency,
+	// // benchmark_reference_id:arr[i].benchmark_reference_id, benchmark_reference_id_source:arr[i].benchmark_reference_id_source});
+ // //    					}
+	// 			});
+	// 		}
+	// 	}
 		else if (data.type == 'untreated') {				// recheck first
 			console.log('--------------get untreated account now--------------------------');
 			if (data.table_name == 'account'){
