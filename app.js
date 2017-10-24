@@ -20,8 +20,9 @@ var path = require('path');
 var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var http = require('http');
 var app = express();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 var url = require('url');
 var setup = require('./setup');
 var fs = require('fs');
@@ -104,7 +105,12 @@ app.use(function(err, req, res, next) {														// = development error hand
 // ============================================================================================================================
 // 														Launch Webserver
 // ============================================================================================================================
-var server = http.createServer(app).listen(port, function() {});
+io.on('connection', function(socket){
+    console.log("-----------------receive a connection from client!!!!------------------------");
+    // socket.emit('ac_change');
+});
+
+var server = http.listen(port, function() {});
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 process.env.NODE_ENV = 'production';
 server.timeout = 240000;																							// Ta-da.
@@ -325,7 +331,7 @@ function cb_deployed(e){
 				console.log('received ws msg:', message);
 				try{
 					var data = JSON.parse(message);
-					part1.process_msg(ws, data);											//pass the websocket msg to part 1 processing
+					part1.process_msg(ws, data, io);											//pass the websocket msg to part 1 processing
 				//	part2.process_msg(ws, data);											//pass the websocket msg to part 2 processing
 				}
 				catch(e){

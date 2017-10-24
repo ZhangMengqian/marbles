@@ -10,6 +10,10 @@ var base_actrade="";
 var base_acbench="";
 var base_bench="";
 
+// var express = require('express');
+// var app = express();
+// var http = require('http').Server(app);
+// var io = require('socket.io')(http);
 // =================================================================================
 // On Load
 // =================================================================================
@@ -1304,6 +1308,14 @@ function connect_to_server(){
                 };
                 ws.send(JSON.stringify(obj));
 			}
+			// else if(msgObj.msg == 'io_event'){
+             //    io.on('connection', function(socket){
+             //        if(msgObj.page == 'account') {
+             //            console.log("-----------------send account change to client!!!!------------------------");
+             //            socket.emit('ac_change');
+             //        }
+             //    });
+			// }
 			else console.log('rec', msgObj.msg, msgObj);
 		}
 

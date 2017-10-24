@@ -1,5 +1,10 @@
+script(type='text/javascript').
+	var socket = io();
+	socket.on('ac_change',function(){
+		document.getElementById("nav_ac_checker").click();
+	});
 #createPanel(hidden).panel
-	
+
 	h1 Create New Account
 	hr
 	
