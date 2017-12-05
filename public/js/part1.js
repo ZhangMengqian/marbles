@@ -10,10 +10,7 @@ var base_actrade="";
 var base_acbench="";
 var base_bench="";
 
-// var express = require('express');
-// var app = express();
-// var http = require('http').Server(app);
-// var io = require('socket.io')(http);
+var http = {};
 // =================================================================================
 // On Load
 // =================================================================================
@@ -23,6 +20,7 @@ $(document).on('ready', function() {
 	// jQuery UI Events
 	// =================================================================================
 	$('#submit').click(function(){
+		console.log('----------click button to create a new account-------------');
 		var obj = 	{
 						type: 'create_account',
 						ac_id: $('input[name="ac_id"]').val().replace(' ', ''),
@@ -54,6 +52,7 @@ $(document).on('ready', function() {
 		if(obj.ac_id){
 			console.log('creating user, sending', obj);
 			ws.send(JSON.stringify(obj));
+
 			showHomePanel();
 			$('#user1wrap').append("<p>Create [account]:"+obj.ac_id+" [short name]:"+obj.ac_short_name+"</p>");	
 			
@@ -234,19 +233,6 @@ $(document).on('ready', function() {
 		}
 	});
 
-	// $('#submit9').click(function(){
-	// 	var obj = 	{
-	// 					type: 'download_data',
-	// 					data_type: $('select[name="data type"]').val()
-	// 				};
-	// 		console.log(obj.data_type);		
-				
-	// 	if(obj.data_type){
-	// 		console.log('data download request, sending', obj);
-	// 		ws.send(JSON.stringify(obj));
-	// 	}
-	// 	return false;
-	// });
 	String.prototype.trim=function(){
 　　    		return this.replace(/(^\s*)|(\s*$)/g, "");
 　　    }
@@ -297,87 +283,6 @@ $(document).on('ready', function() {
 		$('#panel_benchmark').hide();
 		$('#panel_viewer').fadeIn(300);
 	});
-	
-   // $('#ac_accept').click(function(){
-   // 		// $('#actrade_mak_noti').append(tmp_account);
-	// 	// tmp_account="";
-	// 	console.log('accepting user, sending', account_obj);
-	// 	ws.send(JSON.stringify(account_obj));
-	// 	var obj = {
-	// 		type: 'ac_accept',
-	// 		ac_id:
-	// 	};
-	// 	// $('#ac_check_notice').empty();
-	// 	// $('#ac_check_button').hide();
-	// 	$('#user1wrap').append("<p>Account Checker Accepted!</p>");
-	// 	ws.send(JSON.stringify({type:"check_decide", checktype:"Account", checkcont:"accept"}));
-	// 	showHomePanel();
-   // });
-	
-// 	$('#ac_decline').click(function(){
-// 	tmp_account="";
-// 	$('#ac_check_notice').empty();
-// 	$('#ac_check_button').hide();
-// 	$('#user1wrap').append("<p>Account Checker Declined!</p>");
-// 	ws.send(JSON.stringify({type:"check_decide", checktype:"Account", checkcont:"decline"}));
-// 	showHomePanel();
-// });
-	
-// 	$('#actrade_accept').click(function(){
-//   	$('#acbench_mak_noti').append(tmp_actrade);
-// 	tmp_actrade="";
-// 	$('#actrade_check_notice').empty();
-// 	$('#actrade_check_button').hide();
-// 	$('#user1wrap').append("<p>Account trade Checker Accepted!</p>");
-// 	ws.send(JSON.stringify({type:"check_decide", checktype:"Ac_trades_setup", checkcont:"accept"}));
-// 	showHomePanel();
-// });
-
-//     $('#actrade_decline').click(function(){
-// 	tmp_actrade="";
-// 	$('#actrade_check_notice').empty();
-// 	$('#actrade_check_button').hide();
-// 	$('#user1wrap').append("<p>Account trade Checker Declined!</p>");
-// 	ws.send(JSON.stringify({type:"check_decide", checktype:"Ac_trades_setup", checkcont:"decline"}));
-// 	showHomePanel();
-// });
-
-// 	$('#acbench_accept').click(function(){
-//   	$('#bench_mak_noti').append(tmp_acbench);
-// 	tmp_acbench="";
-// 	$('#acbench_check_noti').empty();
-// 	$('#acbench_check_button').hide();
-// 	$('#user1wrap').append("<p>Account Benchmark Checker Accepted!</p>");
-// 	ws.send(JSON.stringify({type:"check_decide", checktype:"Ac_benchmark", checkcont:"accept"}));
-// 	showHomePanel();
-// });
-
-//     $('#acbench_decline').click(function(){
-// 	tmp_acbench="";
-// 	$('#acbench_check_noti').empty();
-// 	$('#acbench_check_button').hide();
-// 	$('#user1wrap').append("<p>Account Benchmark Checker Declined!</p>");
-// 	ws.send(JSON.stringify({type:"check_decide", checktype:"Ac_benchmark", checkcont:"decline"}));
-// 	showHomePanel();
-// });
-
-//    $('#bench_accept').click(function(){
-// 	tmp_bench="";
-// 	$('#bench_check_noti').empty();
-// 	$('#bench_check_button').hide();
-// 	$('#user1wrap').append("<p>Benchmark Checker Accepted!</p>");
-// 	ws.send(JSON.stringify({type:"check_decide", checktype:"Benchmarks", checkcont:"accept"}));
-// 	showHomePanel();
-// });
-
-//     $('#bench_decline').click(function(){
-// 	tmp_bench="";
-// 	$('#bench_check_noti').empty();
-// 	$('#bench_check_button').hide();
-// 	$('#user1wrap').append("<p>Benchmark Checker Declined!</p>");
-// 	ws.send(JSON.stringify({type:"check_decide", checktype:"Benchmarks", checkcont:"decline"}));
-// 	showHomePanel();
-// });
 
     $(document).click(function(e){  //click the button
 		var clickid=$(e.target).attr('id');
@@ -421,8 +326,6 @@ $(document).on('ready', function() {
             ws.send(JSON.stringify(obj));
             $('#actranoti_' + clickid.substr(14)).remove();
             $('#user1wrap').append("<p>Account trade Checker Declined!</p>");
-            // ws.send(JSON.stringify({type:"check_decide", checktype:"Ac_trades_setup", checkcont:"decline"}));
-            // showHomePanel();
 		}
 		else if (clickid.indexOf("acben_accept_")>=0){
             var obj ={
@@ -528,10 +431,7 @@ $(document).on('ready', function() {
 							};
 				//ws.send(JSON.stringify(obj));
 				$(ui.draggable).fadeOut();
-		
 					$(ui.draggable).remove();
-				
-		//		showHomePanel();
 			}
 		}
 
@@ -848,7 +748,9 @@ function handleFile(files) {
 function connect_to_server(){
 	var connected = false;
 	connect();
-	
+
+
+
 	function connect(){
 		var wsUri = 'ws://' + document.location.hostname + ':' + document.location.port;
 		console.log('Connectiong to websocket', wsUri);
@@ -1232,25 +1134,28 @@ function connect_to_server(){
                 $('#bench_mak_noti').append(obj);
 			}
             else if(msgObj.msg === 'validity') {
+                ws.send(JSON.stringify(msgObj));
+            }
+            else if(msgObj.msg === 're_validity'){
                 console.log("account data validity");
                 if (msgObj.table_name == 'account') {
-                    var account_notice = '<div><hr/><h4>' + "[NOTICE!] Data in Table `account` changed!" + '<br/>' + "[HASH VALUE] " + msgObj.sha_value + '</h4><hr/></div>';
+                    var account_notice = '<div><hr/><h4>' + "[IP_ADDRESS]" + msgObj.ip_source + '<br/>' + "[NOTICE!] Data in Table `account` changed!" + '<br/>' + "[HASH VALUE] " + msgObj.sha_value + '</h4><hr/></div>';
                     $('#ac_data_validity_notice').append(account_notice);
                 }
                 else if (msgObj.table_name == 'ac_trade'){
-                    var account_notice = '<div><hr/><h4>' + "[NOTICE!] Data in Table `ac_trade` changed!" + '<br/>' + "[HASH VALUE] " + msgObj.sha_value + '</h4><hr/></div>';
+                    var account_notice = '<div><hr/><h4>' + "[IP_ADDRESS]" + msgObj.ip_source + '<br/>' + "[NOTICE!] Data in Table `ac_trade` changed!" + '<br/>' + "[HASH VALUE] " + msgObj.sha_value + '</h4><hr/></div>';
                     $('#actra_validity_notice').append(account_notice);
 				}
 				else if (msgObj.table_name == 'ac_benchmark') {
-                    var account_notice = '<div><hr/><h4>' + "[NOTICE!] Data in Table `ac_benchmark` changed!" + '<br/>' + "[HASH VALUE] " + msgObj.sha_value + '</h4><hr/></div>';
+                    var account_notice = '<div><hr/><h4>' + "[IP_ADDRESS]" + msgObj.ip_source + '<br/>' + "[NOTICE!] Data in Table `ac_benchmark` changed!" + '<br/>' + "[HASH VALUE] " + msgObj.sha_value + '</h4><hr/></div>';
                     $('#acben_validity_notice').append(account_notice);
 				}
 				else if (msgObj.table_name == 'benchmarks'){
-                    var account_notice = '<div><hr/><h4>' + "[NOTICE!] Data in Table `benchmarks` changed!" + '<br/>' + "[HASH VALUE] " + msgObj.sha_value + '</h4><hr/></div>';
+                    var account_notice = '<div><hr/><h4>' + "[IP_ADDRESS]" + msgObj.ip_source + '<br/>' + "[NOTICE!] Data in Table `benchmarks` changed!" + '<br/>' + "[HASH VALUE] " + msgObj.sha_value + '</h4><hr/></div>';
                     $('#bench_validity_notice').append(account_notice);
 				}
                 else if(msgObj.table_name == 'unknown'){
-                    var notice = '<div><hr/><h4>' + "[NOTICE!] Can not find the hash value in Table `" + msgObj.show_location + "`! Data changed!" + '<br/>' + "[HASH VALUE] " + msgObj.sha_value + '</h4><hr/></div>';
+                    var notice = '<div><hr/><h4>' + "[IP_ADDRESS]" + msgObj.ip_source + '<br/>' + "[NOTICE!] Can not find the hash value in Table `" + msgObj.show_location + "`! Data changed!" + '<br/>' + "[HASH VALUE] " + msgObj.sha_value + '</h4><hr/></div>';
                     if(msgObj.show_location == 'account') {
                         $('#ac_data_validity_notice').append(notice);
                     }
@@ -1275,17 +1180,8 @@ function connect_to_server(){
                 };
                 ws.send(JSON.stringify(obj));
 			}
-			// else if(msgObj.msg == 'io_event'){
-             //    io.on('connection', function(socket){
-             //        if(msgObj.page == 'account') {
-             //            console.log("-----------------send account change to client!!!!------------------------");
-             //            socket.emit('ac_change');
-             //        }
-             //    });
-			// }
 			else console.log('rec', msgObj.msg, msgObj);
 		}
-
 		catch(e){
 			console.log('ERROR', e);
 		}

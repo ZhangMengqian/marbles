@@ -89,7 +89,7 @@ if __name__ == '__main__':
 	connection = MySQLdb.connect(
 		host='localhost',
 		user='root',
-		passwd='l19951030',
+		passwd='',
 		port=3306,
 		db='morgan'
 	)

@@ -21,7 +21,8 @@ var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var app = express();
-var http = require('http').Server(app);
+var my_http = require('http');
+var http = my_http.Server(app);
 var io = require('socket.io')(http);
 var url = require('url');
 var setup = require('./setup');
@@ -45,6 +46,15 @@ app.use('/cc/summary', serve_static(path.join(__dirname, 'cc_summaries')) );				
 app.use( serve_static(path.join(__dirname, 'public'), {maxAge: '1d', setHeaders: setCustomCC}) );							//1 day cache
 //app.use( serve_static(path.join(__dirname, 'public')) );
 app.use(session({secret:'Somethignsomething1234!test', resave:true, saveUninitialized:true}));
+
+function getJsonLength(jsonData) {
+    var length;
+    for(var ever in jsonData) {
+        length++;
+    }
+    return length;
+}
+
 function setCustomCC(res, path) {
 	if (serve_static.mime.lookup(path) === 'image/jpeg')  res.setHeader('Cache-Control', 'public, max-age=2592000');		//30 days cache
 	else if (serve_static.mime.lookup(path) === 'image/png') res.setHeader('Cache-Control', 'public, max-age=2592000');
@@ -62,6 +72,7 @@ var bust_css = require('./busters_css.json');
 process.env.cachebust_js = bust_js['public/js/singlejshash'];			//i'm just making 1 hash against all js for easier jade implementation
 process.env.cachebust_css = bust_css['public/css/singlecsshash'];		//i'm just making 1 hash against all css for easier jade implementation
 console.log('cache busting hash js', process.env.cachebust_js, 'css', process.env.cachebust_css);
+
 
 
 ///////////  Configure Webserver  ///////////
@@ -101,6 +112,15 @@ app.use(function(err, req, res, next) {														// = development error hand
 	res.render('template/error', {bag:req.bag});
 });
 
+// ============================================================================================================================
+// 														Work Area
+// ============================================================================================================================
+var part1 = require('./utils/ws_part1');														//websocket message processing for part 1
+//var part2 = require('./utils/ws_part2');														//websocket message processing for part 2
+var ws = require('ws');																			//websocket mod
+var wss = {};
+var Ibc1 = require('ibm-blockchain-js');														//rest based SDK for ibm blockchain
+var ibc = new Ibc1();
 
 // ============================================================================================================================
 // 														Launch Webserver
@@ -111,6 +131,22 @@ io.on('connection', function(socket){
 });
 
 var server = http.listen(port, function() {});
+
+my_http.createServer( function (request, response) {
+    response.writeHead( 200, {'Content-Type':'text/plain'});
+    response.end('success');
+	request.on("data",function(data){
+        console.log("-----[receive data from server]------");
+        console.log(data.toString());
+        var obj = JSON.parse( data.toString() );
+        if(obj.type=='online'){
+        	console.log("still online...");
+		}else {
+            part1.process_msg(ws, obj, io);
+        }
+    });
+} ).listen(4000);
+
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 process.env.NODE_ENV = 'production';
 server.timeout = 240000;																							// Ta-da.
@@ -141,15 +177,6 @@ require('cf-deployment-tracker-client').track();		//reports back to us, this hel
 // 														Entering
 // ============================================================================================================================
 
-// ============================================================================================================================
-// 														Work Area
-// ============================================================================================================================
-var part1 = require('./utils/ws_part1');														//websocket message processing for part 1
-//var part2 = require('./utils/ws_part2');														//websocket message processing for part 2
-var ws = require('ws');																			//websocket mod
-var wss = {};
-var Ibc1 = require('ibm-blockchain-js');														//rest based SDK for ibm blockchain
-var ibc = new Ibc1();
 
 // ==================================
 // load peers manually or from VCAP, VCAP will overwrite hardcoded list!
@@ -231,8 +258,8 @@ var options = 	{
 								}
 					},
 					chaincode:{
-						zip_url: 'https://github.com/ZhangMengqian/marbles/archive/master.zip',
-						unzip_dir: 'marbles-master/chaincode',													//subdirectroy name of chaincode after unzipped
+                        zip_url: 'https://github.com/ZhangMengqian/marbles/archive/master.zip',
+                        unzip_dir: 'marbles-master/chaincode',													//subdirectroy name of chaincode after unzipped
                         git_url: 'http://gopkg.in/ZhangMengqian/marbles.v0/chaincode'
 						// git_url: 'http://gopkg.in/qianlizimu/marbles.v2/chaincode'						//GO get http url
 					
@@ -323,16 +350,65 @@ function cb_deployed(e){
 		if(!process.error) process.error = {type: 'deploy', msg: e.details};
 	}
 	else{
-		console.log('------------------------------------------ Websocket Up ------------------------------------------');
-		
+		console.log('---------------- Websocket Up ------------------------------------------');
+		// tell the server
+		var data = {
+			type:'new_connection'
+		};
+        var obj = JSON.stringify(data);
+        var headers = {
+            'Content-Type': 'application/json'
+            // 'Content-Length': obj.length
+        };
+        var options = {
+            host: '10.115.200.231',		//server
+            port: 5000,
+            method: 'POST',
+            headers: headers
+        };
+        var req = my_http.request(options, function (res) {
+            console.log('-----going to send data----');
+            req.on('error', function (e) {
+                console.log('------error--------', e);
+            });
+        });
+        req.write(obj);
+        req.end();
+
 		wss = new ws.Server({server: server});												//start the websocket now
 		wss.on('connection', function connection(ws) {
 			ws.on('message', function incoming(message) {
 				console.log('received ws msg:', message);
 				try{
+					var mydata = message;
 					var data = JSON.parse(message);
-					part1.process_msg(ws, data, io);											//pass the websocket msg to part 1 processing
-				//	part2.process_msg(ws, data);											//pass the websocket msg to part 2 processing
+					if(data.type=='get' || data.type=='chainstats' || data.type=='untreated' || data.type=='new' || data.type=='recheck') {
+                        part1.process_msg(ws, data, io);
+                        // part1.process_msg(ws, obj, io);
+                        //part2.process_msg(ws, data);											//pass the websocket msg to part 2 processing
+                    }
+                    else{
+                        console.log('[app.js]----------------Ready to  information to server---------------');
+                        var headers = {
+                            'Content-Type': 'application/json',
+                            'Content-Length': mydata.length
+                        };
+                        var options = {
+                            // host:'119.23.21.130',			//server
+                            host: '10.115.200.231',
+                            port: 5000,
+                            method: 'POST',
+                            headers: headers
+                        };
+                        var req = my_http.request(options, function (res) {
+                            console.log('-----going to send data----');
+                            req.on('error', function (e) {
+                                console.log('------error--------', e);
+                            });
+                        });
+                        req.write(mydata);
+                        req.end();
+                    }
 				}
 				catch(e){
 					console.log('ws message error', e);
