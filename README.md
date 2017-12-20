@@ -74,23 +74,16 @@
    go build
 ```
    Stop blockchain service set up by single-peer-ca.yaml and restart it.
-# 11.  
-   Install mysql server
-   Download MySQL if it is not in your computer.
-   https://dev.mysql.com/downloads/mysql/#downloads
-   Set your user name to "root" and password to "".
-   Open command shell for mysql server, type this:
-```
-   create database morgan;
-   use morgan;
-   source [file directory]morgan.sql;
-```
 # 12. 
-   In the Windows command line window, type this(in project directory):
+   In the Windows command line window, type this(in project directory) to install nodejs library:
 ```
    npm install gulp -g
-   npm install mysql -g
+   npm install mysql -g (only required for using Mysql as database)
    npm install jssha -g
+   nom install serve-static -g
+   npm install socket.io -g
+   npm install sqlite3 -g
+   npm install ws -g
    npm install  
    gulp
  ```
