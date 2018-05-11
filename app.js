@@ -132,20 +132,20 @@ io.on('connection', function(socket){
 
 var server = http.listen(port, function() {});
 
-my_http.createServer( function (request, response) {
-    response.writeHead( 200, {'Content-Type':'text/plain'});
-    response.end('success');
-	request.on("data",function(data){
-        console.log("-----[receive data from server]------");
-        console.log(data.toString());
-        var obj = JSON.parse( data.toString() );
-        if(obj.type=='online'){
-        	console.log("still online...");
-		}else {
-            part1.process_msg(ws, obj, io);
-        }
-    });
-} ).listen(4000);
+// my_http.createServer( function (request, response) {
+//     response.writeHead( 200, {'Content-Type':'text/plain'});
+//     response.end('success');
+// 	request.on("data",function(data){
+//         console.log("-----[receive data from server]------");
+//         console.log(data.toString());
+//         var obj = JSON.parse( data.toString() );
+//         if(obj.type=='online'){
+//         	console.log("still online...");
+// 		}else {
+//             part1.process_msg(ws, obj, io);
+//         }
+//     });
+// } ).listen(4000);
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 process.env.NODE_ENV = 'production';
@@ -248,8 +248,8 @@ function detect_tls_or_not(peer_array){
 // ==================================
 var options = 	{
 					network:{
-						peers: [peers[0]],																	//lets only use the first peer! since we really don't need any more than 1
-						users: prefer_type1_users(users),													//dump the whole thing, sdk will parse for a good one
+						peers: [peers[0],peers[1],peers[2],peers[3]],																	//lets only use the first peer! since we really don't need any more than 1
+						users: [users[0],users[1],users[2],users[3]],													//dump the whole thing, sdk will parse for a good one
 						options: {
 									quiet: true, 															//detailed debug messages on/off true/false
 									tls: detect_tls_or_not(peers), 											//should app to peer communication use tls?
@@ -258,9 +258,14 @@ var options = 	{
 								}
 					},
 					chaincode:{
-                        zip_url: 'https://github.com/ZhangMengqian/marbles/archive/master.zip',
-                        unzip_dir: 'marbles-master/chaincode',													//subdirectroy name of chaincode after unzipped
-                        git_url: 'http://gopkg.in/ZhangMengqian/marbles.v0/chaincode'
+                        // zip_url: 'https://github.com/ZhangMengqian/marbles/archive/master.zip',
+                        // unzip_dir: 'marbles-master/chaincode',													//subdirectroy name of chaincode after unzipped
+                        // git_url: 'http://gopkg.in/ZhangMengqian/marbles.v0/chaincode'
+
+                        zip_url: 'https://github.com/ZhangMengqian/info/archive/v1.zip',
+                        unzip_dir: 'info-1',													//subdirectroy name of chaincode after unzipped
+                        git_url: 'http://gopkg.in/ZhangMengqian/info.v1'
+
 						// git_url: 'http://gopkg.in/qianlizimu/marbles.v2/chaincode'						//GO get http url
 					
 						//hashed cc name from prev deployment, comment me out to always deploy, uncomment me when its already deployed to skip deploying again
@@ -291,7 +296,7 @@ ibc.load(options, function (err, cc){														//parse/load chaincode, respo
 		}
 		else{																				//no, already deployed
 			console.log('chaincode summary file indicates chaincode has been previously deployed');
-				cc.deploy('init', ['99'], {delay_ms: 30000}, function(e){ 						//delay_ms is milliseconds to wait after deploy for conatiner to start, 50sec recommended
+			cc.deploy('init', ['99'], {delay_ms: 30000}, function(e){ 						//delay_ms is milliseconds to wait after deploy for conatiner to start, 50sec recommended
 				check_if_deployed(e, 1);
 			});
 		}
@@ -351,29 +356,6 @@ function cb_deployed(e){
 	}
 	else{
 		console.log('---------------- Websocket Up ------------------------------------------');
-		// tell the server
-		var data = {
-			type:'new_connection'
-		};
-        var obj = JSON.stringify(data);
-        var headers = {
-            'Content-Type': 'application/json'
-            // 'Content-Length': obj.length
-        };
-        var options = {
-            host: '10.115.200.231',		//server
-            port: 5000,
-            method: 'POST',
-            headers: headers
-        };
-        var req = my_http.request(options, function (res) {
-            console.log('-----going to send data----');
-            req.on('error', function (e) {
-                console.log('------error--------', e);
-            });
-        });
-        req.write(obj);
-        req.end();
 
 		wss = new ws.Server({server: server});												//start the websocket now
 		wss.on('connection', function connection(ws) {
@@ -382,33 +364,9 @@ function cb_deployed(e){
 				try{
 					var mydata = message;
 					var data = JSON.parse(message);
-					if(data.type=='get' || data.type=='chainstats' || data.type=='untreated' || data.type=='new' || data.type=='recheck') {
-                        part1.process_msg(ws, data, io);
+					part1.process_msg(ws, data, io);
                         // part1.process_msg(ws, obj, io);
                         //part2.process_msg(ws, data);											//pass the websocket msg to part 2 processing
-                    }
-                    else{
-                        console.log('[app.js]----------------Ready to  information to server---------------');
-                        var headers = {
-                            'Content-Type': 'application/json',
-                            'Content-Length': mydata.length
-                        };
-                        var options = {
-                            // host:'119.23.21.130',			//server
-                            host: '10.115.200.231',
-                            port: 5000,
-                            method: 'POST',
-                            headers: headers
-                        };
-                        var req = my_http.request(options, function (res) {
-                            console.log('-----going to send data----');
-                            req.on('error', function (e) {
-                                console.log('------error--------', e);
-                            });
-                        });
-                        req.write(mydata);
-                        req.end();
-                    }
 				}
 				catch(e){
 					console.log('ws message error', e);
