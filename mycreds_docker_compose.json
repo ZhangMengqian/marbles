@@ -22,18 +22,18 @@
 			"id": "vp3"
 		}],
 		"users":[{
-			"enrollId": "test_vp0",
-			"enrollSecret": "MwYpmSRjupbT"
-		},{
-			"enrollId": "test_vp1",
-			"enrollSecret": "5wgHK9qqYaPy"
-		},{
-			"enrollId": "test_vp2",
-			"enrollSecret": "vQelbRvja7cJ"
-		},{
-			"enrollId": "test_vp3",
-			"enrollSecret": "9LKqKH5peurL"
-		}],
+          "enrollId": "alice",
+          "enrollSecret": "CMS10pEQlB16"
+        },{
+          "enrollId": "lukas",
+          "enrollSecret": "NPKYL39uKbkj"
+        },{
+          "enrollId": "assigner",
+          "enrollSecret": "Tc43PeqBl11"
+        },{
+          "enrollId": "jim",
+          "enrollSecret": "6avZQLwcUe9b"
+        }],
 		"cert": "https://blockchain-certs.mybluemix.net/us.blockchain.ibm.com.cert"
 	}
 }

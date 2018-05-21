@@ -249,29 +249,29 @@ function detect_tls_or_not(peer_array){
 var options = 	{
 					network:{
 						peers: [peers[0],peers[1],peers[2],peers[3]],																	//lets only use the first peer! since we really don't need any more than 1
-						users: [users[0],users[1],users[2],users[3]],													//dump the whole thing, sdk will parse for a good one
+						users: users,													//dump the whole thing, sdk will parse for a good one
 						options: {
 									quiet: true, 															//detailed debug messages on/off true/false
 									tls: detect_tls_or_not(peers), 											//should app to peer communication use tls?
-									maxRetry: 1,																//how many times should we retry register before giving up
+									maxRetry: 10,																//how many times should we retry register before giving up
 									timeout: 300000
 								}
 					},
 					chaincode:{
-                        // zip_url: 'https://github.com/ZhangMengqian/marbles/archive/master.zip',
-                        // unzip_dir: 'marbles-master/chaincode',													//subdirectroy name of chaincode after unzipped
-                        // git_url: 'http://gopkg.in/ZhangMengqian/marbles.v0/chaincode'
+                        zip_url: 'https://github.com/ZhangMengqian/marbles/archive/v2.zip',
+                        unzip_dir: 'marbles-2/chaincode',													//subdirectroy name of chaincode after unzipped
+                        git_url: 'http://gopkg.in/ZhangMengqian/marbles.v2/chaincode'
 
-                        zip_url: 'https://github.com/ZhangMengqian/info/archive/v1.zip',
-                        unzip_dir: 'info-1',													//subdirectroy name of chaincode after unzipped
-                        git_url: 'http://gopkg.in/ZhangMengqian/info.v1'
+                        // zip_url: 'https://github.com/ZhangMengqian/info/archive/v1.zip',
+                        // unzip_dir: 'info-1',													//subdirectroy name of chaincode after unzipped
+                        // git_url: 'http://gopkg.in/ZhangMengqian/info.v1'
 
 						// git_url: 'http://gopkg.in/qianlizimu/marbles.v2/chaincode'						//GO get http url
 					
 						//hashed cc name from prev deployment, comment me out to always deploy, uncomment me when its already deployed to skip deploying again
 						//deployed_name: '16e655c0fce6a9882896d3d6d11f7dcd4f45027fd4764004440ff1e61340910a9d67685c4bb723272a497f3cf428e6cf6b009618612220e1471e03b6c0aa76cb'
 					}
-				};
+	};
 if(process.env.VCAP_SERVICES){
 	console.log('\n[!] looks like you are in bluemix, I am going to clear out the deploy_name so that it deploys new cc.\n[!] hope that is ok budddy\n');
 	options.chaincode.deployed_name = '';

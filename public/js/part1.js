@@ -20,61 +20,74 @@ $(document).on('ready', function() {
 	// jQuery UI Events
 	// =================================================================================
 	$('#submit').click(function(){
-		console.log('----------click button to create a new account-------------');
-		var obj = 	{
-						type: 'create_account',
-						ac_id: $('input[name="ac_id"]').val().replace(' ', ''),
-						ac_short_name: $('input[name="ac_short_name"]').val(),
-						ac_status: $('input[name="status"]').val(),
-						term_date: $('input[name="term_date"]').val(),
-						inception_date: $('input[name="inception_date"]').val(),
-						ac_region: $('input[name="ac_region"]').val(),
-						ac_sub_region: $('input[name="ac_sub_region"]').val(),
-						cod_country_domicile: $('input[name="cod_country_domicile"]').val(),
-						liq_method: $('input[name="liq_method"]').val(),
-						contracting_entity: $('input[name="contract_entity"]').val(),
-						mgn_entity: $('input[name="mgn_entity"]').val(),
-						ac_legal_name: $('input[name="ac_legal_name"]').val(),
-						manager_name: $('input[name="manager_name"]').val(),
-						cod_ccy_base: $('input[name="cod_ccy_base"]').val(),
-						long_name: $('input[name="long_name"]').val(),
-						mandate_id: $('input[name="mandate_id"]').val(),
-						client_id: $('input[name="client_id"]').val(),
-						custodian_name: $('input[name="custodian_name"]').val(),
-						sub_mandate_id: $('input[name="sub_mandate_id"]').val(),
-						transfer_agent_name: $('input[name="transfer_agent_name"]').val(),
-						trust_bank: $('input[name="trust_bank"]').val(),
-						re_trust_bank: $('input[name="re_trust_bank"]').val(),
-						last_updated_by: $('input[name="last_updated_by"]').val(),
-						last_approved_by: $('input[name="last_approved_by"]').val(),
-						last_update_date: $('input[name="last_update_date"]').val()
-					};
-		if(obj.ac_id){
-			console.log('creating user, sending', obj);
-			ws.send(JSON.stringify(obj));
-
-			showHomePanel();
-			$('#user1wrap').append("<p>Create [account]:"+obj.ac_id+" [short name]:"+obj.ac_short_name+"</p>");	
-			
-			tmp_account='<div id="acnoti_'+obj.ac_id+'"><p><span style="color:#FF0;">A new account has been created:</span><br>'+
-			"[account]:"+obj.ac_id+"<br>[short name]:"+obj.ac_short_name+
-			"<br>[status]:"+obj.ac_status+"<br>[term date]:"+obj.term_date+
-			"<br>[inception date]:"+obj.inception_date+"<br>[region]:"+obj.ac_region+
-			"<br>[sub region]:"+obj.ac_sub_region+"<br>[country domicile]:"+obj.cod_country_domicile+
-			"<br>[liq method]:"+obj.liq_method+"<br>[contracting entity]:"+obj.contracting_entity+
-			"<br>[mgn entity]:"+obj.mgn_entity+"<br>[account legal name]:"+obj.ac_legal_name+
-			"<br>[manager name]:"+obj.manager_name+"<br>[cod_ccy_base]:"+obj.cod_ccy_base+
-			"<br>[long name]:"+obj.long_name+"<br>[mandate id]:"+obj.mandate_id+
-			"<br>[client id]:"+obj.client_id+"<br>[custodian name]:"+obj.custodian_name+
-			"<br>[sub_mandate_id]:"+obj.sub_mandate_id+"<br>[transfer_agent_name]:"+obj.transfer_agent_name+
-			"<br>[trust_bank]:"+obj.trust_bank+"<br>[re_trust_bank]:"+obj.re_trust_bank+
-			"<br>[last_updated_by]:"+obj.last_updated_by+"<br>[last_approved_by]:"+obj.last_approved_by+
-			"<br>[last_update_date]:"+obj.last_update_date+'</p><button type="button" id="del_ac'+obj.ac_id+'">delete</button><hr /></div>';
-			// $('#ac_check_notice').append(tmp_account);
-			$('#ac_history').append(tmp_account);
-			// $('#ac_check_button').show();
-		}
-		return false;
+        console.log('----------click button to create a new account-------------');
+        var obj = 	{
+            type: 'produce',
+            pro_name: $('input[name="pro_name"]').val(),
+            pro_num: $('input[name="pro_num"]').val(),
+            pro_price: $('input[name="pro_price"]').val(),
+            pro_desc: $('input[name="pro_desc"]').val()
+        };
+        console.log('produce, sending', obj);
+        ws.send(JSON.stringify(obj));
+        showHomePanel();
+        $('#user1wrap').append("<p>[New Product]:"+obj.pro_name"</p>");
+        return false;
+	    // console.log('----------click button to create a new account-------------');
+		// var obj = 	{
+		// 				type: 'create_account',
+		// 				ac_id: $('input[name="ac_id"]').val().replace(' ', ''),
+		// 				ac_short_name: $('input[name="ac_short_name"]').val(),
+		// 				ac_status: $('input[name="status"]').val(),
+		// 				term_date: $('input[name="term_date"]').val(),
+		// 				inception_date: $('input[name="inception_date"]').val(),
+		// 				ac_region: $('input[name="ac_region"]').val(),
+		// 				ac_sub_region: $('input[name="ac_sub_region"]').val(),
+		// 				cod_country_domicile: $('input[name="cod_country_domicile"]').val(),
+		// 				liq_method: $('input[name="liq_method"]').val(),
+		// 				contracting_entity: $('input[name="contract_entity"]').val(),
+		// 				mgn_entity: $('input[name="mgn_entity"]').val(),
+		// 				ac_legal_name: $('input[name="ac_legal_name"]').val(),
+		// 				manager_name: $('input[name="manager_name"]').val(),
+		// 				cod_ccy_base: $('input[name="cod_ccy_base"]').val(),
+		// 				long_name: $('input[name="long_name"]').val(),
+		// 				mandate_id: $('input[name="mandate_id"]').val(),
+		// 				client_id: $('input[name="client_id"]').val(),
+		// 				custodian_name: $('input[name="custodian_name"]').val(),
+		// 				sub_mandate_id: $('input[name="sub_mandate_id"]').val(),
+		// 				transfer_agent_name: $('input[name="transfer_agent_name"]').val(),
+		// 				trust_bank: $('input[name="trust_bank"]').val(),
+		// 				re_trust_bank: $('input[name="re_trust_bank"]').val(),
+		// 				last_updated_by: $('input[name="last_updated_by"]').val(),
+		// 				last_approved_by: $('input[name="last_approved_by"]').val(),
+		// 				last_update_date: $('input[name="last_update_date"]').val()
+		// 			};
+		// if(obj.ac_id){
+		// 	console.log('creating user, sending', obj);
+		// 	ws.send(JSON.stringify(obj));
+        //
+		// 	showHomePanel();
+		// 	$('#user1wrap').append("<p>Create [account]:"+obj.ac_id+" [short name]:"+obj.ac_short_name+"</p>");
+		//
+		// 	tmp_account='<div id="acnoti_'+obj.ac_id+'"><p><span style="color:#FF0;">A new account has been created:</span><br>'+
+		// 	"[account]:"+obj.ac_id+"<br>[short name]:"+obj.ac_short_name+
+		// 	"<br>[status]:"+obj.ac_status+"<br>[term date]:"+obj.term_date+
+		// 	"<br>[inception date]:"+obj.inception_date+"<br>[region]:"+obj.ac_region+
+		// 	"<br>[sub region]:"+obj.ac_sub_region+"<br>[country domicile]:"+obj.cod_country_domicile+
+		// 	"<br>[liq method]:"+obj.liq_method+"<br>[contracting entity]:"+obj.contracting_entity+
+		// 	"<br>[mgn entity]:"+obj.mgn_entity+"<br>[account legal name]:"+obj.ac_legal_name+
+		// 	"<br>[manager name]:"+obj.manager_name+"<br>[cod_ccy_base]:"+obj.cod_ccy_base+
+		// 	"<br>[long name]:"+obj.long_name+"<br>[mandate id]:"+obj.mandate_id+
+		// 	"<br>[client id]:"+obj.client_id+"<br>[custodian name]:"+obj.custodian_name+
+		// 	"<br>[sub_mandate_id]:"+obj.sub_mandate_id+"<br>[transfer_agent_name]:"+obj.transfer_agent_name+
+		// 	"<br>[trust_bank]:"+obj.trust_bank+"<br>[re_trust_bank]:"+obj.re_trust_bank+
+		// 	"<br>[last_updated_by]:"+obj.last_updated_by+"<br>[last_approved_by]:"+obj.last_approved_by+
+		// 	"<br>[last_update_date]:"+obj.last_update_date+'</p><button type="button" id="del_ac'+obj.ac_id+'">delete</button><hr /></div>';
+		// 	// $('#ac_check_notice').append(tmp_account);
+		// 	$('#ac_history').append(tmp_account);
+		// 	// $('#ac_check_button').show();
+		// }
+		// return false;
 	});
 	
 	$('#submit2').click(function(){

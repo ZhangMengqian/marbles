@@ -26,7 +26,19 @@ module.exports.setup = function(sdk, cc){
 
 module.exports.process_msg = function(ws, data, io){
 
-    if(data.type == 'create_account'){
+    if(data.type == 'produce'){
+        var value = data.pro_name + data.pro_num + data.pro_price + data.pro_desc;
+        var sha = new jsSHA("SHA-256","TEXT");
+        sha.update(value);
+        var sha_value = sha.getHash("HEX");
+        chaincode.invoke.produce([ sha_value, data.pro_name, data.pro_num, data.pro_price, data.pro_desc], function(err, data){
+            console.log('New Product Response:', data, err);
+        });
+        ibc.block_stats(function(e, stats){
+            console.log('got some stats', stats);
+        });
+    }
+    else if(data.type == 'create_account'){
         console.log('----------------------------------Create Account!--------------------------------------');
         var value=data.ac_id+data.ac_short_name+data.ac_status+data.term_date+data.inception_date+data.ac_region+data.ac_sub_region+data.cod_country_domicile+data.liq_method+data.contracting_entity+data.mgn_entity+data.ac_legal_name+data.manager_name+data.cod_ccy_base+data.long_name+data.mandate_id+data.client_id+data.custodian_name+data.sub_mandate_id+data.transfer_agent_name+data.trust_bank+data.re_trust_bank+data.last_updated_by+data.last_approved_by+data.last_update_date;
         console.log("------FROM PAGE----"+value);

@@ -89,6 +89,13 @@ type Benchmarks struct{
 	Benchmark_reference_id_source string `json:"benchmark_reference_id_source"`
 }
 
+type product struct{
+    Hash string `json:"hash"`
+	Pro_name string `json:"pro_name"`
+	Pro_num string `json:"pro_num"`
+	Pro_price string `json:"pro_price"`
+	Pro_desc string `json:"pro_desc"`
+}
 
 var tmp_account [] string
 var tmp_tradeset [] string
@@ -216,7 +223,9 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 	    return t.read(stub, args)
 	} else if function == "get_account" {
 	    return t.get_account(stub, args)
-	}
+	} else if function == "produce" {
+     	return t.produce(stub, args)
+    }
 	fmt.Println("invoke did not find func: " + function)					//error
 
 	return nil, errors.New("Received unknown function invocation")
@@ -549,4 +558,26 @@ func (t *SimpleChaincode) check_decide(stub shim.ChaincodeStubInterface, args []
 	
 }
 
+func (t *SimpleChaincode) produce(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+    var err error
+	fmt.Println("running produce()")
 
+    if len(args) != 5 {
+    	return nil, errors.New("Incorrect number of arguments. Expecting 5. name of the key and value to set")
+    }
+    key := args[0]
+	newaccount := product{}
+	newaccount.Hash = args[0]
+	newaccount.Pro_name = args[1]
+	newaccount.Pro_num = args[2]
+	newaccount.Pro_price = args[3]
+	newaccount.Pro_desc = args[4]
+
+	jsonAsBytes, _ := json.Marshal(newaccount)
+	err = stub.PutState( key, jsonAsBytes)
+    if err != nil {
+    	return nil, err
+    }
+	fmt.Println("- end produce")
+	return nil, nil
+}
